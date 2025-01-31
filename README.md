@@ -1,9 +1,10 @@
-# DNS over HTTPS over Tor paper
+# DNS over HTTPS over Tor
 
 Measuring performance of anonymized DNS queries using Tor.
 
 ## Set up Muffet's DoHoT
-- Measure performance (baseline)
+- Measure performance (baseline) 
+- https://github.com/alecmuffett/dohot
 
 ## Ideas to test
 - Fewer relays
