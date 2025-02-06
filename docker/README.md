@@ -1,6 +1,6 @@
 # DoHoT container
-https://github.com/alecmuffett/dohot/blob/master/INSTALL.md
-https://github.com/dnscrypt/dnscrypt-proxy/wiki/Installation-on-Debian-and-Ubuntu
+- https://github.com/alecmuffett/dohot/blob/master/INSTALL.md  
+- https://github.com/dnscrypt/dnscrypt-proxy/wiki/Installation-on-Debian-and-Ubuntu
 
 ## Running container
 ```sh
