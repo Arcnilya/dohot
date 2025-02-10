@@ -26,3 +26,5 @@
 ## Main pdf
 *.pdf
 
+## Tranco lists
+measurement/tranco*
