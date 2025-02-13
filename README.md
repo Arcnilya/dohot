@@ -11,24 +11,37 @@ Measuring performance of DoHoT configurations
 ## Set up Muffet's DoHoT
 https://github.com/alecmuffett/dohot
 - [x] Put everything in a container
-- [ ] Figure out what measurement to run and how
-    - Tranco 1M + warmup domains for DoH handshakes and circuits
-    - Note cache hits
-    - Cache wipes (restart container?)
-    - Grab RTT from dig (config retries)
+- [x] Figure out how to run measurements
+- [ ] Establish step-by-step
+    1. Get Tranco 1M list
+    2. Run DoHoT container, wait for latency check
+    3. Send non-Tranco domain to warm-up connection (kauotic.se)
+    4. Send Tranco 1M in order (top to bottom), store response time (msec)
+    5. Shut down container (clearing cache)
+    6. Goto step 2
 - [ ] Establish a baseline (default config/torrc)
 
 ## Configuration
 - [ ] Proximity constrains on relays
-    - In torrc: EntryNodes {se} MiddleNodes {se} ExitNodes {se} StrictNodes 1
-    - Verify: ControlPort \> GETINFO \> circuit-status \> GETINFO \> ns/id/FINGERPRINT
-    - Verify: Find additional tools for ControlPort
+    1. [Sweden](docker/torrc/sweden)
+    2. [Nordics](docker/torrc/nordics)
+    3. [Europe](docker/torrc/europe)
+    - Verify using ControlPort
+        1. GETINFO \> circuit-status
+        2. GETINFO \> ns/id/FINGERPRINT
+        3. whois IP
+    - Find additional tools for ControlPort
+
 - [ ] Fewer relays (hops)
-    - In torrc:
+    1. In torrc:
         - AllowSingleHopCircuits 1?
         - UseEntryGuards 0?
         - ReducedExitPolicy 1?
-    - Custom Tor binary (Pulls)
+        - Verify using ControlPort
+    2. Custom Tor binary (Pulls)
+
+- [ ] DoH list
+    - Change stuff in [dnscrypt-proxy.toml](docker/dnscrypt-proxy.toml)
 
 ## Integration
 - [ ] Learn to program in Rust

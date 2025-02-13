@@ -1,0 +1,11 @@
+SocksPort 9050
+ControlPort 9051
+CookieAuthentication 0
+
+EntryNodes {at},{be},{bg},{cy},{cz},{de},{dk},{ee},{es},{fi},{fr},{gr},{hr},{hu},{ie},{it},{lt},{lu},{lv},{mt},{nl},{po},{pt},{ro},{se},{si},{sk}
+MiddleNodes {at},{be},{bg},{cy},{cz},{de},{dk},{ee},{es},{fi},{fr},{gr},{hr},{hu},{ie},{it},{lt},{lu},{lv},{mt},{nl},{po},{pt},{ro},{se},{si},{sk}
+ExitNodes {at},{be},{bg},{cy},{cz},{de},{dk},{ee},{es},{fi},{fr},{gr},{hr},{hu},{ie},{it},{lt},{lu},{lv},{mt},{nl},{po},{pt},{ro},{se},{si},{sk}
+
+ExcludeNodes {ac},{af},{ax},{al},{dz},{ad},{ao},{ai},{aq},{ag},{ar},{am},{aw},{au},{az},{bs},{bh},{bd},{bb},{by},{bz},{bj},{bm},{bt},{bo},{ba},{bw},{bv},{br},{io},{vg},{bn},{bf},{bi},{kh},{cm},{ca},{cv},{ky},{cf},{td},{cl},{cn},{cx},{cc},{co},{km},{cg},{cd},{ck},{cr},{ci},{cu},{dj},{dm},{do},{tp},{ec},{eg},{sv},{gq},{et},{fk},{fo},{fj},{fx},{gf},{pf},{tf},{ga},{gm},{ge},{gh},{gi},{gl},{gd},{gp},{gu},{gt},{gn},{gw},{gy},{ht},{hm},{hn},{hk},{in},{id},{ir},{iq},{im},{il},{jm},{jp},{jo},{kz},{ke},{ki},{kp},{kr},{kw},{kg},{la},{lb},{ls},{lr},{ly},{li},{mo},{mk},{mg},{mw},{my},{mv},{ml},{mh},{mq},{mr},{mu},{yt},{mx},{fm},{md},{mc},{mn},{me},{ms},{ma},{mz},{mm},{na},{nr},{np},{an},{nc},{nz},{ni},{ne},{ng},{nu},{nf},{mp},{om},{pk},{pw},{ps},{pa},{pg},{py},{pe},{ph},{pn},{pl},{pr},{qa},{re},{ru},{rw},{ws},{sm},{st},{sa},{uk},{sn},{rs},{sc},{sl},{sg},{sb},{so},{as},{za},{gs},{su},{lk},{sh},{kn},{lc},{pm},{vc},{sd},{sr},{sj},{sz},{ch},{sy},{tw},{tj},{tz},{th},{tg},{tk},{to},{tt},{tn},{tr},{tm},{tc},{tv},{ug},{ua},{ae},{gb},{uk},{us},{um},{uy},{uz},{vu},{va},{ve},{vn},{vi},{wf},{eh},{ye},{zm},{zw}
+
+StrictNodes 1

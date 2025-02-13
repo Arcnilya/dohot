@@ -10,7 +10,7 @@ RUN apt update && apt upgrade -y && apt install -y \
 
 WORKDIR /etc/dnscrypt-proxy
 COPY dnscrypt-proxy.toml .
-COPY torrc /etc/tor/
+COPY torrc/nordics /etc/tor/torrc
 COPY getinfo.sh .
 COPY bootup.sh .
 CMD ["./bootup.sh"]

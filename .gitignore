@@ -28,3 +28,5 @@
 
 ## Tranco lists
 measurement/tranco*
+measurement/old_lists/
+analysis/*.txt
