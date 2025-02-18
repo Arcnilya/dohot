@@ -12,33 +12,25 @@ Measuring performance of DoHoT configurations
 https://github.com/alecmuffett/dohot
 - [x] Put everything in a container
 - [x] Figure out how to run measurements
-- [ ] Establish step-by-step
-    1. Get Tranco 1M list
-    2. Run DoHoT container, wait for latency check
-    3. Send non-Tranco domain to warm-up connection (kauotic.se)
-    4. Send Tranco 1M in order (top to bottom), store response time (msec)
+- [x] Establish step-by-step
+    1. Get Tranco 1M list `dnsperf/lists $ ./gettranco.sh`
+    2. Run DoHoT container `docker $ ./run.sh`
+    3. wait for latency check
+    4. Run dnsperf container `dnsperf $ ./run.sh lists/tranco*.txt`
     5. Shut down container (clearing cache)
-    6. Goto step 2
 - [ ] Establish a baseline (default config/torrc)
+    - [ ] Setup VM with containers
+    - [ ] Run Tranco 1M
 
 ## Configuration
-- [ ] Proximity constrains on relays
+- [x] Proximity constrains on relays (region)
     1. [Sweden](docker/torrc/sweden)
     2. [Nordics](docker/torrc/nordics)
     3. [Europe](docker/torrc/europe)
-    - Verify using ControlPort
-        1. GETINFO \> circuit-status
-        2. GETINFO \> ns/id/FINGERPRINT
-        3. whois IP
-    - Find additional tools for ControlPort
+    - Verify `docker $ ./circinfo.sh` 
 
-- [ ] Fewer relays (hops)
-    1. In torrc:
-        - AllowSingleHopCircuits 1?
-        - UseEntryGuards 0?
-        - ReducedExitPolicy 1?
-        - Verify using ControlPort
-    2. Custom Tor binary (Pulls)
+- [ ] Fewer relays (hops) using custom Tor binary + [carml](https://github.com/meejah/carml)
+    - [container](single-hop-tor) WIP
 
 - [ ] DoH list
     - Change stuff in [dnscrypt-proxy.toml](docker/dnscrypt-proxy.toml)
