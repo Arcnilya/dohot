@@ -15,8 +15,8 @@ dig @localhost -p 1337 example.com
 ```
 
 ## Fetch circuit info
+After changing the torrc I need a way of confirming the selection of relays.
+Run the dohot-container locally, then run:
 ```sh
-docker exec -it dohot-container bash
-./getinfo.sh
+./circinfo.sh
 ```
-

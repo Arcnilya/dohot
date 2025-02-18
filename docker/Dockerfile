@@ -1,5 +1,4 @@
 FROM ubuntu
-
 RUN apt update && apt upgrade -y && apt install -y \
     vim \
     netcat-traditional \
@@ -10,7 +9,8 @@ RUN apt update && apt upgrade -y && apt install -y \
 
 WORKDIR /etc/dnscrypt-proxy
 COPY dnscrypt-proxy.toml .
-COPY torrc/nordics /etc/tor/torrc
+ARG TORRC=default
+COPY torrc/${TORRC} /etc/tor/torrc
 COPY getinfo.sh .
 COPY bootup.sh .
 CMD ["./bootup.sh"]
