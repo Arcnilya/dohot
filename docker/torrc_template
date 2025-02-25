@@ -1,0 +1,8 @@
+SocksPort 9050
+ControlPort 9051
+CookieAuthentication 0
+#FetchDirInfoEarly 1
+#FetchDirInfoExtraEarly 1
+#FetchUselessDescriptors 1
+#DownloadExtraInfo 1
+

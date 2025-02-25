@@ -1,8 +1,0 @@
-services:
-    dohot:
-        image: dohot-image
-        build: .
-        container_name: dohot-container
-        ports: # HOST:CONTAINER
-            - "1337:53/tcp" 
-            - "1337:53/udp" 

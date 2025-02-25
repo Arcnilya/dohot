@@ -30,3 +30,6 @@
 dnsperf/lists/*.txt
 dnsperf/lists/*.csv
 dnsperf/lists/old
+
+## Datasets
+dnsperf/dataset/*.csv

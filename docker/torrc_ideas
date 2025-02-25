@@ -2,6 +2,11 @@ SocksPort 9050
 ControlPort 9051
 CookieAuthentication 0
 
+FetchDirInfoEarly 1
+FetchDirInfoExtraEarly 1
+FetchUselessDescriptors 1
+DownloadExtraInfo 1
+
 EntryNodes {se} 
 MiddleNodes {se}
 ExitNodes {se}
@@ -10,4 +15,10 @@ ExcludeNodes {??},{ac},{af},{ax},{al},{dz},{ad},{ao},{ai},{aq},{ag},{ar},{am},{a
 
 StrictNodes 1
 
-
+__DisablePredictedCircuits 1
+ConfluxEnabled 0
+CircuitBuildTimeout 0
+CircuitIdleTimeout 999999
+MaxCircuitDirtiness 999999
+NewCircuitPeriod 999999
+KeepalivePeriod 999999
