@@ -11,8 +11,8 @@ if [ "$HOPS" = "3" ]; then
     [[ -n "$EXCLUDE_NODES" ]] && echo "ExcludeNodes {$(parse $EXCLUDE_NODES)}" >> "$TORRC_PATH"
     [[ -n "$EXCLUDE_NODES" ]] && echo "StrictNodes 1" >> "$TORRC_PATH"
     cat $TORRC_PATH
-#else
-#    echo "__DisablePredictedCircuits 1" >> "$TORRC_PATH"
+else
+    echo "UseEntryGuards 0" >> "$TORRC_PATH"
 fi
 service tor restart
 

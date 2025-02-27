@@ -22,3 +22,4 @@ CircuitIdleTimeout 999999
 MaxCircuitDirtiness 999999
 NewCircuitPeriod 999999
 KeepalivePeriod 999999
+UseEntryGuards 0

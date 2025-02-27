@@ -23,28 +23,30 @@ https://github.com/alecmuffett/dohot
     - [x] Write a [script](baseline.sh) for deployment+measurement
     - [x] Run Tranco 1M a few times WIP
 
-## Configuration
+### Analyze Baseline
+I have 13 x 1M Tranco:
+- AVG latency (overall and for each iteration)
+- Popularity impact?
+- Circuit/DoH timeout patterns?
+
+
+## Configuring Circuits
 - [x] Proximity constrains on relays (region)
-    1. [Sweden](docker/torrc/sweden)
-    2. [Nordics](docker/torrc/nordics)
-    3. [Europe](docker/torrc/europe)
-    - Verify `docker $ ./circinfo.sh`
+    - `./run.sh --entry se --exit no,dk`
 
-- [ ] Single-hop using custom Tor binary + [carml](https://github.com/meejah/carml)
-    - [container](single-hop-tor) WIP
-    - We are stopped by TORPROTOCOL, very sad
-
-- [ ] Two-hop (entry/exit) using only carml+stem
+- [x] Two-hop (entry/exit) using only carml+stem
     No need for a custom binary or separate container
     - [x] Copy changes to [other container](docker)
     - [x] Automate selection of relays [script](docker/relays.py)
     - [x] Swap circinfo.sh to carml+stem
-    - [ ] Make two-hop a toggle (similar to region), parse torrc?
+    - [x] Make two-hop a toggle (similar to region)
+    - `./run.sh --hops 2`
+    - `./run.sh --hops 2 --entry se --exit se`
 
 - [ ] DoH list
     - Change stuff in [dnscrypt-proxy.toml](docker/dnscrypt-proxy.toml)
 
-### Picking relay pairs
+### Picking Relay-pairs
 Groups:
 1. Same country
 2. Same continent
@@ -54,6 +56,9 @@ Combinations:
 - Same country entry: (1,1) (1,2) (1,3)
 - Same continent entry: (2,1) (2,2) (2,3)
 - Diff continent entry: (3,1) (3,2) (3,3)
+
+### Analyze Configurations
+TODO
 
 ## Integration
 - [ ] Learn to program in Rust
