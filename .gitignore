@@ -32,4 +32,4 @@ dnsperf/lists/*.csv
 dnsperf/lists/old
 
 ## Datasets
-dnsperf/dataset/*.csv
+dataset/*.csv
