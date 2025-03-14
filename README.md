@@ -1,14 +1,15 @@
-# DoHoT - DNS over HTTPS via Tor
+# DoHoT - DNS over HTTPS over Tor
 
 ## Overview
-This repository contains resources and experiments related to sending DNS
+This repository contains resources and experiments related to improving the performance of DNS
 queries over Tor to DoH (DNS over HTTPS) servers, an approach known as DoHoT.
 This method aims to achieve anonymity between the client and the resolver
 without requiring additional infrastructure beyond the existing Tor network.
 
 ## Background
 Alec Muffet has been testing the feasibility of using Tor to send DNS queries
-to DoH servers. This approach differs from other anonymity-preserving DNS
+to DoH servers [[github](https://github.com/alecmuffett/dohot)].
+This approach differs from other anonymity-preserving DNS
 methods, such as Oblivious DNS (ODNS) and Oblivious DoH (ODoH), which rely on
 additional infrastructure operated by non-colluding parties. Instead, DoHoT
 leverages the existing Tor network to provide anonymity without further
