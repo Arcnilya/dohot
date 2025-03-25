@@ -8,6 +8,7 @@ RUN add-apt-repository ppa:deadsnakes/ppa -y && apt update
 RUN apt install -y python3.11 python3.11-venv python3.11-dev
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
 RUN apt install -y python3-pip
+RUN apt remove -y python3-cryptography
 RUN pip install carml --break-system-packages
 RUN pip install stem --break-system-packages
 RUN rm -rf /var/lib/apt/lists/*
