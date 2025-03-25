@@ -10,19 +10,20 @@ def t():
     return datetime.datetime.now()
 
 
-fname = "baseline_13x1M.csv"
+when = "feb23"
+fname = f"{when}/baseline_13x1M.csv"
 cols = ["TIME", "RCODE", "DOMAIN", "RRTYPE", "LATENCY"]
 print(t(), "Loading datasets")
-if not os.path.exists("processed-"+fname):
+if not os.path.exists(f"{when}/processed-"+fname):
     df = pd.read_csv(fname, names=cols, nrows=10000000)
-    tranco = pd.read_csv("tranco_663NX.csv", names=["RANK", "DOMAIN"])
+    tranco = pd.read_csv(f"{when}/tranco_663NX.csv", names=["RANK", "DOMAIN"])
     print(t(), "Merging and transforming datasets")
     df = pd.merge(df, tranco, on="DOMAIN", how="left")
     df = df[df["RANK"].notna()]
     df["DATAPOINTS"] = df.groupby("DOMAIN")["RCODE"].transform(lambda x: (x=="NOERROR").sum())
-    df.to_csv("processed-"+fname, index=False)
+    df.to_csv(f"{when}/processed-"+fname, index=False)
 else:
-    df = pd.read_csv("processed-"+fname, header=0) 
+    df = pd.read_csv(f"{when}/processed-"+fname, header=0) 
 
 print(df, "\n")
 

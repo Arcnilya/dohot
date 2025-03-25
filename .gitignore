@@ -27,9 +27,10 @@
 *.pdf
 
 ## Domain lists
-dnsperf/lists/*.txt
-dnsperf/lists/*.csv
-dnsperf/lists/old
+lists/*.txt
+lists/*.csv
+lists/old
 
 ## Datasets
-dataset/*.csv
+dataset/feb23
+dataset/mar15

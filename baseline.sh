@@ -1,7 +1,11 @@
 #!/bin/bash
 
-domains=${1:-"dnsperf/lists/mini.txt"}
+domains=${1:-"lists/mini.txt"}
 starttime=$(date +"%Y-%m-%dT%H:%M")
+
+echo "$(date +"%Y-%m-%dT%H:%M:%S"): Stopping DoHoT if already running"
+docker stop dohot-container
+
 echo "$(date +"%Y-%m-%dT%H:%M:%S"): Starting DoHoT"
 docker run --rm -d -p 1337:53/tcp -p 1337:53/udp --name dohot-container dohot-image > /dev/null
 sleep 120 # Let dnscrypt-proxy find a nearby DoH server
