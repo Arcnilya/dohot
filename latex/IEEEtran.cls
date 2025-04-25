@@ -4374,6 +4374,7 @@ between column types.}%
 % 
 % 
 % Modify Latex2e \@citex to separate citations with "], ["
+\iffalse
 \def\@citex[#1]#2{%
   \let\@citea\@empty
   \@cite{\@for\@citeb:=#2\do
@@ -4385,6 +4386,7 @@ between column types.}%
        \@latex@warning
          {Citation `\@citeb' on page \thepage \space undefined}}%
        {\hbox{\csname b@\@citeb\endcsname}}}}{#1}}
+\fi
 
 % V1.6 we create hooks for the optional use of Donald Arseneau's
 % cite.sty package. cite.sty is "smart" and will notice that the

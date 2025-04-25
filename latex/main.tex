@@ -1,21 +1,38 @@
 \documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
 % The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
-\usepackage{cite}
+%\usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 %\usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{url}
+\usepackage{hyperref}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\usepackage{acronym}
+\newacro{dns}[DNS]{Domain Name System}
+\newacro{doh}[DoH]{DNS over HTTPS}
+\newacro{dot}[DoT]{DNS over TLS}
+\newacro{odns}[ODNS]{Oblivious DNS}
+\newacro{odoh}[ODoH]{Oblivious DoH}
+\newacro{dohot}[DoHoT]{DNS over HTTPS over Tor}
+\newacro{dotot}[DoToT]{DNS over TLS over Tor}
+\newacro{dotor}[DoTor]{DNS over Tor}
+\newacro{sld}[SLD]{Second-Level Domain}
+\newacro{tld}[TLD]{Top-Level Domain}
+\newacro{rcode}[RCODE]{Return Code}
+
+
 \begin{document}
 
 \title{
-    Foo
+    DoHoT or Not? Tuning Tor Circuits for Anonymous DNS Queries
 }
 
+\iffalse
 \author{\IEEEauthorblockN{1\textsuperscript{st} Jonathan Magnusson}
 \IEEEauthorblockA{\textit{Karlstad University} \\
 Karlstad, Sweden \\
@@ -26,21 +43,23 @@ jonathan.magnusson@kau.se}
 City, Country \\
 email address}
 }
+\fi
+\author{Anonymous Authors}
 
 \maketitle
 
-\begin{abstract}
-    Abstract text
-\end{abstract}
+\input{src/abstract}
 
 \begin{IEEEkeywords}
     key, words
 \end{IEEEkeywords}
 
-\section{Introduction}
-Introduction text~\cite{RFC1111}
+\input{src/intro}
+\input{src/background}
+\input{src/method}
+\input{src/measurement}
 
 \bibliographystyle{plain}
-\bibliography{ref} % bibtex main to update
+\bibliography{src/ref} % bibtex main to update
 
 \end{document}

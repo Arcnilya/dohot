@@ -1,0 +1,48 @@
+\section{Method} \label{sec:method}
+Alec Muffet's DoHoT, DNSCrypt-proxy, torrc, carml, stem.
+
+\begin{table}[h!]
+    \centering
+    \caption{Table of measurement configurations using Tor.}
+    \label{tab:conf}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+         \hline
+         ID & protocol & method & hops & entry & middle & exit \\\hline
+         \hline
+         1 & dohot & torrc & 3 & random & random & random \\\hline
+         2 & dohot & torrc & 3 & sweden & random & random \\\hline
+         3 & dohot & torrc & 3 & sweden & random & sweden \\\hline
+         4 & dohot & carml+stem & 3 & random & random & random \\\hline
+         5 & dohot & carml+stem & 3 & sweden & random & random \\\hline
+         6 & dohot & carml+stem & 3 & sweden & random & sweden \\\hline
+         7 & dohot & carml+stem & 3 & sweden & sweden & random \\\hline
+         8 & dohot & carml+stem & 3 & sweden & sweden & sweden \\\hline
+         9 & dohot & carml+stem & 2 & random & - & random \\\hline
+         10 & dohot & carml+stem & 2 & sweden & - & random \\\hline
+         11 & dohot & carml+stem & 2 & sweden & - & sweden \\\hline
+    \end{tabular}
+\end{table}
+
+Rows 1--3 in Table~\ref{tab:conf} present configuration variations using the
+Tor configuration file (\texttt{torrc}). In this setup, it is not possible to
+reduce the number of hops below three, nor to specify the geographical location
+of the middle relay.
+
+Rows 4--6 show equivalent configurations constructed with \texttt{carml} and
+\texttt{stem}, enabling a comparison between Tor's default relay selection
+algorithm and a custom approach.
+
+Rows 7--8 demonstrate configurations where the middle relay is explicitly
+specified in a three-hop circuit using \texttt{carml} and \texttt{stem}, a
+capability not available through \texttt{torrc} alone.
+
+Finally, rows 9--11 illustrate two-hop circuit configurations, which are only
+achievable when using \texttt{carml} and \texttt{stem}.
+
+For each configuration in Table~\ref{tab:conf} we perform the following steps 1000 times: 
+(1) start DoHoT using the specified configuration.
+(2) wait for a circuit to be established and a successful query responded.
+(3) send a query for an A record using a unique and random non-existing domain.
+(4) measure the time (ms) for the reply to return.
+(5) stop DoHoT.
+

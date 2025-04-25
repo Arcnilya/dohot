@@ -1,0 +1,68 @@
+\section{Introduction} \label{sec:intro}
+
+The Domain Name System (\ac{dns}) is a fundamental Internet component that
+translates human-readable domain names into IP
+addresses~\cite{RFC1034,RFC1035}. Whenever a user attempts to access a website
+or online resource, a \ac{dns} query is issued to determine the corresponding
+IP address. Despite its essential role, traditional \ac{dns} operates in
+plaintext, making it vulnerable to eavesdropping, manipulation, and tracking.
+
+Privacy-preserving protocols such as \ac{doh}~\cite{RFC8484} and
+\ac{dot}~\cite{RFC7858} have been developed to address these concerns. These
+protocols encrypt \ac{dns} traffic between the client and the resolver,
+preventing on-path adversaries from observing or tampering with queries and
+responses. While \ac{doh} and \ac{dot} significantly improve confidentiality,
+they do not fully address privacy concerns -- especially when the resolver
+becomes a point of surveillance or data aggregation.
+
+To further decouple the identity of the client from the \ac{dns} query, more
+advanced protocols like \ac{odns}~\cite{ODNS} and \ac{odoh}~\cite{RFC9230} have
+been proposed. These protocols introduce cryptographic indirection layers,
+ensuring no single server can correlate a query with its origin. However, these
+schemes often rely on a limited number of specialized servers and assume that
+parties do not collude -- a strong assumption in practice. Moreover, deployment
+remains limited, and performance overhead can be substantial.
+
+An alternative approach to achieving strong anonymity and unlinkability is to
+route \ac{dns} queries through an anonymity network such as
+Tor~\cite{dingledine2004}. Tor is a low-latency, onion-routing network designed
+to anonymize Internet traffic by relaying it through multiple volunteer-run
+nodes. In particular, Alec Muffett's proposal for \ac{dohot}~\cite{DoHoT}
+leverages this infrastructure to anonymize \ac{dns} queries while maintaining
+the advantages of encrypted transport.
+
+Despite its privacy benefits, \ac{dohot} and similar approaches have
+performance limitations. Tor circuits introduce additional latency due to
+multiple hops all over the globe, and variability in relay performance can lead
+to inconsistent results. As a result, users must often choose between strong
+anonymity and usable performance.
+
+In this study, we aim to explore whether it is possible to configure Tor to
+mitigate these performance penalties without sacrificing the security and
+privacy guarantees. To do so, we begin by defining the relevant threat models
+and outlining the capabilities of potential passive and active adversaries in
+the context of encrypted \ac{dns} transport.
+
+Beyond the default Tor configuration, we evaluate the impact of three custom
+circuit strategies aimed at improving latency:
+
+\begin{enumerate}
+    \item Constraining the EntryNode and/or ExitNode in the \texttt{torrc} file to
+        be geographically close to the client.
+    \item Using \texttt{carml}~\cite{carml} and \texttt{stem}~\cite{stem} to
+        create three-hop and two-hop circuits with randomly selected relays.
+    \item Creating three-hop and two-hop circuits with relays that are geographically
+        proximate to the client.
+\end{enumerate}
+
+To eliminate the effects of caching and to maintain consistency across tests,
+we issue queries for uniquely generated \acp{sld} under valid \acp{tld},
+expected to return an NXDOMAIN \ac{rcode}. This approach ensures that the
+observed latency mainly reflects the path between the client and the resolver
+rather than the influence of cache hits or additional authoritative name servers.
+
+Through these measurements, we aim to provide a fair and comprehensive
+evaluation of various approaches to anonymizing \ac{dns} queries, with
+particular attention to the trade-offs between privacy and performance.
+Ultimately, we aim to identify configurations that offer practical improvements
+for users who seek strong privacy guarantees without intolerable slowdowns.
