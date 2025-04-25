@@ -25,9 +25,9 @@ https://github.com/alecmuffett/dohot
 
 ### Analyze Baseline
 I have 13 x 1M Tranco:
-- AVG latency (overall and for each iteration)
-- Popularity impact?
-- Circuit/DoH timeout patterns?
+- [x] AVG latency (overall and for each iteration)
+- [x] Popularity impact?
+- [x] Circuit/DoH timeout patterns?
 
 
 ## Configuring Circuits
@@ -66,3 +66,9 @@ TODO
 
 ## Reflect on threat model and attacker capabilities
 Client -- Attacker/Observer -- Resolver
+
+
+
+
+
+oftc.net #tor-dev
