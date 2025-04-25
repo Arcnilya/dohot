@@ -5,26 +5,18 @@ parse () {
 } 
 
 TORRC_PATH="/etc/tor/torrc"
-if [ "$HOPS" = "3" ] && [ "$METHOD" = "torrc" ]; then
-    [[ -n "$ENTRY_NODES" ]] && echo "EntryNodes {$(parse $ENTRY_NODES)}" >> "$TORRC_PATH"
-    [[ -n "$EXIT_NODES" ]] && echo "ExitNodes {$(parse $EXIT_NODES)}" >> "$TORRC_PATH"
-    [[ -n "$EXCLUDE_NODES" ]] && echo "ExcludeNodes {$(parse $EXCLUDE_NODES)}" >> "$TORRC_PATH"
-    [[ -n "$EXCLUDE_NODES" ]] && echo "StrictNodes 1" >> "$TORRC_PATH"
-    cat $TORRC_PATH
-elif [ "$HOPS" = "3" ] && [ "$METHOD" = "torrc-noguard" ]; then
-    [[ -n "$ENTRY_NODES" ]] && echo "EntryNodes {$(parse $ENTRY_NODES)}" >> "$TORRC_PATH"
-    [[ -n "$EXIT_NODES" ]] && echo "ExitNodes {$(parse $EXIT_NODES)}" >> "$TORRC_PATH"
-    [[ -n "$EXCLUDE_NODES" ]] && echo "ExcludeNodes {$(parse $EXCLUDE_NODES)}" >> "$TORRC_PATH"
-    [[ -n "$EXCLUDE_NODES" ]] && echo "StrictNodes 1" >> "$TORRC_PATH"
+#if [ "$HOPS" = "3" ]; then
+#    [[ -n "$ENTRY_NODES" ]] && echo "EntryNodes {$(parse $ENTRY_NODES)}" >> "$TORRC_PATH"
+#    [[ -n "$EXIT_NODES" ]] && echo "ExitNodes {$(parse $EXIT_NODES)}" >> "$TORRC_PATH"
+#    [[ -n "$EXCLUDE_NODES" ]] && echo "ExcludeNodes {$(parse $EXCLUDE_NODES)}" >> "$TORRC_PATH"
+#    [[ -n "$EXCLUDE_NODES" ]] && echo "StrictNodes 1" >> "$TORRC_PATH"
+#    cat $TORRC_PATH
+#else
     echo "UseEntryGuards 0" >> "$TORRC_PATH"
-    cat $TORRC_PATH
-else
-    echo "UseEntryGuards 0" >> "$TORRC_PATH"
-fi
+#fi
 service tor restart
 
-
-if [ "$HOPS" = "2" ] && [ "$METHOD" = "carml" ]; then
+if [ "$HOPS" = "2" ]; then
     echo "Creating a two-hop circuit"
     fp1=$(python3 relays.py --cc ${ENTRY_NODES:-any} --role entry)
     echo "Found $fp1"
@@ -43,7 +35,7 @@ if [ "$HOPS" = "2" ] && [ "$METHOD" = "carml" ]; then
     done
 fi
 
-if [ "$HOPS" = "3" ] && [ "$METHOD" = "carml" ]; then
+if [ "$HOPS" = "3" ]; then
     echo "Creating a three-hop circuit"
     fp1=$(python3 relays.py --cc ${ENTRY_NODES:-any} --role entry)
     echo "Found $fp1"
@@ -64,9 +56,9 @@ if [ "$HOPS" = "3" ] && [ "$METHOD" = "carml" ]; then
     done
 fi
 
-#python3 circuit_tracker.py > circuit_log.txt &
+/usr/bin/proxychains4 /usr/bin/stubby -v 7 -C /etc/stubby/stubby.yml
+#/usr/bin/stubby -v 7 -C /etc/stubby/stubby.yml 
 
-dnscrypt-proxy -check
-#dnscrypt-proxy -list
-dnscrypt-proxy
+
+
 

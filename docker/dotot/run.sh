@@ -5,14 +5,9 @@ MIDDLE=""
 EXIT=""
 EXCLUDE=""
 HOPS=""
-METHOD=""
 
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
-        --hops)
-            HOPS="$2"
-            shift 2
-            ;;
         --entry)
             ENTRY="$2"
             shift 2
@@ -25,16 +20,16 @@ while [[ "$#" -gt 0 ]]; do
             EXIT="$2"
             shift 2
             ;;
-        --method)
-            METHOD="$2"
-            shift 2
-            ;;
         --exclude)
             EXCLUDE="$2"
             shift 2
             ;;
+        --hops)
+            HOPS="$2"
+            shift 2
+            ;;
         --help|-h)
-            echo "Usage: $0 --hops <number> --entry <country_code> --middle <country_code> --exit <country_code> --method <torrc/carml>"
+            echo "Usage: $0 --hops <number> --entry <country_code> --middle <country_code> --exit <country_code>"
             exit 0
             ;;
         *)
@@ -44,16 +39,16 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
-docker stop dohot-container
-docker rm dohot-container
-docker build -t dohot-image .
-docker run --rm --name dohot-container \
+
+docker stop dotot-container
+docker rm dotot-container
+docker build -t dotot-image .
+docker run --rm --name dotot-container \
     -e ENTRY_NODES="$ENTRY" \
     -e MIDDLE_NODES="$MIDDLE" \
     -e EXIT_NODES="$EXIT" \
     -e EXCLUDE_NODES="$EXCLUDE" \
     -e HOPS="$HOPS" \
-    -e METHOD="$METHOD" \
-    -p 127.0.0.1:1337:53/udp \
-    -p 127.0.0.1:1337:53/tcp \
-    dohot-image
+    -p 127.0.0.1:1337:8053/udp \
+    -p 127.0.0.1:1337:8053/tcp \
+    dotot-image

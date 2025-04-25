@@ -27,7 +27,7 @@ def list_circuits():
                     counter += 1
 
 
-def fetch_relay(targets, role="any"):
+def fetch_relay(targets, role="entry"):
     with Controller.from_port(port = 9051) as controller:
         controller.authenticate()
 
@@ -43,14 +43,16 @@ def fetch_relay(targets, role="any"):
         for desc in relays:
             location = controller.get_info("ip-to-country/%s" % desc.address, 'unknown')
             if targets == "any" or location in targets.split(','):
-                if role == "any" or (role == "entry" and "Guard" in desc.flags) or (role == "exit" and "Exit" in desc.flags):  
+                if role == "entry" and "Guard" in desc.flags:  
+                    return desc.fingerprint
+                elif role == "exit" and "Exit" in desc.flags:  
                     return desc.fingerprint
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--circ', action='store_true', help='list current circuits')
 parser.add_argument('--cc', default="", help='get a random relay from cc(s)')
-parser.add_argument('--role', default="any", help='select relay role (default: any)')
+parser.add_argument('--role', default="entry", help='select relay role (default: entry)')
 
 args = parser.parse_args()
 
