@@ -1,2 +1,53 @@
 \section{Measurement} \label{sec:measurement}
-Foo
+\begin{figure}[h]
+    \centering
+    Query Time by Configuration (torrc vs carml+stem)\par\medskip
+    \vspace{-.5em}
+    \includegraphics[width=.5\textwidth]{img/p1.pdf}
+    \vspace{-2em}
+    \caption{Comparing methods for building circuits in Tor.}
+    \label{fig:p1}
+\end{figure}
+
+We began by comparing the latency of circuits constructed using the standard
+\texttt{torrc} configuration with those built using \texttt{carml+stem}. As
+shown in Figure~\ref{fig:p1}, circuits created via \texttt{torrc} consistently
+outperformed those built with \texttt{carml+stem}. This performance gap is
+primarily due to differences in relay selection. By default, \texttt{torrc}
+selects relays based on weighted bandwidth, favoring faster, more
+geographically optimal relays. In contrast, \texttt{carml+stem} selects relays
+uniformly at random within constraints such as location and relay type (e.g.,
+exit or non-exit).
+
+\begin{figure}[h]
+    \centering
+    Query Time by Configuration (Middle location)\par\medskip
+    \vspace{-.5em}
+    \includegraphics[width=.5\textwidth]{img/p2.pdf}
+    \vspace{-2em}
+    \caption{Using carml+stem to specify location of middle relay.}
+    \label{fig:p2}
+\end{figure}
+
+One advantage of \texttt{carml+stem} is controlling the middle relay placement.
+By specifying the middle relay's location, we could reduce the geographical
+spread of circuits. Figure~\ref{fig:p2} shows a notable reduction in latency
+when the middle relay is constrained to be in the same country as the client.
+As expected, reducing the physical distance between relays improves
+performance.
+
+\begin{figure}[h]
+    \centering
+    Query Time by Configuration (Two-Hops)\par\medskip
+    \vspace{-.5em}
+    \includegraphics[width=.5\textwidth]{img/p3.pdf}
+    \vspace{-2em}
+    \caption{Using carml+stem to build circuits without a middle relay.}
+    \label{fig:p3}
+\end{figure}
+
+Finally, we used \texttt{carml+stem} to construct two-hop circuits, consisting
+only of an entry and an exit relay, a configuration not supported by
+\texttt{torrc}. As illustrated in Figure~\ref{fig:p3}, this further reduces
+latency. The best performance was observed when both relays were located in the
+same country as the client.

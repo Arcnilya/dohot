@@ -1,0 +1,91 @@
+\section{Discussion} \label{sec:disc}
+
+Our findings demonstrate that \ac{dohot} can achieve significantly improved
+\ac{dns} query performance by carefully tuning Tor circuit configurations,
+specifically by reducing the number of hops and by geographically localizing
+relays. These optimizations suggest practical pathways to making anonymous
+\ac{dns} queries more feasible for everyday use, without fundamentally
+compromising privacy guarantees.
+
+\subsection{Performance vs. Anonymity Trade-offs}
+The results in Section~\ref{sec:measurement} confirm that three-hop Tor
+circuits incur higher latency than two-hop configurations. While Tor's design
+conventionally mandates three hops to balance trust and anonymity, our threat
+model, focused on \ac{dns} query anonymity, shows that omitting the middle
+relay (i.e., using two hops) represent a compelling optimization, particularly
+in a latency-sensitive context such as \ac{dns}.
+
+Our comparison between \texttt{torrc} and \texttt{carml+stem} configurations
+reveals that default Tor path selection tends to outperform manual circuit
+configurations due to bandwidth-weighted relay selection. Nonetheless,
+\texttt{carml+stem} offers better control over custom circuit construction
+where all relays reside within the same geographic region, significantly
+reducing inter-relay latency. 
+
+Reducing the number of hops and specifying the geographic location of relays in
+\ac{dohot} does not compromise client privacy within the context of our threat
+model for anonymous \ac{dns} queries. However, we do not recommend these
+configurations for general Tor usage, as they may weaken anonymity guarantees
+in broader applications. Additionally, the anonymity of \ac{dns} queries cannot
+be assured in the presence of colluding adversaries under a stronger threat
+model.
+
+\subsection{DoHoT in Context of Existing DNS Privacy Protocols}
+\ac{dohot} offers a compelling alternative to protocols like \ac{odns} and
+\ac{odoh}. Unlike these, it does not require new infrastructure or trusted
+third parties, leveraging the mature and widely distributed Tor network
+instead. Moreover, since \ac{doh} encrypts \ac{dns} queries end-to-end, exit
+relays in \ac{dohot} setups are blind to the query contents, mitigating key
+privacy concerns noted in prior studies. 
+
+Schmitt~\emph{et al.}~\cite{ODNS} compared traditional \ac{dns} resolution with
+DNS resolution over the Tor network using the Alexa top 10,000 domains. Their
+results showed a median resolution time of 31.31 ms for traditional \ac{dns},
+compared to 276.76 ms over Tor. It is important to note that their evaluation
+used standard Tor configurations, where DNS queries are resolved in plaintext
+at the exit relay, unlike \ac{dohot}, which encrypts queries end-to-end using
+\ac{doh}. In our measurements, the default three-hop \ac{dohot} configuration
+yielded a median resolution time of under 200 ms. When using a two-hop circuit
+with both relays near the client, the median dropped below 100 ms.
+
+Singanamalla~\emph{et al.}~\cite{singanamalla2020} evaluated the performance of
+\ac{odoh} in a deployment setting, comparing it with several other protocols
+including standard \ac{doh}, proxied \ac{doh}, various \ac{odoh}
+configurations, DNSCrypt, and \ac{dohot}. They reported an average resolution
+time of approximately 300 ms for \ac{odoh}, while \ac{dohot} averaged 696.40
+ms. In contrast, our experiments showed a substantially lower average for
+\ac{dohot} at 238.11 ms. With a two-hop circuit using relays located in the
+same country as the client, the average resolution time was further reduced to
+155.54 ms.
+
+However, \ac{dohot} still inherits limitations from Tor, including potential
+censorship and reliance on public volunteer infrastructure. Compared to
+\ac{odns}/\ac{odoh}, which can offer lower latency and are easier to deploy in
+centralized environments, \ac{dohot}'s reliance on Tor's ecosystem might hinder
+scalability for very high-throughput scenarios.
+
+\subsection{Limitations}
+Our experiments primarily measured \ac{dns} query latency in a controlled
+environment using NXDOMAIN lookups. This approach removes caching as a variable
+but does not fully reflect real-world usage where cache hits are common.
+
+
+\iffalse
+\begin{table}[h!]
+    \centering
+    \caption{Comparative Evaluation Dimensions}
+    \label{tab:comp}
+    \begin{tabular}{|c|c|c|c|}
+         \hline
+         Approach & Latency & Anonymity & Deployability \\\hline
+         \hline
+         Do\{T,H,Q\} & Low      & None      & High   \\\hline
+         ODNS        & Medium   & Medium    & Low    \\\hline
+         ODoH        & Low      & Medium    & Medium \\\hline
+         DoHoT 1.0   & High     & High      & High   \\\hline
+         DoHoT 2.0   & Medium   & High      & High   \\\hline
+    \end{tabular}
+\end{table}
+\fi
+
+
