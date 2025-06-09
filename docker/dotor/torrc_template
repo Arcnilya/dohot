@@ -1,6 +1,9 @@
 SocksPort 9050
 ControlPort 9051
 CookieAuthentication 0
+
+AutomapHostsOnResolve 1
+AutomapHostsSuffixes .
 #FetchDirInfoEarly 1
 #FetchDirInfoExtraEarly 1
 #FetchUselessDescriptors 1

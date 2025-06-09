@@ -1,19 +1,14 @@
 #!/bin/bash
 
 ENTRY=""
-MIDDLE=""
 EXIT=""
 EXCLUDE=""
-HOPS=""
+HOPS=3
 
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
         --entry)
             ENTRY="$2"
-            shift 2
-            ;;
-        --middle)
-            MIDDLE="$2"
             shift 2
             ;;
         --exit)
@@ -29,7 +24,7 @@ while [[ "$#" -gt 0 ]]; do
             shift 2
             ;;
         --help|-h)
-            echo "Usage: $0 --hops <number> --entry <country_code> --middle <country_code> --exit <country_code>"
+            echo "Usage: $0 --entry <country_code> --exit <country_code> --exclude <country_code> --hops <number>"
             exit 0
             ;;
         *)
@@ -39,16 +34,14 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
-
-docker stop dotot-container
-docker rm dotot-container
-docker build -t dotot-image .
-docker run --rm --name dotot-container \
+docker stop dotor-container
+docker rm dotor-container
+docker build -t dotor-image .
+docker run --rm --name dotor-container \
     -e ENTRY_NODES="$ENTRY" \
-    -e MIDDLE_NODES="$MIDDLE" \
     -e EXIT_NODES="$EXIT" \
     -e EXCLUDE_NODES="$EXCLUDE" \
     -e HOPS="$HOPS" \
-    -p 127.0.0.1:1337:8053/udp \
-    -p 127.0.0.1:1337:8053/tcp \
-    dotot-image
+    -p 127.0.0.1:1337:1337/udp \
+    -p 127.0.0.1:1337:1337/tcp \
+    dotor-image

@@ -6,8 +6,7 @@ a website or online service, a \ac{dns} query is issued, and these queries have
 historically been sent in plaintext, exposing users to surveillance,
 censorship, and profiling.
 
-To address these concerns, privacy-enhancing protocols \cite{RFC7858, RFC8484,
-RFC9250} have been introduced that encrypt the communication between the client
+To address these concerns, privacy-enhancing protocols \cite{RFC7858,RFC8484,RFC9250} have been introduced that encrypt the communication between the client
 and the resolver, preventing on-path adversaries from inspecting or modifying
 \ac{dns} traffic. However, they do not anonymize the client: the resolver still
 sees both the IP address of the client and the contents of the query. In many

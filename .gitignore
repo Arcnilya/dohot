@@ -25,14 +25,3 @@
 
 ## Main pdf
 *.pdf
-
-## Domain lists
-lists/*.txt
-lists/*.csv
-lists/old
-
-## Datasets
-dataset/feb23
-dataset/mar15
-
-measurements/old/*

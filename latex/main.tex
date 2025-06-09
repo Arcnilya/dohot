@@ -1,9 +1,7 @@
-\documentclass[conference]{IEEEtran}
-\IEEEoverridecommandlockouts
-% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
-%\usepackage{cite}
+\documentclass[runningheads]{llncs}
+%
+\usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amsfonts}
-%\usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
@@ -34,34 +32,19 @@
 
 \newcommand{\todo}[1]{\textcolor{red}{\texttt{TODO: #1}}}
 
-
 \begin{document}
+\title{DoHoT or Not? Tuning Tor Circuits for Anonymous DNS Queries}
+\author{First Author\inst{1}\orcidID{0000-1111-2222-3333} \and
+Second Author\inst{2}\orcidID{1111-2222-3333-4444}}
 
-\title{
-    DoHoT or Not? Tuning Tor Circuits for Anonymous DNS Queries
-}
+\authorrunning{F. Author et al.}
 
-\iffalse
-\author{\IEEEauthorblockN{1\textsuperscript{st} Jonathan Magnusson}
-\IEEEauthorblockA{\textit{Karlstad University} \\
-Karlstad, Sweden \\
-jonathan.magnusson@kau.se}
-\and
-\IEEEauthorblockN{2\textsuperscript{nd} Given Name Surname}
-\IEEEauthorblockA{\textit{name of organization (of Aff.)}\\
-City, Country \\
-email address}
-}
-\fi
-\author{Anonymous Authors}
-
-\maketitle
+\institute{University, City, Country \email{email@foo.boo}
+\and University, City, Country \email{email@foo.boo}}
+%
+\maketitle              % typeset the header of the contribution
 
 \input{src/abstract}
-
-\begin{IEEEkeywords}
-    key, words
-\end{IEEEkeywords}
 
 \input{src/intro}
 \input{src/background}
@@ -70,7 +53,7 @@ email address}
 \input{src/discussion}
 \input{src/conclusion}
 
-\bibliographystyle{plain}
-\bibliography{src/ref} % bibtex main to update
+\bibliographystyle{splncs04}
+\bibliography{src/ref} 
 
 \end{document}
