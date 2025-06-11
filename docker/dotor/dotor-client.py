@@ -44,6 +44,9 @@ def extract_hostname(data) -> str:
     return hostname
 
 def main():
+    #This is not the correct client, please use the dotor-client-tor-resolve.py instead.
+    print('This is not the correct client, please use the dotor-client-tor-resolve.py instead.')
+    exit(0)
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s_in, socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s_out:
         s_in.bind(('', 1337))
         s_out.bind(('', 9050))

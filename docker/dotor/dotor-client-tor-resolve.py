@@ -19,13 +19,13 @@ def main():
             data, a = s_in.recvfrom(1024)
             client_host, client_port = a
             hostname, id = extract_hostname(data)
-            correct_id = id.to_bytes(2,'big')
             q_r = dnsmessage.from_wire(r_sample.response.to_wire())
             if debug: print(f'DEBUG before: {q_r}\n--------\nID: {id}\n--------\n')
             q_r.id = id
             q_r.question[0].name = dns.name.from_text(hostname)
             if debug: print(f'DEBUG after: {q_r}\n--------\nqr.id: {q_r.id}\n--------\n')
             response = subprocess.check_output(['tor-resolve', hostname])
+            q_r.answer[0] = (dns.rrset.from_text( hostname, 3600, 'IN', 'A', response.decode('utf-8').strip()))
             q = q_r.to_wire() 
             b_tmp = bytearray(q)
             
