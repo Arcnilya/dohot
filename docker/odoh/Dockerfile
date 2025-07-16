@@ -12,9 +12,7 @@ ENV GOOS=linux
 ENV GOARCH=amd64
 RUN cd src/dnscrypt-proxy && go build -ldflags="-s -w" -mod vendor && cp /etc/dnscrypt-proxy-src/src/dnscrypt-proxy/dnscrypt-proxy /usr/local/bin/
 RUN mkdir -p /var/log/dnscrypt-proxy/
-#RUN echo "alias dnscrypt-proxy=/etc/dnscrypt-proxy-src/src/dnscrypt-proxy" >> $BASH_ENV 
 WORKDIR /etc/dnscrypt-proxy
-#COPY /etc/dnscrypt-proxy-src/src/dnscrypt-proxy/dnscrypt-proxy /usr/local/bin/
 COPY dnscrypt-proxy.toml .
 COPY bootup.sh .
 CMD ["./bootup.sh"]
