@@ -44,6 +44,7 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
+echo "stopping dohot-container..."
 docker stop dohot-container
 docker rm dohot-container
 docker build -t dohot-image .

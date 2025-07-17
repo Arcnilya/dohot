@@ -67,6 +67,7 @@ fi
 #python3 circuit_tracker.py > circuit_log.txt &
 
 dnscrypt-proxy -check
+echo "dnscrypt-proxy version: $(dnscrypt-proxy -version)"
 #dnscrypt-proxy -list
 dnscrypt-proxy
 
