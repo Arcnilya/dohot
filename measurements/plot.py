@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 plt.rcParams.update({'font.size': 16})
 
-height = 6
+height = 4
 width = 9
 
 def plot_one(dframe):
@@ -40,9 +40,9 @@ def plot_one(dframe):
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Configuration')
     plt.tight_layout()
-    plt.savefig('../latex/img/p1.pdf')
-    plt.savefig('p1.png')
-    #plt.show()
+    #plt.savefig('../latex/img/p1.pdf')
+    #plt.savefig('p1.png')
+    plt.show()
 
 
 def plot_two(dframe):
@@ -53,9 +53,9 @@ def plot_two(dframe):
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Configuration')
     plt.tight_layout()
-    plt.savefig('../latex/img/p2.pdf')
-    plt.savefig('p2.png')
-    #plt.show()
+    #plt.savefig('../latex/img/p2.pdf')
+    #plt.savefig('p2.png')
+    plt.show()
 
 
 def plot_three(dframe):
@@ -66,9 +66,23 @@ def plot_three(dframe):
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Configuration')
     plt.tight_layout()
-    plt.savefig('../latex/img/p3.pdf')
-    plt.savefig('p3.png')
-    #plt.show()
+    #plt.savefig('../latex/img/p3.pdf')
+    #plt.savefig('p3.png')
+    plt.show()
+
+def plot_four(dframe):
+    dframe['ylabel'] = df['prot'] + '\n' + df['setting']
+    plt.figure(figsize=(width, height))
+    sns.boxplot(y='ylabel', x='time', data=dframe, showfliers=False)
+    plt.xticks(rotation=45)
+    #plt.title('Query Time by Configuration (DoHoT vs Optimised vs ODoH)')
+    plt.xlabel('Query Time (ms)')
+    plt.ylabel('Configuration')
+    plt.tight_layout()
+    #plt.savefig('../latex/img/p4.pdf')
+    #plt.savefig('p4.png')
+    plt.show()
+
 
 
 df = pd.read_csv("log.csv")
@@ -76,6 +90,7 @@ df[['prot','method','setting','iteration','nonce']] = df['query'].str.split('-',
 df['method'] = df['method'].str.replace('carml','carml+stem')
 df['group'] = df['method'] + '\n' + df['setting']
 df['time'] = pd.to_numeric(df['time'], errors='coerce')
+print(df)
 
 group_avg_df = df.groupby('group', as_index=False)['time'].mean()
 print(group_avg_df)
@@ -85,19 +100,36 @@ print(group_avg_df)
 tmp = df[df['setting'] == "any2any2any"]
 tmp = pd.concat([tmp, df[df['setting'] == "se2any2any"]], sort=False)
 tmp = pd.concat([tmp, df[df['setting'] == "se2any2se"]], sort=False)
+print(tmp)
 plot_one(tmp)
 
-# Second plot: swedish middle relay
-tmp = df[df['setting'] == "se2se2any"]
+# Second plot: middle relay
+tmp = df[(df['method'] == "carml+stem") & (df['setting'] == "se2any2se")] # for comparison
 tmp = pd.concat([tmp, df[df['setting'] == "se2se2se"]], sort=False)
+tmp = pd.concat([tmp, df[df['setting'] == "se2se2any"]], sort=False)
+tmp = pd.concat([tmp, df[df['setting'] == "se2se2de"]], sort=False)
+tmp = pd.concat([tmp, df[df['setting'] == "se2de2se"]], sort=False)
+tmp = pd.concat([tmp, df[df['setting'] == "de2de2se"]], sort=False)
+tmp = pd.concat([tmp, df[df['setting'] == "de2se2de"]], sort=False)
+tmp = pd.concat([tmp, df[df['setting'] == "de2de2de"]], sort=False)
+print(tmp)
 plot_two(tmp)
 
 # Third plot: two-hops
 tmp = df[df['setting'] == "any2any"]
 tmp = pd.concat([tmp, df[df['setting'] == "se2any"]], sort=False)
+tmp = pd.concat([tmp, df[df['setting'] == "any2se"]], sort=False)
 tmp = pd.concat([tmp, df[df['setting'] == "se2se"]], sort=False)
+tmp = pd.concat([tmp, df[df['setting'] == "se2de"]], sort=False)
+tmp = pd.concat([tmp, df[df['setting'] == "de2de"]], sort=False)
+# Missing de2se?
+print(tmp)
 plot_three(tmp)
 
-
-
+# Fourth plot: old dohot, new dohot, odoh
+tmp = df[(df['method'] == "torrc") & (df['setting'] == "any2any2any")] # old dohot
+tmp = pd.concat([tmp, df[(df['method'] == "carml+stem") & (df['setting'] == "se2se")]], sort=False) # new dohot
+tmp = pd.concat([tmp, df[df['prot'] == "odoh"]], sort=False) # odoh
+print(tmp)
+plot_four(tmp)
 

@@ -9,11 +9,12 @@ log() {
 }
 
 start_resolver() {
-    local port=$1
-    local cname=$2
-    shift 2
+    local prot=$1
+    local port=$2
+    local cname=$3
+    shift 3
     log "Starting $cname"
-    docker run -d -p $port:53/tcp -p $port:53/udp --name "$cname" "$@" dohot-image > /dev/null
+    docker run -d -p $port:53/tcp -p $port:53/udp --name "$cname" "$@" $prot-image > /dev/null
     dig @$resolver -p $port kau.se +tries=5 +noall > /dev/null 2>&1
 }
 
@@ -38,7 +39,7 @@ run_test_round() {
 
     for i in $(seq 0 $((queries - 1))); do
         while :; do
-            start_resolver "$port" "$cname" "${docker_env_args[@]}"
+            start_resolver "$prot" "$port" "$cname" "${docker_env_args[@]}"
             dname="${prot}-${method}-${setting}-$i-$(mktemp -u XXXXXXXX).net"
             log "Sending $dname"
             qtime=$(dig @$resolver -p $port $dname +tries=2 | grep "Query time" | awk '{print $(NF-1)}')
@@ -59,25 +60,38 @@ docker rm -f $(docker ps -aq --filter name=dohot-) 2>/dev/null
 start_time=$(date +%s)
 
 # Run test rounds in parallel
-prot="dohot"
-run_test_round "$prot" "torrc" "default"    $((base_port + 0)) -e HOPS="3" -e METHOD="torrc" &
-run_test_round "$prot" "torrc" "noguard"    $((base_port + 10)) -e HOPS="3" -e METHOD="torrc-noguard" &
-run_test_round "$prot" "torrc" "se2any2any" $((base_port + 1)) -e HOPS="3" -e METHOD="torrc" -e ENTRY_NODES="se" &
-run_test_round "$prot" "torrc" "se2any2se"  $((base_port + 2)) -e HOPS="3" -e METHOD="torrc" -e ENTRY_NODES="se" -e EXIT_NODES="se" &
-run_test_round "$prot" "carml" "twohops"    $((base_port + 3)) -e HOPS="2" -e METHOD="carml" &
-run_test_round "$prot" "carml" "threehops"  $((base_port + 4)) -e HOPS="3" -e METHOD="carml" &
-run_test_round "$prot" "carml" "se2se"      $((base_port + 5)) -e HOPS="2" -e METHOD="carml" -e ENTRY_NODES="se" -e EXIT_NODES="se" &
-run_test_round "$prot" "carml" "se2de"      $((base_port + 6)) -e HOPS="2" -e METHOD="carml" -e ENTRY_NODES="se" -e EXIT_NODES="de" &
-run_test_round "$prot" "carml" "se2se2se"   $((base_port + 7)) -e HOPS="3" -e METHOD="carml" -e ENTRY_NODES="se" -e MIDDLE_NODES="se" -e EXIT_NODES="se" &
-run_test_round "$prot" "carml" "se2se2de"   $((base_port + 8)) -e HOPS="3" -e METHOD="carml" -e ENTRY_NODES="se" -e MIDDLE_NODES="se" -e EXIT_NODES="de" &
-run_test_round "$prot" "carml" "se2de2se"   $((base_port + 9)) -e HOPS="3" -e METHOD="carml" -e ENTRY_NODES="se" -e MIDDLE_NODES="de" -e EXIT_NODES="se" &
 
-#prot="dotot"
-#run_test_round "$prot" "torrc" "default"   $((base_port + 8)) &
-#run_test_round "$prot" "carml" "twohops"   $((base_port + 9)) -e HOPS="2" &
-#run_test_round "$prot" "carml" "threehops" $((base_port + 10)) -e HOPS="3" &
-#run_test_round "$prot" "carml" "se2se"     $((base_port + 11)) -e ENTRY_NODES="se" -e EXIT_NODES="se" -e HOPS="2" &
-#run_test_round "$prot" "carml" "se2de"     $((base_port + 12)) -e ENTRY_NODES="se" -e EXIT_NODES="de" -e HOPS="2" &
+## Plot 1
+run_test_round "dohot" "torrc" "any2any2any" $((base_port + 0)) -e HOPS="3" -e METHOD="torrc" &
+run_test_round "dohot" "carml" "any2any2any" $((base_port + 1)) -e HOPS="3" -e METHOD="carml" &
+
+run_test_round "dohot" "torrc" "se2any2any" $((base_port + 2)) -e HOPS="3" -e METHOD="torrc" -e ENTRY_NODES="se" &
+run_test_round "dohot" "carml" "se2any2any" $((base_port + 3)) -e HOPS="3" -e METHOD="carml" -e ENTRY_NODES="se" &
+
+run_test_round "dohot" "torrc" "se2any2se" $((base_port + 4)) -e HOPS="3" -e METHOD="torrc" -e ENTRY_NODES="se" -e EXIT_NODES="se" &
+run_test_round "dohot" "carml" "se2any2se" $((base_port + 5)) -e HOPS="3" -e METHOD="carml" -e ENTRY_NODES="se" -e EXIT_NODES="se" &
+
+## Plot 2
+run_test_round "dohot" "carml" "se2se2se" $((base_port + 6)) -e HOPS="3" -e METHOD="carml" -e ENTRY_NODES="se" -e MIDDLE_NODES="se" -e EXIT_NODES="se" &
+run_test_round "dohot" "carml" "se2se2any" $((base_port + 7)) -e HOPS="3" -e METHOD="carml" -e ENTRY_NODES="se" -e MIDDLE_NODES="se" &
+run_test_round "dohot" "carml" "se2se2de" $((base_port + 8)) -e HOPS="3" -e METHOD="carml" -e ENTRY_NODES="se" -e MIDDLE_NODES="se" -e EXIT_NODES="de" &
+run_test_round "dohot" "carml" "se2de2se" $((base_port + 9)) -e HOPS="3" -e METHOD="carml" -e ENTRY_NODES="se" -e MIDDLE_NODES="de" -e EXIT_NODES="se" &
+run_test_round "dohot" "carml" "de2de2se" $((base_port + 10)) -e HOPS="3" -e METHOD="carml" -e ENTRY_NODES="de" -e MIDDLE_NODES="de" -e EXIT_NODES="se" &
+run_test_round "dohot" "carml" "de2se2de" $((base_port + 11)) -e HOPS="3" -e METHOD="carml" -e ENTRY_NODES="de" -e MIDDLE_NODES="se" -e EXIT_NODES="de" &
+run_test_round "dohot" "carml" "de2de2de" $((base_port + 12)) -e HOPS="3" -e METHOD="carml" -e ENTRY_NODES="de" -e MIDDLE_NODES="de" -e EXIT_NODES="de" &
+
+## Plot 3
+run_test_round "dohot" "carml" "any2any" $((base_port + 13)) -e HOPS="2" -e METHOD="carml" &
+run_test_round "dohot" "carml" "se2any" $((base_port + 14)) -e HOPS="2" -e METHOD="carml" -e ENTRY_NODES="se" &
+run_test_round "dohot" "carml" "any2se" $((base_port + 15)) -e HOPS="2" -e METHOD="carml" -e EXIT_NODES="se" &
+run_test_round "dohot" "carml" "se2se" $((base_port + 16)) -e HOPS="2" -e METHOD="carml" -e ENTRY_NODES="se" -e EXIT_NODES="se" &
+run_test_round "dohot" "carml" "se2de" $((base_port + 17)) -e HOPS="2" -e METHOD="carml" -e ENTRY_NODES="se" -e EXIT_NODES="de" &
+run_test_round "dohot" "carml" "de2se" $((base_port + 17)) -e HOPS="2" -e METHOD="carml" -e ENTRY_NODES="se" -e EXIT_NODES="de" &
+run_test_round "dohot" "carml" "de2de" $((base_port + 18)) -e HOPS="2" -e METHOD="carml" -e ENTRY_NODES="de" -e EXIT_NODES="de" &
+
+## Plot 4
+run_test_round "odoh" "default" "default" $((base_port + 19)) &
+
 
 wait
 
