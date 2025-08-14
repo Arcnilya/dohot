@@ -4,6 +4,11 @@ parse () {
    echo "$1" | sed 's/,/},{/g; s/{/{/; s/}/}/'
 } 
 
+echo "Start of bootup.sh"
+echo "Entry nodes: ${ENTRY_NODES}"
+echo "Middle nodes: ${MIDDLE_NODES}"
+echo "Exit nodes: ${EXIT_NODES}"
+
 TORRC_PATH="/etc/tor/torrc"
 if [ "$HOPS" = "3" ] && [ "$METHOD" = "torrc" ]; then
     [[ -n "$ENTRY_NODES" ]] && echo "EntryNodes {$(parse $ENTRY_NODES)}" >> "$TORRC_PATH"
