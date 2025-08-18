@@ -67,11 +67,16 @@ circuits without the middle.
          4 & dohot & carml+stem & 3 & random & random & random \\\hline
          5 & dohot & carml+stem & 3 & sweden & random & random \\\hline
          6 & dohot & carml+stem & 3 & sweden & random & sweden \\\hline
-         7 & dohot & carml+stem & 3 & sweden & sweden & random \\\hline
-         8 & dohot & carml+stem & 3 & sweden & sweden & sweden \\\hline
-         9 & dohot & carml+stem & 2 & random & - & random \\\hline
-         10 & dohot & carml+stem & 2 & sweden & - & random \\\hline
-         11 & dohot & carml+stem & 2 & sweden & - & sweden \\\hline
+         \hline
+         7 & dohot & carml+stem & 3 & random & sweden & random \\\hline
+         8 & dohot & carml+stem & 3 & sweden & sweden & random \\\hline
+         9 & dohot & carml+stem & 3 & random & sweden & sweden \\\hline
+         10 & dohot & carml+stem & 3 & sweden & sweden & sweden \\\hline 
+         \hline
+         11 & dohot & carml+stem & 2 & random & - & random \\\hline
+         12 & dohot & carml+stem & 2 & sweden & - & random \\\hline
+         13 & dohot & carml+stem & 2 & random & - & sweden \\\hline
+         14 & dohot & carml+stem & 2 & sweden & - & sweden \\\hline
     \end{tabular}
 \end{table}
 
@@ -84,11 +89,11 @@ Rows 4--6 show equivalent configurations constructed with \texttt{carml} and
 \texttt{stem}, enabling a comparison between Tor's default relay selection
 algorithm and the custom approach.
 
-Rows 7--8 demonstrate configurations where the middle relay is explicitly
+Rows 7--10 demonstrate configurations where the middle relay is explicitly
 specified in a three-hop circuit using \texttt{carml} and \texttt{stem}, a
 capability not available through \texttt{torrc} alone.
 
-Finally, rows 9--11 illustrate two-hop circuit configurations, which are only
+Finally, rows 11--14 illustrate two-hop circuit configurations, which are only
 achievable when using \texttt{carml} and \texttt{stem}.
 
 

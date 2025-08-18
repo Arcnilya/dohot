@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 plt.rcParams.update({'font.size': 16})
 
-height = 4
-width = 9
+height = 5
+width = 8
 
 def plot_one(dframe):
     settings_order = ['any2any2any', 'se2any2any', 'se2any2se']
@@ -46,8 +46,8 @@ def plot_one(dframe):
 
 
 def plot_two(dframe):
-    plt.figure(figsize=(width, height))
-    sns.boxplot(y='group', x='time', data=dframe, showfliers=False)
+    plt.figure(figsize=(width, height+1))
+    sns.boxplot(y='setting', x='time', data=dframe, showfliers=False)
     plt.xticks(rotation=45)
     #plt.title('Query Time by Configuration (Sweden Middle)')
     plt.xlabel('Query Time (ms)')
@@ -60,7 +60,7 @@ def plot_two(dframe):
 
 def plot_three(dframe):
     plt.figure(figsize=(width, height))
-    sns.boxplot(y='group', x='time', data=dframe, showfliers=False)
+    sns.boxplot(y='setting', x='time', data=dframe, showfliers=False)
     plt.xticks(rotation=45)
     #plt.title('Query Time by Configuration (Two-Hop)')
     plt.xlabel('Query Time (ms)')
@@ -72,7 +72,7 @@ def plot_three(dframe):
 
 def plot_four(dframe):
     dframe['ylabel'] = df['prot'] + '\n' + df['setting']
-    plt.figure(figsize=(width, height))
+    plt.figure(figsize=(width, height-1))
     sns.boxplot(y='ylabel', x='time', data=dframe, showfliers=False)
     plt.xticks(rotation=45)
     #plt.title('Query Time by Configuration (DoHoT vs Optimised vs ODoH)')
@@ -105,31 +105,28 @@ plot_one(tmp)
 
 # Second plot: middle relay
 tmp = df[(df['method'] == "carml+stem") & (df['setting'] == "se2any2se")] # for comparison
-tmp = pd.concat([tmp, df[df['setting'] == "se2se2se"]], sort=False)
+tmp = pd.concat([tmp, df[df['setting'] == "any2se2any"]], sort=False)
+tmp = pd.concat([tmp, df[df['setting'] == "any2se2se"]], sort=False)
 tmp = pd.concat([tmp, df[df['setting'] == "se2se2any"]], sort=False)
-tmp = pd.concat([tmp, df[df['setting'] == "se2se2de"]], sort=False)
-tmp = pd.concat([tmp, df[df['setting'] == "se2de2se"]], sort=False)
-tmp = pd.concat([tmp, df[df['setting'] == "de2de2se"]], sort=False)
-tmp = pd.concat([tmp, df[df['setting'] == "de2se2de"]], sort=False)
-tmp = pd.concat([tmp, df[df['setting'] == "de2de2de"]], sort=False)
+tmp = pd.concat([tmp, df[df['setting'] == "se2se2se"]], sort=False)
 print(tmp)
 plot_two(tmp)
 
 # Third plot: two-hops
 tmp = df[df['setting'] == "any2any"]
-tmp = pd.concat([tmp, df[df['setting'] == "se2any"]], sort=False)
 tmp = pd.concat([tmp, df[df['setting'] == "any2se"]], sort=False)
+tmp = pd.concat([tmp, df[df['setting'] == "se2any"]], sort=False)
 tmp = pd.concat([tmp, df[df['setting'] == "se2se"]], sort=False)
-tmp = pd.concat([tmp, df[df['setting'] == "se2de"]], sort=False)
-tmp = pd.concat([tmp, df[df['setting'] == "de2de"]], sort=False)
-# Missing de2se?
 print(tmp)
 plot_three(tmp)
 
 # Fourth plot: old dohot, new dohot, odoh
 tmp = df[(df['method'] == "torrc") & (df['setting'] == "any2any2any")] # old dohot
+#tmp = pd.concat([tmp, df[df['setting'] == "au2se2au"]], sort=False) # worst circuit
 tmp = pd.concat([tmp, df[(df['method'] == "carml+stem") & (df['setting'] == "se2se")]], sort=False) # new dohot
 tmp = pd.concat([tmp, df[df['prot'] == "odoh"]], sort=False) # odoh
 print(tmp)
 plot_four(tmp)
+
+
 
