@@ -1,31 +1,52 @@
+# --- builder stage ---
+FROM golang:1.24 AS builder
+WORKDIR /work
+RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+RUN git clone --depth=1 https://github.com/DNSCrypt/dnscrypt-proxy dnscrypt
+
+WORKDIR /work/dnscrypt/dnscrypt-proxy
+ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+RUN go version \
+ && go build -ldflags="-s -w" -mod=vendor -o /usr/local/bin/dnscrypt-proxy
+
+# ---------- runtime: Ubuntu ----------
 FROM ubuntu:latest
-#SHELL ["/bin/bash", "-c"]
 
-RUN apt update && apt upgrade -y
-RUN apt install -y tor vim netcat-traditional net-tools #dnscrypt-proxy
-RUN apt install -y software-properties-common
+# Base packages
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+      tor tor-geoipdb vim netcat-traditional net-tools lsof \
+      software-properties-common ca-certificates curl git \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install python 3.11 for carl and stem
-RUN add-apt-repository ppa:deadsnakes/ppa -y && apt update
-RUN apt install -y python3.11 python3.11-venv python3.11-dev
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
-RUN apt install -y python3-pip
-RUN apt remove -y python3-cryptography
-RUN pip install carml --break-system-packages
-RUN pip install stem --break-system-packages
-RUN apt install -y lsof
+# Python 3.11 (deadsnakes)
+RUN add-apt-repository ppa:deadsnakes/ppa -y && apt-get update && \
+    apt-get install -y --no-install-recommends python3.11 python3.11-venv python3.11-dev python3-pip && \
+    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 && \
+    apt-get remove -y python3-cryptography || true && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt install -y git golang
-RUN rm -rf /var/lib/apt/lists/*
+# Create and use a dedicated venv
+RUN python3.11 -m venv /opt/venv
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-# Install dnscrypt-proxy from source
-RUN mkdir -p /etc/dnscrypt-proxy-src
-WORKDIR /etc/dnscrypt-proxy-src
-RUN git clone --depth=1 https://github.com/DNSCrypt/dnscrypt-proxy src
-ENV GOOS=linux
-ENV GOARCH=amd64
-RUN cd src/dnscrypt-proxy && go build -ldflags="-s -w" -mod vendor && cp /etc/dnscrypt-proxy-src/src/dnscrypt-proxy/dnscrypt-proxy /usr/local/bin/
+RUN apt-get update && apt-get install -y python3.11-distutils
+RUN python -m pip install --upgrade pip setuptools wheel
+
+RUN pip install --no-cache-dir stem carml
+
+# Copy compiled dnscrypt-proxy from builder
+COPY --from=builder /usr/local/bin/dnscrypt-proxy /usr/local/bin/
 RUN mkdir -p /var/log/dnscrypt-proxy/
+
+WORKDIR /etc/dnscrypt-proxy-src
+COPY dnscrypt-proxy.toml .
+COPY torrc_template /etc/tor/torrc
+COPY relays.py .
+COPY circuit_tracker.py .
+COPY bootup.sh .
 
 ENV ENTRY_NODES=
 ENV MIDDLE_NODES=
@@ -33,10 +54,5 @@ ENV EXIT_NODES=
 ENV EXCLUDE_NODES=
 ENV HOPS=
 ENV METHOD=
-WORKDIR /etc/dnscrypt-proxy
-COPY dnscrypt-proxy.toml .
-COPY torrc_template /etc/tor/torrc
-COPY relays.py .
-COPY circuit_tracker.py .
-COPY bootup.sh .
+
 CMD ["./bootup.sh"]

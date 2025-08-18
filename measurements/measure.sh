@@ -2,7 +2,7 @@
 
 resolver=localhost
 base_port=1337
-queries=100
+queries=1000
 
 log() {
     echo "$(date +"%Y-%m-%dT%H:%M:%S"): $1"
@@ -86,11 +86,11 @@ run_test_round "dohot" "carml" "se2any" $((base_port + 14)) -e HOPS="2" -e METHO
 run_test_round "dohot" "carml" "any2se" $((base_port + 15)) -e HOPS="2" -e METHOD="carml" -e EXIT_NODES="se" &
 run_test_round "dohot" "carml" "se2se" $((base_port + 16)) -e HOPS="2" -e METHOD="carml" -e ENTRY_NODES="se" -e EXIT_NODES="se" &
 run_test_round "dohot" "carml" "se2de" $((base_port + 17)) -e HOPS="2" -e METHOD="carml" -e ENTRY_NODES="se" -e EXIT_NODES="de" &
-run_test_round "dohot" "carml" "de2se" $((base_port + 17)) -e HOPS="2" -e METHOD="carml" -e ENTRY_NODES="se" -e EXIT_NODES="de" &
-run_test_round "dohot" "carml" "de2de" $((base_port + 18)) -e HOPS="2" -e METHOD="carml" -e ENTRY_NODES="de" -e EXIT_NODES="de" &
+run_test_round "dohot" "carml" "de2se" $((base_port + 18)) -e HOPS="2" -e METHOD="carml" -e ENTRY_NODES="de" -e EXIT_NODES="se" &
+run_test_round "dohot" "carml" "de2de" $((base_port + 19)) -e HOPS="2" -e METHOD="carml" -e ENTRY_NODES="de" -e EXIT_NODES="de" &
 
 ## Plot 4
-run_test_round "odoh" "default" "default" $((base_port + 19)) &
+run_test_round "odoh" "default" "default" $((base_port + 20)) &
 
 
 wait
@@ -107,5 +107,3 @@ echo "query,time" > log.csv
 cat log-*.csv | grep -v "query,time" >> log.csv
 rm log-*.csv
 log "Done. Final log is in log.csv"
-
-
