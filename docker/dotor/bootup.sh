@@ -39,6 +39,6 @@ fi
 python3 -m venv .venv
 source .venv/bin/activate
 pip install dnspython
-nohup python3 dotor-client-tor-resolve.py &
-sleep infinity
+nohup python3 -u dotor-client-tor-resolve.py #&
+#sleep infinity
 
