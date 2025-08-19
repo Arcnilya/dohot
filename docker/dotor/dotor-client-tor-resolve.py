@@ -1,7 +1,7 @@
 import socket, dns, re, hmac, subprocess, dns.resolver
 import dns.message as dnsmessage
 #from hashlib import sha1
-debug = True
+debug = False
 hostname_pattern = re.compile(r'^.+(?= IN A)')
 
 def extract_hostname(data):
@@ -23,7 +23,7 @@ def main():
             data, a = s_in.recvfrom(1024)
             client_host, client_port = a
             hostname, id = extract_hostname(data)
-            q_r = q_r_base.copy()
+            q_r = dns.message.from_wire(q_r_base.to_wire())
             if debug: print(f'DEBUG before: {q_r}\n--------\nID: {id}\n--------\n')
             q_r.id = id
             q_r.question[0].name = dns.name.from_text(hostname)
