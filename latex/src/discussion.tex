@@ -27,7 +27,7 @@ Reducing the number of hops and specifying the geographic location of relays in
 model for anonymous \ac{dns} queries. However, we do not recommend these
 configurations for general Tor usage, as they may weaken anonymity guarantees
 in broader applications. Additionally, the anonymity of \ac{dns} queries cannot
-be assured in the presence of colluding adversaries under a stronger threat
+be assured in the presence of colluding adversaries under a global threat
 model.
 
 \subsection{DoHoT in Context of Existing DNS Privacy Protocols}
@@ -60,7 +60,7 @@ same country as the client, the average resolution time was further reduced to
 
 However, \ac{dohot} still inherits limitations from Tor, including potential
 censorship and reliance on public volunteer infrastructure. Compared to
-\ac{odns}/\ac{odoh}, which can offer lower latency and are easier to deploy in
+\ac{odns} or \ac{odoh}, which can offer lower latency and are easier to deploy in
 centralized environments, \ac{dohot}'s reliance on Tor's ecosystem might hinder
 scalability for very high-throughput scenarios.
 

@@ -27,7 +27,7 @@ traffic. Similarly, \acf{doh}~\cite{RFC8484} transmits \ac{dns} messages over
 HTTPS, allowing \ac{dns} queries to blend in with regular encrypted web
 traffic. More recently, \acf{doq}~\cite{RFC9250} has been proposed to reduce
 latency and connection overhead by using the QUIC transport protocol, which
-integrates \ac{tls} and offers faster handshakes.
+integrates \ac{tls} over UDP and offers faster handshakes.
 
 While these protocols protect \ac{dns} queries from third-party passive
 eavesdroppers on the network path, they do not address a key structural
@@ -55,9 +55,8 @@ contents from on-path observers, they do not prevent the resolver from linking
 to introduce anonymity into \ac{dns} resolution by explicitly separating the
 client from the query.
 
-\subsubsection{\ac{odns}} \label{sec:bg:anon:odns}
-achieves this by using its own authoritative namespace
-where the authoritative name servers act as recursive resolvers~\cite{ODNS}. A client
+\ac{odns} achieves this by using its own authoritative namespace where the
+authoritative name servers act as recursive resolvers~\cite{ODNS}. A client
 encrypts the domain name in their query using a key, which itself is encrypted
 using the public key of the name server. and appends the \ac{tld}
 \texttt{odns}. Then, the client sends the query together with the encrypted key
@@ -66,19 +65,18 @@ server. The \ac{odns} name server can decrypt the key used to hide the real
 domain and perform a recursive lookup against the authoritative name servers
 before encrypting the answer and sending it back to the client via the other
 resolver. Because the proxy resolver only sees ciphertext, it cannot determine
-the queried domain, and the \ac{odns} name server has no information about
-the client issuing the query. There are two main limitations with \ac{odns}.
-The \ac{ecs} is part of the \ac{edns} and allows resolvers to include the
-client's subnet when querying authoritative name servers. The purpose of this
-extra information is to provide the client with a closer instance of the
-service if multiple are available. However, this feature de-anonymizes the
-client in a system like \ac{odns}. It is in general recommended to turn
-\ac{ecs} off for privacy reasons. Another limitation of \ac{odns} is collusion
-between the \ac{odns} name server and the resolver, since they have one piece
-of the puzzle each.
+the queried domain, and the \ac{odns} name server has no information about the
+client issuing the query. There are two main limitations with \ac{odns}. The
+\ac{ecs} is part of the \ac{edns} and allows resolvers to include the client's
+subnet when querying authoritative name servers. The purpose of this extra
+information is to provide the client with a closer instance of the service if
+multiple are available. However, this feature may de-anonymize the client in a
+system like \ac{odns}. It is in general recommended to turn \ac{ecs} off for
+privacy reasons. Another limitation of \ac{odns} is collusion between the
+\ac{odns} name server and the resolver, since they have one piece of the puzzle
+each.
 
-\subsubsection{\ac{odoh}} \label{sec:bg:anon:odoh}
-builds on this idea using the \ac{doh} transport~\cite{RFC9230}.
+\ac{odoh} builds on this idea using the \ac{doh} transport~\cite{RFC9230}.
 Clients send encrypted queries to a proxy (the \ac{doh} forwarder), which
 relays them to a \ac{doh} server (the target resolver). The proxy sees the
 client's IP address but not the query, while the target resolver sees the query
@@ -91,19 +89,18 @@ can hinder the scalability and accessibility of the protocols for end-users.
 \ac{odns} needs custom authoritative name servers which also act as recursive
 resolvers, and \ac{odoh} needs custom proxies between clients and the recursive
 \ac{doh} resolvers. The \ac{odoh} has seen deployment from Cloudflare with
-several proxy partners~\cite{singanamalla2020,cfblog}.
-Cloudflare has also commented on Mozilla's implementation of \ac{doh} where they
-suggested that Firefox also could help with discovering \ac{odoh} proxies which
-is important for a widespread adoption of the protocol~\cite{cfmozilla}.
-Schmitt~\emph{et al.}~\cite{ODNS} briefly discusses the use of \ac{dns} in
-Tor in contrast to \ac{odns}, highlighting several limitations. They note that
-Tor introduces significant latency, is susceptible to censorship, and that exit
-relays may be held accountable for transmitted content. Additionally, exit
-relay operators can observe \ac{dns} queries, and \ac{dns} traffic patterns may
-be fingerprinted to compromise client anonymity.
+several proxy partners~\cite{singanamalla2020,cfblog}. Cloudflare has also
+commented on Mozilla's implementation of \ac{doh} where they suggested that
+Firefox also could help with discovering \ac{odoh} proxies which is important
+for a widespread adoption of the protocol~\cite{cfmozilla}. Schmitt~\emph{et
+al.}~\cite{ODNS} briefly discusses the use of \ac{dns} in Tor in contrast to
+\ac{odns}, highlighting several limitations. They note that Tor introduces
+significant latency, is susceptible to censorship, and that exit relays may be
+held accountable for transmitted content. Additionally, exit relay operators
+can observe \ac{dns} queries, and \ac{dns} traffic patterns may be
+fingerprinted to compromise client anonymity.
 
-\subsubsection{\ac{dohot}} \label{sec:bg:anon:dohot}
-is an alternative method for anonymizing queries introduced by Alec
+\ac{dohot} is an alternative method for anonymizing queries introduced by Alec
 Muffet~\cite{DoHoT}. By routing \ac{doh} traffic through the Tor network, this
 approach enables clients to conceal their identity using Tor's existing relay
 infrastructure without requiring additional cryptographic protocols or
@@ -117,4 +114,3 @@ without visibility into the actual \ac{dns} content. Muffett's extensive home
 testing during the pandemic lockdown demonstrated that, despite increased
 latency, the system maintained acceptable performance for everyday Internet
 activities.
-
