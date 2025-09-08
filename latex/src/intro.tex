@@ -1,18 +1,20 @@
 \section{Introduction} \label{sec:intro}
 
 The \ac{dns} is a foundational Internet protocol for translating human-readable
-domain names into IP addresses~\cite{RFC1034,RFC1035}. Whenever a user accesses
-a website or online service, a \ac{dns} query is issued, and these queries have
-historically been sent in plaintext, exposing users to surveillance,
-censorship, and profiling.
+domain names into resources, such as IP addresses~\cite{RFC1034,RFC1035}.
+Whenever a user accesses a website or online service, a \ac{dns} query is
+issued, and these queries have historically been sent in plaintext, exposing
+users to surveillance, censorship, and profiling.
 
-To address these concerns, privacy-enhancing protocols \cite{RFC7858,RFC8484,RFC9250} have been introduced that encrypt the communication between the client
-and the resolver, preventing on-path adversaries from inspecting or modifying
-\ac{dns} traffic. However, they do not anonymize the client: the resolver still
-sees both the IP address of the client and the contents of the query. In many
-parts of the world, resolvers can, and often do, monetize or log this data
-without user consent. Even in jurisdictions with strong privacy laws there are
-data breaches and leakage risks.
+To address these concerns, privacy-enhancing protocols
+\cite{RFC7858,RFC8484,RFC9250} have been introduced that encrypt the
+communication between the client and the resolver, preventing on-path
+adversaries from inspecting or modifying \ac{dns} traffic. However, they do not
+anonymize the client: the resolver still sees both the IP address of the client
+\emph{and} the contents of the query. In many parts of the world, resolvers
+can, and often do, monetize or log this data without user consent. Even in
+jurisdictions with strong privacy laws there are data breaches and leakage
+risks.
 
 To reduce this link between client identity and \ac{dns} queries, new protocols
 have been proposed which introduce a cryptographic relay (or proxy) between the
