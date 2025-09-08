@@ -17,7 +17,7 @@ def main():
     test_response = subprocess.check_output(['tor-resolve', "netnod.se"])
     if debug: print(f'test_response: {test_response.decode("utf-8").strip()} for domain netnod.se vs normal resolve: {q_r_base.answer[0]}\n')
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s_in:
-        s_in.bind(('', 1337))
+        s_in.bind(('', 53))
         #s_in.listen()
         while True:
             data, a = s_in.recvfrom(1024)
@@ -28,8 +28,20 @@ def main():
             q_r.id = id
             q_r.question[0].name = dns.name.from_text(hostname)
             if debug: print(f'DEBUG after: {q_r}\n--------\nqr.id: {q_r.id}\n--------\n')
-            response = subprocess.check_output(['tor-resolve', hostname])
-            q_r.answer[0] = (dns.rrset.from_text( hostname, 3600, 'IN', 'A', response.decode('utf-8').strip()))
+
+            response = b''
+            try:
+                response = subprocess.check_output(['tor-resolve', hostname], stderr=subprocess.STDOUT)
+                q_r.set_rcode(dns.rcode.NOERROR)
+                q_r.answer[0] = dns.rrset.from_text(hostname, 3600, 'IN', 'A', response.decode('utf-8').strip())
+            except subprocess.CalledProcessError:
+                # tor-resolve failed (e.g., non-existing domain or SOCKS error) -> reply NXDOMAIN
+                q_r.set_rcode(dns.rcode.NXDOMAIN)
+                # ensure no stale records leak from the base response
+                q_r.answer.clear()
+                q_r.authority.clear()
+                q_r.additional.clear()
+
             q = q_r.to_wire() 
             b_tmp = bytearray(q)
             
