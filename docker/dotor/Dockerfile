@@ -19,7 +19,7 @@ WORKDIR /etc/dnscrypt-proxy
 COPY torrc_template /etc/tor/torrc
 COPY relays.py .
 COPY bootup.sh .
-COPY dotor-client-tor-resolve.py .
+COPY dotor-client.py .
 #EXPOSE 1337/udp
 #EXPOSE 1337/tcp
 
