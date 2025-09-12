@@ -48,7 +48,6 @@ def tor_socks5_handler(hostname):
 def response_unpacker(data):
     
     result = {'Valid_response': True, 'Protocol': b'\x05', 'VER': b'\x00', 'RSV': b'\x00', 'ATYP': b'\x00', 'ADDR': b'\x00', 'IPv': 'None', 'Error': 'None'}
-
     if data is Exception or isinstance(data, str):
         result['Valid_response'] = False
         result['Error'] = data
@@ -63,8 +62,8 @@ def response_unpacker(data):
         return result
     if data[1:2] != b'\x00':
         result['Valid_response'] = False
-        if data[1:2] == b'\x04':
-            result['Error'] = f'Host unreachable'
+        if data[1:2] == b'\x01':
+            result['Error'] = f'General SOCKS server failure' #Used when resolve fails, it's pretty weird
         else:
             result['Error'] = f'Error in response, VER not 0: {data}'
         return result
@@ -96,7 +95,7 @@ def fake_resolver(hostname, id, sample_response):
     print('Starting socks5-tester.py...\n\n')
      
     
-    query_response = sample_response.copy()
+    query_response = sample_response
     query_response.id = id
     query_response.question[0].name = dns.name.from_text(hostname)
     
@@ -108,8 +107,8 @@ def fake_resolver(hostname, id, sample_response):
 
     if response_full['Valid_response']:
         query_response.set_rcode(dns.rcode.NOERROR)
-        query_response.answer[0] = dns.rrset.from_text(hostname, 3600, 'IN', 'A', response_full['ADDR'].decode('utf-8').strip())
-    elif response_full['Error'] == 'Host unreachable':
+        query_response.answer[0] = dns.rrset.from_text(hostname, 3600, 'IN', 'A', response_full['ADDR'])
+    elif response_full['Error'] == 'General SOCKS server failure':
         # Usually means nothing found
         query_response.set_rcode(dns.rcode.NXDOMAIN)
         # Ensure no stale records leak from the base response
@@ -137,14 +136,14 @@ def main():
 
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s_in:
         s_in.bind(('', 53))
-        #s_in.listen()
+        print('Listening on port 1337/udp for DNS queries...')
         while True:
             data, a = s_in.recvfrom(1024)
             print(f'Got data from {a}: {data}')
             client_host, client_port = a
             hostname, id = extract_hostname(data)
             q=fake_resolver(hostname, id, q_r) 
-            print(f'{hostname} got response with id {id} from {client_host} at port {client_port}\nSent (id:{q_r.id}):\n{q}\n{q_r}')
+            print(f'{hostname} got response with id {id} from {client_host} at port {client_port}\nSent (id:{q_r.id}):\n{q}')
             s_in.sendto(q, a)
 
 
