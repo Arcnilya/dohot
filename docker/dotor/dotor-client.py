@@ -130,6 +130,8 @@ def main():
     r_sample = dns.resolver.resolve('netnod.se')
     q_r_base = dnsmessage.from_wire(r_sample.response.to_wire())
     q_r = dns.message.from_wire(q_r_base.to_wire())
+    if len(q_r.answer) < 1 or len(q_r.question) < 1:
+        raise Exception(f'Error in sample query response from normal DNS resolve of netnod.se during startup phase: {q_r_base}')
 
     #test_response = subprocess.check_output(['tor-resolve', "netnod.se"])
     #if debug: print(f'test_response: {test_response.decode("utf-8").strip()} for domain netnod.se vs normal resolve: {q_r_base.answer[0]}\n')
