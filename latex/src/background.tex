@@ -81,7 +81,8 @@ Clients send encrypted queries to a proxy (the \ac{doh} forwarder), which
 relays them to a \ac{doh} server (the target resolver). The proxy sees the
 client's IP address but not the query, while the target resolver sees the query
 but not the client's identity. This design assumes that the proxy and resolver
-do not collude, an assumption that is difficult to verify in practice.
+do not collude, an assumption that is difficult to verify in practice.  
+{\color{red} The Mutualized Oblivious DNS~\cite{kurihara2023muodns} ($\mu$ODNS) is an attempt to minimize the  collusion between the relay and the target resolver and corruption of the client's privacy. For this purpose,  multiple relays are selected randomly to be used towards the target resolver.  However,  to be the best of our knowledge,  there is a significant lack of global $\mu$ODNS adoption.}
 
 The effectiveness of \ac{odns} and \ac{odoh} hinges on the availability of
 resolvers and proxies that support the protocols. If this number is limited, it

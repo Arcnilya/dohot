@@ -90,6 +90,8 @@ Finally, rows 11--14 illustrate two-hop circuit configurations, which are only
 achievable when using \texttt{carml} and \texttt{stem}.
 \fi
 
+\todo{Alfred-suggestion: The paragraph below can be move after the three scenarios. The approach described is common to all three measurements scenarios}
+
 To eliminate the effects of caching and to maintain consistency across tests,
 we issue queries for uniquely generated \acp{sld} under a valid \ac{tld}, which
 are expected to return an non-existing-domain return code (NXDOMAIN). This
@@ -104,6 +106,13 @@ return. Finally, we stop the container before the next iteration
 begins.
 
 \todo{Comparison with ODoH (Alfred)}
+For ODoH, we also rely on DNSCrypt-proxy based container to foward DNS queries to DoH resolvers through ODNS infrastructure: relay and target. 
+We follow similar approach as for DoHoT and configure DNSCrypt-proxy to forward encrypted client query to  cloudflare DoH resolvers thought an Oblivious DoH relay in Sweden. This ensure that,  the ODoH relay and the target resolver are not conflicting. 
+Moreover, by using  an ODoH relay in Sweden, we mimic the DoHoT  case where the Tor entry relay is in Sweden. Furthermore, to be consistent with DoHoT experiments, we also use Cloudflare ODNS resolver as target. 
+Note that,  $\mu$ODNS  is not  considered in this study as it not based on the popular DNSCrypt-proxy and his adoption is considerably limited. 
+Based on this configuration, we create container and apply exactly the same measurement cases as for DoHoT. 
+
+
 
 
 \todo{Comparison with DoTor (Tor)}
