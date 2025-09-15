@@ -41,7 +41,7 @@ def plot_one(dframe):
     plt.ylabel('Configuration')
     plt.tight_layout()
     #plt.savefig('../latex/img/p1.pdf')
-    #plt.savefig('p1.png')
+    plt.savefig('p1.png')
     plt.show()
 
 
@@ -54,7 +54,7 @@ def plot_two(dframe):
     plt.ylabel('Configuration')
     plt.tight_layout()
     #plt.savefig('../latex/img/p2.pdf')
-    #plt.savefig('p2.png')
+    plt.savefig('p2.png')
     plt.show()
 
 
@@ -67,7 +67,7 @@ def plot_three(dframe):
     plt.ylabel('Configuration')
     plt.tight_layout()
     #plt.savefig('../latex/img/p3.pdf')
-    #plt.savefig('p3.png')
+    plt.savefig('p3.png')
     plt.show()
 
 def plot_four(dframe):
@@ -80,7 +80,7 @@ def plot_four(dframe):
     plt.ylabel('Configuration')
     plt.tight_layout()
     #plt.savefig('../latex/img/p4.pdf')
-    #plt.savefig('p4.png')
+    plt.savefig('p4.png')
     plt.show()
 
 
