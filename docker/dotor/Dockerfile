@@ -15,17 +15,20 @@ RUN pip install stem --break-system-packages
 RUN apt install -y dnsutils
 RUN rm -rf /var/lib/apt/lists/*
 
-ENV ENTRY_NODES=
-ENV EXIT_NODES=
-ENV EXCLUDE_NODES=
-ENV HOPS=3
 WORKDIR /etc/dnscrypt-proxy
 COPY torrc_template /etc/tor/torrc
 COPY relays.py .
 COPY bootup.sh .
-COPY dotor-client-tor-resolve.py .
-EXPOSE 1337/udp
-EXPOSE 1337/tcp
+COPY dotor-client.py .
+#EXPOSE 1337/udp
+#EXPOSE 1337/tcp
+
+ENV ENTRY_NODES=
+ENV MIDDLE_NODES=
+ENV EXIT_NODES=
+ENV EXCLUDE_NODES=
+ENV HOPS=
+ENV METHOD=
 
 CMD ["./bootup.sh"]
 
