@@ -1,7 +1,6 @@
 \section{Discussion} \label{sec:disc}
-
 Our findings demonstrate that \ac{dohot} can achieve significantly improved
-\ac{dns} query performance by carefully tuning Tor circuit configurations,
+\ac{dns} query performance by tuning Tor circuit configurations,
 specifically by reducing the number of hops and by geographically localizing
 relays. These optimizations suggest practical pathways to making anonymous
 \ac{dns} queries more feasible for everyday use, without fundamentally
@@ -48,6 +47,17 @@ at the exit relay, unlike \ac{dohot}, which encrypts queries end-to-end using
 yielded a median resolution time of under 200 ms. When using a two-hop circuit
 with both relays near the client, the median dropped below 100 ms.
 
+Schmitt~\emph{et al.} briefly discusses the use of \ac{dns} in Tor in contrast
+to \ac{odns}, highlighting several limitations. They note that Tor introduces
+significant latency, is susceptible to censorship, and that exit relays may be
+held accountable for transmitted content. Additionally, exit relay operators
+can observe \ac{dns} queries, and \ac{dns} traffic patterns may be
+fingerprinted to compromise client anonymity. Since queries in \ac{dohot} are
+encrypted, exit relays can only observe a client communicating with a resolver
+without visibility into the actual \ac{dns} content. While Tor censorship
+remains a persistent challenge, techniques such as bridge relays provide
+potential workarounds. 
+
 Singanamalla~\emph{et al.}~\cite{singanamalla2020} evaluated the performance of
 \ac{odoh} in a deployment setting, comparing it with several other protocols
 including standard \ac{doh}, proxied \ac{doh}, various \ac{odoh}
@@ -58,16 +68,29 @@ ms. In contrast, our experiments showed a substantially lower average for
 same country as the client, the average resolution time was further reduced to
 155.54 ms.
 
+\subsection{Limitations}
 However, \ac{dohot} still inherits limitations from Tor, including potential
 censorship and reliance on public volunteer infrastructure. Compared to
 \ac{odns} or \ac{odoh}, which can offer lower latency and are easier to deploy in
 centralized environments, \ac{dohot}'s reliance on Tor's ecosystem might hinder
 scalability for very high-throughput scenarios.
 
-\subsection{Limitations}
-Our experiments primarily measured \ac{dns} query latency in a controlled
-environment using NXDOMAIN lookups. This approach removes caching as a variable
-but does not fully reflect real-world usage where cache hits are common.
+Our findings indicate that the middle relay in Tor's conventional three-hop
+design may not be necessary for anonymous \ac{dns} resolution within the bounds
+of a non-colluding adversary model. However, omitting it reduces the diversity
+of the path and may weaken anonymity in settings with more powerful or
+coordinated adversaries.
+
+Localizing the entry and exit relays to the same geographic region as the
+client significantly reduced \ac{dns} query latency. However, narrowing the
+relay selection pool may reduce entropy in path selection, potentially
+increasing the risk of relay-based correlation attacks. This strategy should be
+applied with caution depending on the user's threat model and required
+anonymity level.
+
+Our experiments primarily measured \ac{dns} query latency using NXDOMAIN
+lookups. This approach removes caching as a variable and does not fully reflect
+real-world usage where cache hits are common.
 
 
 \iffalse

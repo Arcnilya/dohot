@@ -1,11 +1,23 @@
 \section{Measurement} \label{sec:measurement}
+We performed our measurements in four groups. The goal of the first set of
+measurements was to compare the circuit configuration methods against each
+other. We wanted to investigate whether there were performance differences
+between using \texttt{torrc} or \texttt{carml+stem}. The second set of
+measurements explore the impact on latency when specifying the location of the
+middle relay, something that only \texttt{carml+stem} can do out of the two
+methods. In the third set of measurements we look at circuits without middle
+relays, also a capability we get from \texttt{carml+stem}. Finally we also
+compare the best performing configuration against a default \ac{dohot} setup,
+as well as \ac{odoh} and DoTor.
+
 \begin{figure}[h]
     \centering
-    Query Time by Configuration (torrc vs carml+stem)\par\medskip
+    Query Time by Method (torrc vs carml+stem)\par\medskip
     \vspace{-.5em}
     \includegraphics[width=\textwidth]{img/p1.pdf}
     \vspace{-2em}
-    \caption{Comparing methods for building circuits in Tor.}
+    \caption{Comparing approaches for building circuits in Tor in regards to query latency. 
+    Methods on the left and circuits on the right.}
     \label{fig:p1}
 \end{figure}
 
@@ -17,15 +29,16 @@ primarily due to differences in relay selection. By default, \texttt{torrc}
 selects relays based on weighted bandwidth, favoring faster, more
 geographically optimal relays. In contrast, \texttt{carml+stem} selects relays
 uniformly at random within constraints such as location and relay type (e.g.,
-exit or non-exit). \todo{details from graph}
+exit or non-exit). 
 
 \begin{figure}[h]
     \centering
-    Query Time by Configuration (Middle location)\par\medskip
+    Query Time by Circuit (specific middle)\par\medskip
     \vspace{-.5em}
     \includegraphics[width=\textwidth]{img/p2.pdf}
     \vspace{-2em}
-    \caption{Using carml+stem to specify location of middle relay.}
+    \caption{Comparing circuits using carml+stem to specify location of middle relay in regards to latency.
+    Including se2any2se from Figure~\ref{fig:p1} for comparison.}
     \label{fig:p2}
 \end{figure}
 
@@ -34,15 +47,15 @@ By specifying the middle relay's location, we can reduce the geographical
 spread of circuits, and thus reduce the latency of the queries.
 Figure~\ref{fig:p2} shows a notable reduction in latency when the middle relay
 is constrained to be in the same country as the client. As expected, reducing
-the physical distance between relays improves performance. \todo{details from graph}
+the physical distance between relays improves performance. 
 
 \begin{figure}[h]
     \centering
-    Query Time by Configuration (Two-Hops)\par\medskip
+    Query Time by Circuit (without middle)\par\medskip
     \vspace{-.5em}
     \includegraphics[width=\textwidth]{img/p3.pdf}
     \vspace{-2em}
-    \caption{Using carml+stem to build circuits without a middle relay.}
+    \caption{Comparing circuits without middle relays using carml+stem in regards to latency.}
     \label{fig:p3}
 \end{figure}
 
@@ -50,20 +63,21 @@ We used \texttt{carml+stem} to construct two-hop circuits, consisting
 only of an entry and an exit relay, a configuration not supported by
 \texttt{torrc}. As illustrated in Figure~\ref{fig:p3}, this further reduces
 latency. The best performance was observed when both relays were located in the
-same country as the client. \todo{details from graph}
+same country as the client. 
 
 \begin{figure}[h]
     \centering
-    Query Time by Configuration (DoHoT vs ODoH)\par\medskip
+    Query Time by Approach (DoHoT vs ODoH)\par\medskip
     \vspace{-.5em}
     \includegraphics[width=\textwidth]{img/p4.pdf}
     \vspace{-2em}
-    \caption{Comparing the default configuration of DoHoT with the new one optimized for latency as well
-    as ODoH.}
+    \caption{Comparing the default configuration of DoHoT (any2any2any) with
+    the new one optimized for latency (se2se) as well as ODoH \todo{and DoTor}.}
     \label{fig:p4}
 \end{figure}
 
-Figure~\ref{fig:p4} presents a side-by-side comparison between the default configuration of \ac{dohot}
-introduced by Alex Muffet~\cite{DoHoT} and a \ac{dohot} configuration tuned for latency without compromising
-the threat model of anonymous \ac{dns} queries. We also include containerized implementations of \ac{odoh}
-and DoTor for comparison. \todo{details from graph}
+Figure~\ref{fig:p4} presents a side-by-side comparison between the default
+configuration of \ac{dohot} introduced by Alex Muffet~\cite{DoHoT} and a
+\ac{dohot} configuration tuned for latency without compromising the threat
+model of anonymous \ac{dns} queries. We also include containerized
+implementations of \ac{odoh} and DoTor for comparison. 
