@@ -1,4 +1,4 @@
-import socket, dns, re, hmac, subprocess, dns.resolver
+import socket, dns, re, hmac, subprocess, dns.resolver, copy
 import dns.message as dnsmessage
 #from hashlib import sha1
 debug = False
@@ -47,7 +47,7 @@ def tor_socks5_handler(hostname):
 
 def response_unpacker(data):
     
-    result = {'Valid_response': True, 'Protocol': b'\x05', 'VER': b'\x00', 'RSV': b'\x00', 'ATYP': b'\x00', 'ADDR': b'\x00', 'IPv': 'None', 'Error': 'None'}
+    result = {'Valid_response': True, 'Protocol': b'\x05', 'VER': b'\x00', 'RSV': b'\x00', 'ATYP': b'\x00', 'ADDR': b'\x00', 'IPv': 'None', 'Error': 'None', 'DNS-error': False}
     if data is Exception or isinstance(data, str):
         result['Valid_response'] = False
         result['Error'] = data
@@ -60,10 +60,15 @@ def response_unpacker(data):
         result['Valid_response'] = False
         result['Error'] = f'Not SOCKS5 response: {data}'
         return result
+    print(f'Debug: data response code: {data[1:2].hex()}')
     if data[1:2] != b'\x00':
         result['Valid_response'] = False
-        if data[1:2] == b'\x01':
-            result['Error'] = f'General SOCKS server failure' #Used when resolve fails, it's pretty weird
+        if data[1:2] == b'\x04':
+            result['Error'] = f'Host unreachable' #Used when resolve fails due to non existant domain
+            result['DNS-error'] = True
+        elif data[1:2] == b'\x01':
+            result['Error'] = f'General SOCKS server failure' #Used when it fails to handle the hostname e.g. invalid format.
+            result['DNS-error'] = True
         else:
             result['Error'] = f'Error in response, VER not 0: {data}'
         return result
@@ -92,10 +97,10 @@ def response_unpacker(data):
 
 #Produces a dig compliant response for the given hostname (some shortcuts are taken, but the address is correct))
 def fake_resolver(hostname, id, sample_response):
-    print('Starting socks5-tester.py...\n\n')
+    print('Starting...\n\n')
      
     
-    query_response = sample_response
+    query_response = copy.deepcopy(sample_response)
     query_response.id = id
     query_response.question[0].name = dns.name.from_text(hostname)
     
@@ -104,11 +109,12 @@ def fake_resolver(hostname, id, sample_response):
     response_raw = tor_socks5_handler(hostname)
     
     response_full = response_unpacker(response_raw)
+    print(f'Unpacked response: {response_full}')
 
     if response_full['Valid_response']:
         query_response.set_rcode(dns.rcode.NOERROR)
         query_response.answer[0] = dns.rrset.from_text(hostname, 3600, 'IN', 'A', response_full['ADDR'])
-    elif response_full['Error'] == 'General SOCKS server failure':
+    elif response_full['DNS-error']:
         # Usually means nothing found
         query_response.set_rcode(dns.rcode.NXDOMAIN)
         # Ensure no stale records leak from the base response
