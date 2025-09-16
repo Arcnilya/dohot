@@ -15,31 +15,35 @@ At the \ac{doh} resolver, the adversary sees decrypted \ac{dns} queries and the
 Tor exit IP but not the client IP. Our model reflects practical threats such as
 surveillance by \acp{isp} (at the Tor entry), data collection by \ac{doh}
 resolvers, and network-level observation (e.g., nation-state monitoring of exit
-traffic), while emphasizing query confidentiality, unlinkability, and client
-anonymity within the constraints of Tor's threat model and the encryption
-guarantees by \ac{doh}.
+traffic), while emphasizing query confidentiality and client anonymity within
+the constraints of Tor's threat model and the encryption guarantees by
+\ac{doh}.
 
 For \ac{dohot} we use the implementation proposed by Alec Muffet as a
 foundation. We dockerize both Tor and DNSCrypt-proxy to a single container to
 simplify the deployment and measurement. DNSCrypt-proxy is responsible for
 listening on a port for client queries and sending them to a \ac{doh} server
-using Tor. On the container we install two additional tools for interacting with
+using Tor. We decided to pick a single \ac{doh} provider for our measurements
+to limit the number of variables. Our choice of \ac{doh} resolver, 
+Cloudflare's \texttt{1.1.1.1}, is
+using anycast which means that the closest from the perspective of our exit or
+proxy will be used\footnote{\url{https://developers.cloudflare.com/1.1.1.1/}}.
+
+On the container we install two additional tools for interacting with
 the Tor client. \texttt{Carml} is a command-line tool and Python library that
 lets users interact with a running Tor instance~\cite{carml}. It offers simple
 commands to view and create circuits, manage streams, and set up hidden
 services. \texttt{Stem} is a Python library from the Tor Project used to
 control and script Tor through its Control Protocol~\cite{stem}. It lets
 developers build custom tools to fetch available relays and manage Tor
-processes programmatically. The code for the container and the measurement
-script can be found on GitHub.\footnote{\todo{add github link}}
-\todo{choice of DoH server (Cloudflare)}
+processes programmatically. 
 
 As mentioned in Section~\ref{sec:intro}, we focus on two approaches for
 reducing latency in Tor circuits: \emph{number} of relays and \emph{location}
 of relays. The configuration file for Tor, the \texttt{torrc}, does not allow
 anything less than three relays for a circuit, but we can specify the
 geographical location of the entry and the exit using country-codes. Since the
-client for our measurements is based in Sweden (country-code: se), choosing Tor
+client for our measurements is located in Sweden (country-code: \texttt{se}), choosing Tor
 relays in Sweden places them in close geographic proximity to the client. Using
 \texttt{carml} and \texttt{stem} we are able to both specify the geographical
 location of the middle relay in a three-hop circuit, as well as build two-hop
@@ -90,7 +94,21 @@ Finally, rows 11--14 illustrate two-hop circuit configurations, which are only
 achievable when using \texttt{carml} and \texttt{stem}.
 \fi
 
-\todo{Alfred-suggestion: The paragraph below can be move after the three scenarios. The approach described is common to all three measurements scenarios}
+
+For \ac{odoh}, we also rely on DNSCrypt-proxy based container to foward \ac{dns} queries
+to \ac{doh} resolvers through \ac{odoh} infrastructure: relay and target. We follow
+a similar approach as for \ac{dohot} and configure DNSCrypt-proxy to forward encrypted
+client query to Cloudflare \ac{doh} resolvers through an \ac{odoh} relay in
+Sweden. This ensure that, the \ac{odoh} relay and the target resolver are not
+conflicting. Moreover, by using an \ac{odoh} relay in Sweden, we mimic the \ac{dohot}
+case where the Tor entry relay is in Sweden. Furthermore, to be consistent with
+\ac{dohot} experiments, we also use Cloudflare \ac{doh} resolver as target. Note that,
+$\mu$\ac{odns} is not considered in this study as it not based on the popular
+DNSCrypt-proxy and his adoption is considerably limited. Based on this
+configuration, we create container and apply exactly the same measurement cases
+as for \ac{dohot}. 
+
+\todo{DoTor (Tor Arvill)}
 
 To eliminate the effects of caching and to maintain consistency across tests,
 we issue queries for uniquely generated \acp{sld} under a valid \ac{tld}, which
@@ -103,16 +121,6 @@ configuration and wait until a circuit is established and a query receives a
 successful response. We then issue a query for an A record using a unique,
 non-existent domain and measure the time, in milliseconds, for the reply to
 return. Finally, we stop the container before the next iteration
-begins.
+begins. The code for the containers and measurement script can be found on 
+GitHub.\footnote{\todo{add github link}}
 
-\todo{Comparison with ODoH (Alfred)}
-For ODoH, we also rely on DNSCrypt-proxy based container to foward DNS queries to DoH resolvers through ODNS infrastructure: relay and target. 
-We follow similar approach as for DoHoT and configure DNSCrypt-proxy to forward encrypted client query to  cloudflare DoH resolvers thought an Oblivious DoH relay in Sweden. This ensure that,  the ODoH relay and the target resolver are not conflicting. 
-Moreover, by using  an ODoH relay in Sweden, we mimic the DoHoT  case where the Tor entry relay is in Sweden. Furthermore, to be consistent with DoHoT experiments, we also use Cloudflare ODNS resolver as target. 
-Note that,  $\mu$ODNS  is not  considered in this study as it not based on the popular DNSCrypt-proxy and his adoption is considerably limited. 
-Based on this configuration, we create container and apply exactly the same measurement cases as for DoHoT. 
-
-
-
-
-\todo{Comparison with DoTor (Tor)}

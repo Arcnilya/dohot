@@ -1,4 +1,20 @@
 \begin{abstract}
-    \todo{Write abstract}
-    \keywords{First \and Second \and Third}
+    The Domain Name System (DNS) is used everyday by end users to resolve
+    domain names to IP addresses. While the encryption of these queries to hide
+    browsing habits from third-parties are picking up adoption, it still fails
+    to address the privacy problem of sending who you are and where you are
+    going to a single DNS resolver provider. Multiple solutions to this problem
+    by anonymizing the client have been proposed but there is either a lack of
+    deployment or too costly in regards to latency. This study aims to
+    investigate potential performance increases in the DNS-over-HTTPS-over-Tor
+    (DoHoT) approach. By exploring different circuit configurations of the Tor
+    network we found that we could decrease the latency of DNS queries while
+    preserving the privacy guarantees in our threat model for anonymous
+    resolution. We compare the best performing configuration of DoHoT against
+    other approaches and even though the reduced latency is behind the other
+    solutions, DoHoT is ready to use today with no additional infrastructure
+    required. Our findings demonstrate that, under realistic assumptions, a
+    lightweight Tor-based approach to anonymous resolution offers a compelling
+    balance between privacy and performance.
+    \keywords{DNS \and Oblivious DNS \and Tor \and Encryption \and Proxy \and Latency}
 \end{abstract}

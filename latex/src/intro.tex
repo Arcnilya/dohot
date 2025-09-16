@@ -37,14 +37,9 @@ can be located on different continents, can make \ac{dns} resolution slow and
 inconsistent. This study explores whether Tor's performance penalties can be
 reduced without compromising privacy. Specifically, we investigate the
 viability of using two-hop Tor circuits (entry and exit relays) for \ac{dns}
-resolution, arguing that the third relay (the middle node) may not be essential
-when using the threat model for anonymous \ac{dns} queries. Furthermore, we
-examine whether circuit performance can be improved by restricting relays to
-geographic regions in close proximation to the client.
-
-We evaluate the latency reduction achieved by various methods and
-configurations in Tor, highlighting their benefits and limitations in
-comparison to other privacy-preserving \ac{dns} solutions. Our findings
-demonstrate that, under realistic assumptions, a lightweight Tor-based approach
-offers a compelling balance between privacy and performance, and it is ready to
-use today with no additional infrastructure required.
+resolution, arguing that the middle relay may not be essential when using the
+threat model for anonymous \ac{dns} queries. Furthermore, we examine whether
+circuit performance can be improved by restricting relays to geographic regions
+in close proximation to the client. We evaluate the latency reduction achieved
+by these various methods and configurations in Tor, highlighting their benefits
+and limitations in comparison to other privacy-preserving \ac{dns} solutions. 
