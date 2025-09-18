@@ -67,16 +67,28 @@ same country as the client.
 
 \begin{figure}[h]
     \centering
-    Query Time by Approach (DoHoT vs ODoH)\par\medskip
+    Query Time by Circuit (DoTor carml+stem)\par\medskip
     \vspace{-.5em}
     \includegraphics[width=\textwidth]{img/p4.pdf}
     \vspace{-2em}
-    \caption{Comparing the default configuration of DoHoT (any2any2any) with
-    the new one optimized for latency (se2se) as well as ODoH \todo{and DoTor}.}
+    \caption{DoTor}
     \label{fig:p4}
 \end{figure}
 
-Figure~\ref{fig:p4} presents a side-by-side comparison between the default
+\todo{dotor plot}
+
+\begin{figure}[h]
+    \centering
+    Query Time by Approach\par\medskip
+    \vspace{-.5em}
+    \includegraphics[width=\textwidth]{img/p5.pdf}
+    \vspace{-2em}
+    \caption{Comparing the default configuration of DoHoT (any2any2any) with
+    the new one optimized for latency (se2se) as well as ODoH and DoTor.}
+    \label{fig:p5}
+\end{figure}
+
+Figure~\ref{fig:p5} presents a side-by-side comparison between the default
 configuration of \ac{dohot} introduced by Alex Muffet~\cite{DoHoT} and a
 \ac{dohot} configuration tuned for latency without compromising the threat
 model of anonymous \ac{dns} queries. We also include containerized
