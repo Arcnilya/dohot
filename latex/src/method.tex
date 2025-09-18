@@ -49,52 +49,6 @@ relays in Sweden places them in close geographic proximity to the client. Using
 location of the middle relay in a three-hop circuit, as well as build two-hop
 circuits without a middle relay.
 
-\iffalse
-\begin{table}[h!]
-    \centering
-    \caption{Table of measurement configurations using Tor.}
-    \label{tab:conf}
-    \begin{tabular}{|c|c|c|c|c|c|c|}
-         \hline
-         ID & protocol & method & hops & entry & middle & exit \\\hline
-         \hline
-         1 & dohot & torrc & 3 & random & random & random \\\hline
-         2 & dohot & torrc & 3 & sweden & random & random \\\hline
-         3 & dohot & torrc & 3 & sweden & random & sweden \\\hline
-         4 & dohot & carml+stem & 3 & random & random & random \\\hline
-         5 & dohot & carml+stem & 3 & sweden & random & random \\\hline
-         6 & dohot & carml+stem & 3 & sweden & random & sweden \\\hline
-         \hline
-         7 & dohot & carml+stem & 3 & random & sweden & random \\\hline
-         8 & dohot & carml+stem & 3 & sweden & sweden & random \\\hline
-         9 & dohot & carml+stem & 3 & random & sweden & sweden \\\hline
-         10 & dohot & carml+stem & 3 & sweden & sweden & sweden \\\hline 
-         \hline
-         11 & dohot & carml+stem & 2 & random & - & random \\\hline
-         12 & dohot & carml+stem & 2 & sweden & - & random \\\hline
-         13 & dohot & carml+stem & 2 & random & - & sweden \\\hline
-         14 & dohot & carml+stem & 2 & sweden & - & sweden \\\hline
-    \end{tabular}
-\end{table}
-
-Rows 1--3 in Table~\ref{tab:conf} present configuration variations using the
-Tor configuration file (\texttt{torrc}). In this setup, it is not possible to
-reduce the number of hops below three, nor to specify the geographical location
-of the middle relay.
-
-Rows 4--6 show equivalent configurations constructed with \texttt{carml} and
-\texttt{stem}, enabling a comparison between Tor's default relay selection
-algorithm and the custom approach.
-
-Rows 7--10 demonstrate configurations where the middle relay is explicitly
-specified in a three-hop circuit using \texttt{carml} and \texttt{stem}, a
-capability not available through \texttt{torrc} alone.
-
-Finally, rows 11--14 illustrate two-hop circuit configurations, which are only
-achievable when using \texttt{carml} and \texttt{stem}.
-\fi
-
-
 For \ac{odoh}, we also rely on DNSCrypt-proxy based container to foward \ac{dns} queries
 to \ac{doh} resolvers through \ac{odoh} infrastructure: relay and target. We follow
 a similar approach as for \ac{dohot} and configure DNSCrypt-proxy to forward encrypted
@@ -108,7 +62,7 @@ DNSCrypt-proxy and his adoption is considerably limited. Based on this
 configuration, we create container and apply exactly the same measurement cases
 as for \ac{dohot}. 
 
-\todo{DoTor (Tor Arvill)}
+\todo{DoTor setup (Tor Arvill)}
 
 To eliminate the effects of caching and to maintain consistency across tests,
 we issue queries for uniquely generated \acp{sld} under a valid \ac{tld}, which
@@ -122,5 +76,5 @@ successful response. We then issue a query for an A record using a unique,
 non-existent domain and measure the time, in milliseconds, for the reply to
 return. Finally, we stop the container before the next iteration
 begins. The code for the containers and measurement script can be found on 
-GitHub.\footnote{\todo{add github link}}
+GitHub.\footnote{Anonymized for submission}
 
