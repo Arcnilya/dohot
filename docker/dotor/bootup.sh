@@ -22,7 +22,7 @@ fi
 service tor restart
 
 
-if [ "$HOPS" = "2" ] && [ "METHOD" = "carml" ]; then
+if [ "$HOPS" = "2" ] && [ "$METHOD" = "carml" ]; then
     echo "Creating a two-hop circuit"
     fp1=$(python3 relays.py --cc ${ENTRY_NODES:-any} --role entry)
     echo "Found $fp1"
