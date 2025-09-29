@@ -1,20 +1,23 @@
 \begin{abstract}
-    The Domain Name System (DNS) is used everyday by end users to resolve
+    The Domain Name System (DNS) is used every day by end users to resolve
     domain names to IP addresses. While the encryption of these queries to hide
-    browsing habits from third-parties are picking up adoption, it still fails
-    to address the privacy problem of sending who you are and where you are
-    going to a single DNS resolver provider. Multiple solutions to this problem
-    by anonymizing the client have been proposed but there is either a lack of
-    deployment or too costly in regards to latency. This study aims to
-    investigate potential performance increases in the DNS-over-HTTPS-over-Tor
-    (DoHoT) approach. By exploring different circuit configurations of the Tor
-    network we found that we could decrease the latency of DNS queries while
-    preserving the privacy guarantees in our threat model for anonymous
-    resolution. We compare the best performing configuration of DoHoT against
-    other approaches and even though the reduced latency is behind the other
-    solutions, DoHoT is ready to use today with no additional infrastructure
-    required. Our findings demonstrate that, under realistic assumptions, a
-    lightweight Tor-based approach to anonymous resolution offers a compelling
-    balance between privacy and performance.
+    browsing habits from third parties is gaining adoption, it still fails to
+    address the privacy issue of sending your identity and destination to a
+    single DNS resolver operator. Solutions to this problem by anonymizing the
+    client have been proposed, but they fall short in dimensions such as
+    performance, threat model, and deployability. While performance regarding
+    latency is important, the other dimensions should also be considered when
+    comparing approaches. In this study, we reevaluate DNS-over-HTTPS-over-Tor
+    (DoHoT) and compare it against other proposed solutions, taking into
+    consideration additional aspects such as threat model and deployability.
+    Additionally, we explore various circuit configurations through the Tor
+    network to enhance query latency when utilizing Tor-based anonymization
+    approaches. We could decrease the latency of DNS queries while preserving
+    the privacy guarantees in our threat model for anonymous resolution. We
+    compare the best-performing configuration of DoHoT against other
+    approaches. Although the reduced latency is behind that of the other
+    solutions, DoHoT is ready for use today with no additional infrastructure
+    required, alongside a much stronger threat model.
+
     \keywords{DNS \and Oblivious DNS \and Tor \and Encryption \and Proxy \and Latency}
 \end{abstract}

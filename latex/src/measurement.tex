@@ -30,6 +30,7 @@ selects relays based on weighted bandwidth, favoring faster, more
 geographically optimal relays. In contrast, \texttt{carml+stem} selects relays
 uniformly at random within constraints such as location and relay type (e.g.,
 exit or non-exit). 
+\todo{explain any2any2any, figure takeaway}
 
 \begin{figure}[h]
     \centering
@@ -91,5 +92,4 @@ same country as the client.
 Figure~\ref{fig:p5} presents a side-by-side comparison between the default
 configuration of \ac{dohot} introduced by Alex Muffet~\cite{DoHoT} and a
 \ac{dohot} configuration tuned for latency without compromising the threat
-model of anonymous \ac{dns} queries. We also include containerized
-implementations of \ac{odoh} and DoTor for comparison. 
+model of anonymous \ac{dns} queries. We also include \ac{odoh} and DoTor for comparison. 

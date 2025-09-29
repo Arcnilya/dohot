@@ -27,7 +27,7 @@ model for anonymous \ac{dns} queries. However, we do not recommend these
 configurations for general Tor usage, as they may weaken anonymity guarantees
 in broader applications. Additionally, the anonymity of \ac{dns} queries cannot
 be assured in the presence of colluding adversaries under a global threat
-model.
+model. \todo{rewrite, clarify Tor threat model before this point}
 
 \todo{Paragraph about the pros and cons of DoTor}
 
@@ -71,17 +71,17 @@ same country as the client, the average resolution time was further reduced to
 155.54 ms.
 
 \subsection{Limitations}
-However, \ac{dohot} still inherits limitations from Tor, including potential
+\ac{dohot} still inherits limitations from Tor, including potential
 censorship and reliance on public volunteer infrastructure. Compared to
 \ac{odns} or \ac{odoh}, which can offer lower latency and are easier to deploy in
 centralized environments, \ac{dohot}'s reliance on Tor's ecosystem might hinder
 scalability for very high-throughput scenarios.
 
-Our findings indicate that the middle relay in Tor's conventional three-hop
-design may not be necessary for anonymous \ac{dns} resolution within the bounds
-of a non-colluding adversary model. However, omitting it reduces the diversity
-of the path and may weaken anonymity in settings with more powerful or
-coordinated adversaries.
+We argue that the middle relay in Tor's conventional three-hop design may not
+be necessary for anonymous \ac{dns} resolution within the bounds of a
+non-colluding adversary model. However, omitting it reduces the diversity of
+the path and may weaken anonymity in settings with more powerful or coordinated
+adversaries.
 
 Localizing the entry and exit relays to the same geographic region as the
 client significantly reduced \ac{dns} query latency. However, narrowing the
