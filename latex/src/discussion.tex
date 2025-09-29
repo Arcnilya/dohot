@@ -29,7 +29,13 @@ in broader applications. Additionally, the anonymity of \ac{dns} queries cannot
 be assured in the presence of colluding adversaries under a global threat
 model.
 
-\todo{Paragraph about the pros and cons of DoTor}
+The \ac{dotor} approach sacrifices control for simplicity and (expected) minor performance gains. 
+Allowing the exit-node to perform the DNS-resolution removes all control thereof. 
+Anonymity is instead preserved solely by the Tor-circuit. The main drawbacks here are that the 
+query itself might still be logged even though it is anonymized. 
+Likewise, should an adversary control either node in a circuit consisting only of a guard 
+and exit (e.g. se2se) in addition to the network it could theoretically be possible to correlate
+the query and the client.
 
 \subsection{DoHoT in Context of Existing DNS Privacy Protocols}
 \ac{dohot} offers a compelling alternative to protocols like \ac{odns} and

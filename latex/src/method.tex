@@ -61,7 +61,12 @@ $\mu$\ac{odns} is not included in this study because his adoption is considerabl
 configuration, we create container and apply exactly the same measurement cases
 as for \ac{dohot}. 
 
-\todo{DoTor setup (Tor Arvill)}
+The \ac{dotor} approach relies on directly interfacing with the Tor client using its 
+extensions to the SOCKS5 protocol, specifically the RESOLVE command value (0xF0)\ref{tor-socks5}. 
+This allows for sending a domain to be resolved instead of a destination. It should be noted that this approach
+does not utilize full DNS-queries at this level. To interface with the Tor client a python script is instead 
+utilized to recieve and provide dig-compliant DNS queries and their answers. 
+While neglible in this context it shoud be noted that some overhead is incurred in the process.
 
 To eliminate the effects of caching and to maintain consistency across tests,
 we issue queries for uniquely generated \acp{sld} under a valid \ac{tld}, which
