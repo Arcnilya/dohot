@@ -43,26 +43,33 @@ reducing latency in Tor circuits: \emph{number} of relays and \emph{location}
 of relays. The configuration file for Tor, the \texttt{torrc}, does not allow
 anything less than three relays for a circuit, but we can specify the
 geographical location of the entry and the exit using country-codes. Since the
-client for our measurements is located in Sweden (country-code: \texttt{se}), choosing Tor
-relays in Sweden places them in close geographic proximity to the client. Using
-\texttt{carml} and \texttt{stem} we are able to both specify the geographical
-location of the middle relay in a three-hop circuit, as well as build two-hop
-circuits without a middle relay.
+client for our measurements is located in Sweden (country-code: \texttt{se}),
+choosing Tor relays in Sweden places them in close geographic proximity to the
+client. Using \texttt{carml} and \texttt{stem} we are able to both specify the
+geographical location of the middle relay in a three-hop circuit, as well as
+build two-hop circuits without a middle relay.
 
-For \ac{odoh}, we also rely on DNSCrypt-proxy based container to foward \ac{dns} queries
-to \ac{doh} resolvers through \ac{odoh} infrastructure: relay and target. We follow
-a similar approach as for \ac{dohot} and configure DNSCrypt-proxy to forward encrypted
-client query to Cloudflare \ac{doh} resolvers through an \ac{odoh} relay in
-Sweden. This ensure that, the \ac{odoh} relay and the target resolver are not
-conflicting. Moreover, by using an \ac{odoh} relay in Sweden, we mimic the \ac{dohot}
-case where the Tor entry relay is in Sweden. Furthermore, to be consistent with
-\ac{dohot} experiments, we also use Cloudflare \ac{doh} resolver as target. Note that,
-$\mu$\ac{odns} is not considered in this study as it not based on the popular
-DNSCrypt-proxy and this adoption is considerably limited. Based on this
-configuration, we create container and apply exactly the same measurement cases
-as for \ac{dohot}. 
+For \ac{odoh}, we also rely on DNSCrypt-proxy based container to foward
+\ac{dns} queries to \ac{doh} resolvers through \ac{odoh} infrastructure: relay
+and target. We follow a similar approach as for \ac{dohot} and configure
+DNSCrypt-proxy to forward encrypted client query to Cloudflare \ac{doh}
+resolvers through an \ac{odoh} relay in Sweden. This ensure that, the \ac{odoh}
+relay and the target resolver are not conflicting. Moreover, by using an
+\ac{odoh} relay in Sweden, we mimic the \ac{dohot} case where the Tor entry
+relay is in Sweden. Furthermore, to be consistent with \ac{dohot} experiments,
+we also use Cloudflare \ac{doh} resolver as target. Note that, $\mu$\ac{odns}
+is not included in this study because his adoption is considerably limited.
+Based on this configuration, we create container and apply exactly the same
+measurement cases as for \ac{dohot}. 
 
-\todo{DoTor setup (Tor Arvill)}
+The \ac{dotor} approach relies on directly interfacing with the Tor client
+using its extensions to the SOCKS5 protocol, specifically the RESOLVE command
+value (0xF0)\ref{tor-socks5}. This allows for sending a domain to be resolved
+instead of a destination. It should be noted that this approach does not
+utilize full DNS-queries at this level. To interface with the Tor client a
+python script is instead utilized to recieve and provide dig-compliant DNS
+queries and their answers. While neglible in this context it shoud be noted
+that some overhead is incurred in the process.
 
 To eliminate the effects of caching and to maintain consistency across tests,
 we issue queries for uniquely generated \acp{sld} under a valid \ac{tld}, which
