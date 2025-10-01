@@ -9,39 +9,55 @@ users to surveillance, censorship, and profiling.
 To address these concerns, privacy-enhancing protocols
 \cite{RFC7858,RFC8484,RFC9250} have been standardized and deployed that encrypt
 the communication between the client and the resolver, preventing on-path
-adversaries from inspecting or modifying \ac{dns} traffic. However, they do not
-anonymize the client: the resolver still sees both the IP address of the client
-\emph{and} the contents of the query. In many parts of the world, resolvers
-can, and often do, monetize or log this data without user consent. Even in
-jurisdictions with strong privacy laws there are data breaches and leakage
-risks. \todo{ref}
+adversaries from inspecting or modifying the query contents. However, these
+protocols do not anonymize the client: the resolver still sees both the IP
+address of the client \emph{and} the contents of the query. This data is highly
+sensitive as it can reveal interests, routines, and affiliations of
+individuals, as well as operational details of organizations
+\cite{RFC9076,resolver-wiretap}. Importantly, these risks affect not only end
+users, whose activities may be exposed, but also resolver operators, who must
+safeguard the data they collect. Even in jurisdictions with strong privacy laws
+preventing the monetization of this type of data, there are data breaches and
+leakage risks.
 
 To reduce this link between client identity and \ac{dns} queries, new protocols
-have been proposed which introduce a cryptographic relay (or proxy) between the
-client and the resolver so that no single entity can observe both ends of the
-transaction~\cite{ODNS,RFC9230}. However, these systems depend on non-collusion
-assumptions, involve dedicated infrastructure, and are therefore not yet widely
-deployed. \todo{find more related work comparing with DoHoT/ODoH}
+have been proposed. The \emph{Oblivious} approaches introduce a cryptographic
+relay (or proxy) between the client and the resolver so that no single entity
+can observe both ends of the transaction~\cite{ODNS,RFC9230}. Taking this
+concept to the extreme, \emph{Tor-based} approaches utilizes the popular
+anonymity network~\cite{dingledine2004} to separate the client identity from
+the query~\cite{DoHoT}. A more recent proposal involves integrating \ac{pir} to
+\ac{dns} resolvers leveraging homomorphic encryption schemes~\cite{xiao2025}.
 
-An alternative that avoids introducing new infrastructure is to use the
-existing Tor network~\cite{dingledine2004} to anonymize \ac{dns} queries. Tor
-routes traffic through multiple volunteer-operated relays (typically three:
-entry, middle, and exit), making it difficult for any observer to link a user
-to their destination. Alec Muffett's proposal~\cite{DoHoT} exemplifies this
-approach by tunneling encrypted \ac{dns} traffic through a Tor circuit. This
-approach provides strong anonymity using an already operational global
-anonymity network.
+Comparing these approaches solely in terms of latency, which is a pain-point
+for both encrypted and anonymous \ac{dns} transport, places the Tor-based
+solutions dead last due to the multiple
+relays~\cite{ODNS,RFC9230,xiao2025,kurihara2023muodns}. But the other
+approaches are not without challenges, hindering deployment. Oblivious proxies
+depend on non-collusion assumptions and involve setting up dedicated
+infrastructure. \ac{pir} resolvers would circumvent the collusion problem but
+require protocol changes. We argue that both threat model and deployability
+should be added to performance when comparing these approaches. 
 
-However, the latency introduced by Tor, due to three relays which in worst case
-can be located on different continents, can make \ac{dns} resolution slow and
-inconsistent. This study explores whether Tor's performance penalties can be
-reduced without compromising privacy. Specifically, we investigate the
-viability of using two-hop Tor circuits (entry and exit relays) for \ac{dns}
-resolution, arguing that the middle relay may not be essential when using the
-threat model for anonymous \ac{dns} queries. Furthermore, we examine whether
-circuit performance can be improved by restricting relays to geographic regions
-in close proximation to the client. We evaluate the latency reduction achieved
-by these various methods and configurations in Tor, highlighting their benefits
-and limitations in comparison to other privacy-preserving \ac{dns} solutions. 
+In this study we explore whether Tor's performance penalties can be reduced
+without compromising privacy. Specifically, we investigate the viability of
+using two-hop Tor circuits (entry and exit relays) for \ac{dns} resolution,
+arguing that the middle relay may not be essential in terms of the threat model
+for anonymous \ac{dns} queries. Additionally, we examine whether circuit
+performance can be further improved by restricting relays to geographic regions
+in close proximation to the client. Finally we compare various approaches to
+anonymous \ac{dns} queries using three dimensions: latency, threat model, and
+deployability. Our contributions are as follows:
 
-\todo{our contributions}
+\begin{enumerate}
+    \item we highlight that the reduced threat model, by modifying the
+        circuits, still is stronger than the non-collusion assumptions by
+        Oblivious approaches.
+    \item we show that it is possible to cut the latency of Tor-based anonymous
+        query approaches in half by using less relays in the circuits and
+        placing those relays in relative close proximity to the client.
+    \item we compare different anonymous query schemes in terms of performance,
+        threat model, and deployability, emphasizing that more than performance
+        should be taken into consideration when selecting a scheme for
+        anonymizing \ac{dns} queries.
+\end{enumerate}

@@ -1,19 +1,16 @@
 \section{Conclusion} \label{sec:conclusion}
+We argue that Tor's original threat model for anonymous communication can be
+relaxed in the context of anonymous \ac{dns} queries. By reducing circuit length and
+constraining relay locations, we achieve substantial latency improvements while
+maintaining resistance to collusion attacks. 
 
-In this study, we explored using the Tor network to anonymize \ac{dns} queries
-through the \ac{dohot} approach. Our measurements show that \ac{dohot}
-performance can be significantly improved by reducing circuit length to two
-hops and by constraining relay selection to localized geographic regions. These
-optimizations balance preserving query anonymity in our threat model and
-achieving acceptable query latency, making \ac{dohot} a viable option for
-privacy-conscious users.
+Our measurements confirm that these modifications significantly reduce query
+latency, demonstrating that two-hop circuits with geographically localized
+relays offer a latency-optimized, collusion-resistant alternative for anonymous
+DNS resolution.
 
-Compared to existing privacy-preserving \ac{dns} protocols like \ac{odns} and
-\ac{odoh}, \ac{dohot} benefits from using a well-established anonymity network
-without requiring new infrastructure or trust assumptions. However, it inherits
-limitations from Tor itself, including potential scalability issues and
-susceptibility to censorship. Ultimately, our findings highlight the potential
-of Tor-based \ac{dns} anonymization with tailored circuit designs to offer a
-practical and privacy-respecting solution for everyday users.
-
-
+Finally, we emphasize that evaluating anonymous \ac{dns} schemes requires more
+than performance metrics alone. We propose that threat model assumptions and
+deployability considerations be treated as equally important dimensions, and
+our results illustrate that Tor-based schemes could strike a favorable balance
+across all three for the right use case.

@@ -1,0 +1,35 @@
+\section{Threat Model} \label{sec:threatmodel}
+
+The threat model for anonymous \ac{dns} queries considers a passive adversary
+with access to query information at the target recursive resolver. The
+objective is to anonymize the client's identity (IP address) so that it cannot
+be linked to the issued query.
+
+Oblivious approaches such as \ac{odoh} rely on a single-proxy model whose
+security hinges entirely on a \emph{non-collusion assumption}: the proxy that
+sees the client's IP must not cooperate with the resolver that sees the
+plaintext query. If these entities collude, the client’s privacy is immediately
+compromised. This assumption is hard to verify or enforce in practice,
+especially if both parties fall under the same operational or legal domain.
+
+In contrast, the Tor network provides a stronger and more flexible threat
+model. Tor achieves anonymity by routing traffic through multiple independent,
+volunteer-operated relays and by frequently rotating circuits. Privacy is
+preserved as long as not \emph{all} relays on a circuit collude. The default
+use-case for Tor does \emph{not} protect against a global adversary, who would
+find out both the source and the destination.
+
+For \ac{doh} queries over Tor, the entry relay can observe the client's IP and
+encrypted traffic but not the \ac{dns} query itself. The middle relay only sees
+encrypted traffic without access to either the client IP, resolver IP, or the
+query. The exit relay only sees encrypted traffic and the target \ac{doh}
+resolver. The \ac{doh} resolver sees the decrypted \ac{dns} queries and the
+exit's IP, but never the client's IP. Even if the Tor circuit is shortened
+(e.g., by removing the middle relay), the design still ensures that no single
+entity can observe both the client's identity and the content of their queries
+simultaneously. Even if all relays are colluding in this setting, they still do
+not have access to the query since it is encrypted when sent to the \ac{doh}
+resolver. Thus, Tor's threat model remains stronger than that of single
+oblivious proxies, which fail completely under collusion between the two
+involved parties. 
+

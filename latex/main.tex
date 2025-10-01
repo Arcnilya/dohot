@@ -8,6 +8,7 @@
 \usepackage{url}
 \usepackage{hyperref}
 \usepackage{listings}
+\usepackage{float}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
@@ -29,6 +30,7 @@
 \newacro{edns}[EDNS]{Extension Mechanisms for DNS}
 \newacro{ecs}[ECS]{EDNS Client Subnet}
 \newacro{cdn}[CDN]{Content Delivary Network}
+\newacro{pir}[PIR]{Private Infromation Retrieval}
 
 \newcommand{\todo}[1]{\textcolor{red}{\texttt{TODO: #1}}}
 
@@ -52,6 +54,7 @@
 
 \input{src/intro}
 \input{src/background}
+\input{src/threatmodel}
 \input{src/method}
 \input{src/measurement}
 \input{src/discussion}
@@ -63,6 +66,6 @@ Anonymized for submission.
 \bibliographystyle{splncs04}
 \bibliography{src/ref} 
 
-\input{src/appendix}
+%\input{src/appendix}
 
 \end{document}

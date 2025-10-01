@@ -10,6 +10,8 @@ height = 6
 width = 8
 scale = 0.8
 
+TO_LATEX = False
+
 def plot_one(dframe):
     # torrc vs carml+stem
     settings_order = ['any2any2any', 'se2any2any', 'se2any2se']
@@ -57,7 +59,7 @@ def plot_one(dframe):
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Method')
     plt.tight_layout()
-    plt.savefig('../latex/img/p1.pdf')
+    if TO_LATEX: plt.savefig('../latex/img/p1.pdf')
     plt.savefig('p1.png')
     # plt.show()
 
@@ -92,7 +94,7 @@ def plot_one_old(dframe):
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Configuration')
     plt.tight_layout()
-    plt.savefig('../latex/img/p1.pdf')
+    if TO_LATEX: plt.savefig('../latex/img/p1.pdf')
     plt.savefig('p1.png')
     #plt.show()
 
@@ -105,7 +107,7 @@ def plot_two(dframe):
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Circuit')
     plt.tight_layout()
-    plt.savefig('../latex/img/p2.pdf')
+    if TO_LATEX: plt.savefig('../latex/img/p2.pdf')
     plt.savefig('p2.png')
     #plt.show()
 
@@ -118,7 +120,7 @@ def plot_three(dframe):
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Circuit')
     plt.tight_layout()
-    plt.savefig('../latex/img/p3.pdf')
+    if TO_LATEX: plt.savefig('../latex/img/p3.pdf')
     plt.savefig('p3.png')
     #plt.show()
 
@@ -130,7 +132,7 @@ def plot_four(dframe):
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Circuit')
     plt.tight_layout()
-    plt.savefig('../latex/img/p4.pdf')
+    if TO_LATEX: plt.savefig('../latex/img/p4.pdf')
     plt.savefig('p4.png')
     #plt.show()
 
@@ -144,7 +146,7 @@ def plot_five(dframe):
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Approach')
     plt.tight_layout()
-    plt.savefig('../latex/img/p5.pdf')
+    if TO_LATEX: plt.savefig('../latex/img/p5.pdf')
     plt.savefig('p5.png')
     #plt.show()
 
@@ -154,11 +156,10 @@ df = pd.read_csv("log.csv")
 df[['prot','method','setting','iteration','nonce']] = df['query'].str.split('-',expand=True)
 df['method'] = df['method'].str.replace('carml','carml+stem')
 df['group'] = df['method'] + '\n' + df['setting']
+df['all'] = df['prot'] +'-'+ df['method'] +'-'+ df['setting']
 df['time'] = pd.to_numeric(df['time'], errors='coerce')
 print(df)
 
-group_avg_df = df.groupby('group', as_index=False)['time'].mean()
-print(group_avg_df)
 
 
 # First plot: torrc vs carml+stem
@@ -243,5 +244,9 @@ tmp = pd.concat([tmp, df[df['prot'] == "odoh"]], sort=False) # odoh
 print(tmp)
 plot_five(tmp)
 
-
+group_stats_df = df.groupby('all', as_index=False).agg(
+    mean_time=('time', 'mean'),
+    median_time=('time', 'median')
+)
+print(group_stats_df)
 
