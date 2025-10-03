@@ -87,6 +87,13 @@ Firefox also could help with discovering \ac{odoh} proxies which is important
 for a widespread adoption of the protocol~\cite{cfmozilla}. 
 
 \subsubsection{Tor-based schemes:}
+When a circuit is established in the Tor network to visit a website, the domain
+must be resolved at the exit relay. We call this approach \ac{dotor}. Resolving
+the domain outside the circuit would expose the destination being accessed. The
+specific resolver used for this lookup depends on the exit relay's
+configuration, which may point to a local resolver, an \ac{isp} resolver, or a
+public resolver.
+
 \ac{dohot} is an alternative method for anonymizing queries introduced by Alec
 Muffet~\cite{DoHoT}. By routing \ac{doh} traffic through the Tor network, this
 approach enables clients to conceal their identity using Tor's existing relay
@@ -96,8 +103,6 @@ via \ac{doh} and Tor ensures anonymity between the client and the resolver at
 the cost of latency. Muffett's extensive home testing during the pandemic
 lockdown demonstrated that, despite increased latency, the system maintained
 acceptable performance for everyday Internet activities.
-
-\todo{add DoTor}
 
 \subsubsection{Non-proxy schemes:}
 \acf{pir} resolvers aim to circumvent the non-collusion assumptions when
