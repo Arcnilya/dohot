@@ -31,10 +31,14 @@ a low-latency anonymity network~\cite{dingledine2004}. Tor provides anonymity by
 routing traffic through a series of volunteer-operated relays as part of the Tor
 network such that no single relay knows both the communication's origin and
 destination. Traffic is routed through short-lived circuits. A typical circuit
-consists of three relays: an entry relay, a middle relay, and an exit relay. The
-entry relay is the only node that can observe the client's IP address. The
-middle relay forwards encrypted traffic between the entry and exit, while the
-exit relay communicates with the final destination.
+consists of three relays: an entry guard relay, a middle relay, and an exit
+relay. The entry relay is the only node that can observe the client's IP
+address. The middle relay forwards encrypted traffic between the entry and exit,
+while the exit relay communicates with the final destination. The circuit
+creation is referred to as path selection~\cite{tor-path-selection}. The entry
+guard is long-lived (i.e., fixed from a small guard set that persists across
+invocations of Tor), while middle and exit relays are sampled weighted by their
+measured bandwidth.
 
 \subsection{Anonymous Queries} \label{sec:bg:anon} Several schemes have been
 developed to introduce anonymity into \ac{dns} resolution by explicitly

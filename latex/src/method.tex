@@ -1,42 +1,42 @@
-\section{Method} \label{sec:method}
-Prior work on anonymous \ac{dns} queries has primarily focused on query latency
-when comparing against Tor-based
-approaches~\cite{ODNS,RFC9230,xiao2025,kurihara2023muodns}. This metric alone
-is not particularly informative, since Tor's design inherently introduces
-higher delays. Moreover, such comparisons typically assume the default Tor
-client configuration, where circuits are built from three randomly selected
-relays. The geographic placement of these relays can heavily influence latency
-results. To provide a more complete picture, our evaluation considers
-additional dimensions such as the threat model and deployability, and also
-explores how we can reduce latency in Tor-based solutions.
+\section{Method} \label{sec:method} Prior work on anonymous \ac{dns} queries has
+primarily focused on query latency when comparing against Tor-based
+approaches~\cite{RFC9230,kurihara2023muodns,ODNS,xiao2025}.
+% This metric alone is not particularly informative, since Tor's design inherently introduces higher delays. XXX: this entire section and the next is all about measuring query latency ... cannot say that it is not particularly informative
+Such comparisons typically assume the default Tor client configuration (e.g., in
+as in DoHoT~\cite{DoHoT}), where circuits consists of three randomly selected
+relays (see Section~\ref{sec:bg:tor}). The geographic placement of these relays
+can heavily influence latency results. To provide a more complete picture, our
+overarching evaluation considers additional dimensions such as the threat model
+and deployability, in addition to exploring how we can reduce latency in
+Tor-based solutions.
 
-In this study we focus on two approaches for reducing latency in Tor circuits:
-\emph{number} of relays and \emph{location} of relays. The default Tor
-configuration method (torrc) allows users to constrain the geographic location
-of entry and exit relays via country codes, but offers no control over the
-middle relay. It also does not support building circuits with fewer than three
-relays. To overcome these limitations, we leverage the Python libraries
-\texttt{carml}~\cite{carml} and \texttt{stem}~\cite{stem}, which expose
-fine-grained control over circuit construction. With these tools, we can
+In this paper we focus on two approaches for reducing latency in Tor circuits:
+controlling the \emph{number} of relays and the \emph{location} of relays. The
+default Tor configuration method (torrc) allows users to constrain the
+geographic location of entry and exit relays via country codes, but offers no
+control over the middle relay. It also does not support building circuits with
+fewer than three relays. To overcome these limitations, we leverage the Python
+libraries \texttt{carml}~\cite{carml} and \texttt{stem}~\cite{stem}, which
+expose fine-grained control over circuit construction. With these tools, we can
 specify country codes for the middle relay or omit it entirely, enabling us to
 explore Tor configurations that balance latency and anonymity systematically.
 Since the client for our measurements is located in Sweden (country-code:
 \texttt{se}), choosing Tor relays in Sweden places them in close proximity to
 the client. 
 
-To eliminate the effects of caching and to maintain consistency across tests,
-we issue queries for uniquely generated \acp{sld} under a valid \ac{tld}, which
-are expected to return an non-existing-domain return code (NXDOMAIN). This
-approach ensures that the observed latency mainly reflects the path between the
-client and the resolver rather than the influence of cache hits or additional
+To eliminate the effects of caching and to maintain consistency across tests, we
+issue queries for uniquely generated \acp{sld} under a valid \ac{tld}, which are
+expected to return an non-existing-domain return code (NXDOMAIN). This approach
+ensures that the observed latency mainly reflects the path between the client
+and the resolver rather than the influence of cache hits or additional
 authoritative name servers. For each configuration we repeat the measurement
-1000 times. In each iteration, we start the container with the specified
-configuration and wait until a circuit is established and an arbitrary query
-receives a successful response. We then issue a query for an A record using a
-unique, non-existent domain and measure the time, in milliseconds, for the
-reply to return. Finally, we stop the container before the next iteration
+1,000 times. In each iteration, we start our measurement container with the
+specified configuration and wait until a circuit is established and an arbitrary
+query receives a successful response. We then issue a query for an A record
+using a unique, non-existent domain and measure the time, in milliseconds, for
+the reply to return. Finally, we stop the container before the next iteration
 begins. The code for the containers and measurement script can be found on
-GitHub.\footnote{Anonymized for submission}
+GitHub\footnote{Anonymized for submission}.
 
 For comparison we set up docker containers running \ac{dohot} and
 \ac{odoh}. Both of these utilize DNSCrypt-proxy which is a flexible proxy for
@@ -50,15 +50,15 @@ using anycast which means that the closest from the perspective of our exit or
 proxy will be used\footnote{\url{https://developers.cloudflare.com/1.1.1.1/}}.
 
 In addition we also implemented and measured the latency of \ac{dotor}. This is
-similar to the Tor-based approach used for comparison with
-\ac{odns}~\cite{ODNS} where \ac{doh} is not used. Instead the query is resolved
-by the exit relay. The \ac{dotor} approach relies on directly interfacing with
-the Tor client using its extensions to the SOCKS5 protocol, specifically the
-RESOLVE command value (0xF0)\cite{tor-socks5}. This allows for sending a domain
-to be resolved instead of a destination. It should be noted that this approach
-does not utilize full \ac{dns}-queries at this level. To interface with the Tor
-client a python script is instead utilized to recieve and provide dig-compliant
-DNS queries and their answers. While neglible in this context it shoud be noted
-that some overhead is incurred in the process.
+similar to the Tor-based approach used for comparison with \ac{odns}~\cite{ODNS}
+where \ac{doh} is not used. Instead the query is resolved by the exit relay. The
+\ac{dotor} approach relies on directly interfacing with the Tor client using its
+extensions to the SOCKS5 protocol, specifically the RESOLVE command value
+(0xF0)\cite{tor-socks5}. This allows for sending a domain to be resolved instead
+of a destination. It should be noted that this approach does not utilize full
+\ac{dns}-queries at this level. To interface with the Tor client a python script
+is instead utilized to receive and provide dig-compliant DNS queries and their
+answers. While negligible in this context it, should be noted that some overhead
+is incurred in the process.
 
 
