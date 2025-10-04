@@ -1,66 +1,57 @@
-\section{Background and Related Work} \label{sec:background}
-The \acf{dns} is a hierarchical and distributed database that maps domain names
-to resource records such as IP addresses~\cite{RFC1034,RFC1035}. It enables
-human-readable identifiers such as \texttt{example.com} to be translated into
-machine-usable network addresses for communication on the Internet.
+\section{Background and Related Work} \label{sec:background} The \acf{dns} is a
+hierarchical and distributed database that maps domain names to resource records
+such as IP addresses~\cite{RFC1034,RFC1035}. It enables human-readable
+identifiers such as \texttt{example.com} to be translated into machine-usable
+network addresses for communication on the Internet. When a client needs to
+resolve a domain name, it issues a DNS query, typically to a \ac{dns} resolver
+operated by an \ac{isp} or a public \ac{dns} provider. The resolver acts on
+behalf of the client to perform a sequence of lookups through the \ac{dns}
+hierarchy before responding with the answer back to the client. Resolvers often
+cache responses to improve performance and reduce load on upstream servers. 
 
-When a client needs to resolve a domain name, it issues a DNS query, typically
-to a \ac{dns} resolver operated by an \ac{isp} or a public \ac{dns} provider.
-The resolver acts on behalf of the client to perform a sequence of lookups
-through the \ac{dns} hierarchy before responding with the answer back to the
-client. Resolvers often cache responses to improve performance and reduce load
-on upstream servers. 
+\subsection{Encrypted DNS Transport} \label{sec:bg:encr} Several encrypted
+transport protocols have been standardized to mitigate the privacy risks
+associated with plaintext \ac{dns} queries. These protocols aim to protect the
+confidentiality and integrity of \ac{dns} traffic between the client and the
+resolver. \acf{dot}~\cite{RFC7858} encapsulates \ac{dns} queries within a
+\ac{tls} session, ensuring that on-path observers cannot inspect or tamper with
+\ac{dns} traffic. Similarly, \acf{doh}~\cite{RFC8484} transmits \ac{dns}
+messages over HTTPS, allowing \ac{dns} queries to blend in with regular
+encrypted web traffic. More recently, \acf{doq}~\cite{RFC9250} has been proposed
+to reduce latency and connection overhead by using the QUIC transport protocol,
+which integrates \ac{tls} over UDP and offers faster handshakes. While these
+protocols protect \ac{dns} queries from third-party passive eavesdroppers on the
+network path, they do not address a key structural vulnerability: the resolver
+remains fully capable of observing and logging all \ac{dns} queries and client
+source IP. This exposes users to potential privacy risks, including profiling,
+surveillance, or data misuse by the resolver operator.
 
-\subsection{Encrypted DNS Transport} \label{sec:bg:encr}
-Several encrypted transport protocols have been standardized to mitigate the
-privacy risks associated with plaintext \ac{dns} queries. These protocols aim
-to protect the confidentiality and integrity of \ac{dns} traffic between the
-client and the resolver. \acf{dot}~\cite{RFC7858} encapsulates \ac{dns} queries
-within a \ac{tls} session, ensuring that on-path observers cannot inspect or
-tamper with \ac{dns} traffic. Similarly, \acf{doh}~\cite{RFC8484} transmits
-\ac{dns} messages over HTTPS, allowing \ac{dns} queries to blend in with
-regular encrypted web traffic. More recently, \acf{doq}~\cite{RFC9250} has been
-proposed to reduce latency and connection overhead by using the QUIC transport
-protocol, which integrates \ac{tls} over UDP and offers faster handshakes.
+\subsection{Tor} \label{sec:bg:tor} One way to anonymize clients is to use Tor,
+a low-latency anonymity network~\cite{dingledine2004}. Tor provides anonymity by
+routing traffic through a series of volunteer-operated relays as part of the Tor
+network such that no single relay knows both the communication's origin and
+destination. Traffic is routed through short-lived circuits. A typical circuit
+consists of three relays: an entry relay, a middle relay, and an exit relay. The
+entry relay is the only node that can observe the client's IP address. The
+middle relay forwards encrypted traffic between the entry and exit, while the
+exit relay communicates with the final destination.
 
-While these protocols protect \ac{dns} queries from third-party passive
-eavesdroppers on the network path, they do not address a key structural
-vulnerability: the resolver remains fully capable of observing and logging all
-\ac{dns} queries and client source IP. This exposes users to potential privacy
-risks, including profiling, surveillance, or data misuse by the resolver
-operator.
-
-\subsection{Tor} \label{sec:bg:tor}
-One way to anonymize clients is to leverage an anonymity network. Tor is a
-\emph{relative} low-latency anonymity network that protects users against
-surveillance and traffic analysis~\cite{dingledine2004}. It achieves anonymity
-by routing traffic through a series of volunteer-operated relays and applying
-layered encryption such that no single relay knows both the communication's
-origin and destination. A typical Tor circuit consists of three relays: an
-entry relay, a middle relay, and an exit relay. The entry relay is the only
-node that can observe the client's IP address. The middle relay forwards
-encrypted traffic between the entry and exit, while the exit relay communicates
-with the final destination but does not know the client's IP address.
-
-\subsection{Anonymous Queries} \label{sec:bg:anon}
-While encrypted \ac{dns} protocols such as \ac{doh} and \ac{dot} protect query
-contents from on-path observers, they do not prevent the resolver from linking
-\ac{dns} queries to client identities. Several schemes have been developed
-to introduce anonymity into \ac{dns} resolution by explicitly separating the
-client from the query.
+\subsection{Anonymous Queries} \label{sec:bg:anon} Several schemes have been
+developed to introduce anonymity into \ac{dns} resolution by explicitly
+separating the client from the query.
 
 \subsubsection{Oblivious schemes:}
 \ac{odns} uses its own authoritative namespace where the authoritative name
 servers act as recursive resolvers~\cite{ODNS}. A client encrypts the domain
 name with a key and appends the special-use \ac{tld} \texttt{odns}. The key
-itself encrypted using the server's public key. The query and encrypted key are
-sent to any resolver, which acts as a proxy and forwards it to the \ac{odns}
-server. The server decrypts the key, decrypts the domain, performs
-recursion, and returns an encrypted answer via the resolver. The proxy resolver
-only sees ciphertext, while the \ac{odns} server cannot identify the client.
-Two limitations exist: (i) \ac{ecs}~\cite{RFC7871} in \ac{edns}~\cite{RFC6891}
-may de-anonymize clients and should be disabled; (ii) collusion between the
-resolver and \ac{odns} server could reveal both identity and query.
+itself is encrypted using the server's public key. The query and encrypted key
+are sent to any resolver, which acts as a proxy and forwards it to the \ac{odns}
+server. The server decrypts the key, decrypts the domain, performs recursion,
+and returns an encrypted answer via the resolver. The proxy resolver only sees
+ciphertext, while the \ac{odns} server cannot identify the client. Two
+limitations exist: (i) \ac{ecs}~\cite{RFC7871} in \ac{edns}~\cite{RFC6891} may
+de-anonymize clients, and (ii) collusion between the resolver and \ac{odns}
+server links identity and query.
 
 \ac{odoh} builds on the idea from \ac{odns} but is instead using the \ac{doh}
 transport~\cite{RFC9230}. Clients send encrypted queries to a \ac{doh}
@@ -75,43 +66,41 @@ client's privacy. For this purpose, multiple relays are selected randomly to be
 used towards the target resolver. However, to be the best of our knowledge,
 there is a significant lack of global $\mu$ODNS adoption.
 
-The effectiveness of oblivious schemes hinges on the availability of
-resolvers and proxies that support the protocols. If this number is limited, it
-can hinder the scalability and accessibility of the protocols for end-users.
-\ac{odns} needs custom authoritative name servers which also act as recursive
-resolvers, and \ac{odoh} needs custom proxies between clients and the recursive
-\ac{doh} resolvers. The \ac{odoh} has seen deployment from Cloudflare with
-several proxy partners~\cite{singanamalla2020,cfblog}. Cloudflare has also
-commented on Mozilla's implementation of \ac{doh} where they suggested that
-Firefox also could help with discovering \ac{odoh} proxies which is important
-for a widespread adoption of the protocol~\cite{cfmozilla}. 
+The effectiveness of oblivious schemes hinges on the availability of resolvers
+and proxies that support the protocols. If this number is limited, it can hinder
+the scalability and accessibility of the protocols for end-users. \ac{odns}
+needs custom authoritative name servers which also act as recursive resolvers,
+and \ac{odoh} needs custom proxies between clients and the recursive \ac{doh}
+resolvers. The \ac{odoh} has seen deployment from Cloudflare with several proxy
+partners~\cite{cfblog,singanamalla2020}. Cloudflare has also commented on
+Mozilla's implementation of \ac{doh} where they suggested that Firefox also
+could help with discovering \ac{odoh} proxies which is important for a
+widespread adoption of the protocol~\cite{cfmozilla}. 
 
 \subsubsection{Tor-based schemes:}
-When a circuit is established in the Tor network to visit a website, the domain
-must be resolved at the exit relay. We call this approach \ac{dotor}. Resolving
-the domain outside the circuit would expose the destination being accessed. The
-specific resolver used for this lookup depends on the exit relay's
-configuration, which may point to a local resolver, an \ac{isp} resolver, or a
-public resolver.
+When a circuit is established in the Tor network to connect to a destination,
+the domain must be resolved at the exit relay. We call this approach \ac{dotor}.
+The specific resolver used for this lookup depends on the exit relay's
+configuration.
 
-\ac{dohot} is an alternative method for anonymizing queries introduced by Alec
+\ac{dohot} is an alternative method for anonymizing queries introduced by
 Muffet~\cite{DoHoT}. By routing \ac{doh} traffic through the Tor network, this
 approach enables clients to conceal their identity using Tor's existing relay
 infrastructure without requiring additional cryptographic protocols or
-specialized infrastructure. The \ac{dns} queries remain encrypted end-to-end
-via \ac{doh} and Tor ensures anonymity between the client and the resolver at
-the cost of latency. Muffett's extensive home testing during the pandemic
-lockdown demonstrated that, despite increased latency, the system maintained
-acceptable performance for everyday Internet activities.
+specialized infrastructure. The \ac{dns} queries remain encrypted end-to-end via
+\ac{doh} and Tor ensures anonymity between the client and the resolver at the
+cost of latency. Muffett's extensive home testing during the pandemic lockdown
+demonstrated that, despite increased latency, the system maintained acceptable
+performance for everyday Internet activities.
 
 \subsubsection{Non-proxy schemes:}
-\acf{pir} resolvers aim to circumvent the non-collusion assumptions when
-dealing with proxies by having resolvers operating ``in the blind''. This means
+\acf{pir} resolvers aim to circumvent the non-collusion assumptions when dealing
+with proxies by having resolvers operating ``in the blind''. This means
 resolving domains without knowing what they are using homomorphic encryption
 schemes~\cite{xiao2025}. Clients send encrypted queries to a resolver that
 cannot learn the requested domain, while cache misses trigger iterative lookups
-performed by the client. Authoritative servers privately populate the
-resolver's cache using a new EDNS-PR extension proposed by the authors. This
-design distributes information exposure across multiple authoritative name
-servers, rather than concentrating it at resolvers, thereby raising the bar for
+performed by the client. Authoritative servers privately populate the resolver's
+cache using a new EDNS-PR extension proposed by the authors. This design
+distributes information exposure across multiple authoritative name servers,
+rather than concentrating it at resolvers, thereby raising the bar for
 large-scale profiling or collusion at the cost of protocol changes.
