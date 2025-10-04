@@ -1,23 +1,25 @@
-\section{Threat Model} \label{sec:threatmodel}
+\section{Threat Models for DNS Queries and Tor} \label{sec:threatmodel}
 
 The threat model for anonymous \ac{dns} queries considers a passive adversary
-with access to query information at the target recursive resolver. The
-objective is to anonymize the client's identity (IP address) so that it cannot
-be linked to the issued query.
+with access to query information at the target recursive
+resolver~\cite{RFC9230,kurihara2023muodns,DoHoT,ODNS}. The objective is to
+anonymize the client's identity (IP address) so that it cannot be linked to the
+issued query processed by the resolver.
 
 Oblivious approaches such as \ac{odoh} rely on a single-proxy model whose
 security hinges entirely on a \emph{non-collusion assumption}: the proxy that
 sees the client's IP must not cooperate with the resolver that sees the
-plaintext query. If these entities collude, the client’s privacy is immediately
-compromised. This assumption is hard to verify or enforce in practice,
+plaintext query. If these entities collude, the client's privacy is immediately
+compromised. This assumption is hard to verify let alone to enforce in practice,
 especially if both parties fall under the same operational or legal domain.
 
-In contrast, the Tor network provides a stronger and more flexible threat
-model. Tor achieves anonymity by routing traffic through multiple independent,
-volunteer-operated relays and by frequently rotating circuits. Privacy is
-preserved as long as not \emph{all} relays on a circuit collude. The default
-use-case for Tor does \emph{not} protect against a global adversary, who would
-find out both the source and the destination.
+In contrast, Tor considers a stronger threat model, where the adversary has a
+\emph{partial} view and/or control of the relays and communication
+links~\cite{dingledine2004} that make up the Tor network, consisting of over
+8,000
+relays\footnote{\url{https://metrics.torproject.org/networksize.html?start=2025-01-01}}.
+In general, reliably linking user activity in Tor requires control of all relays
+used for a circuit. 
 
 For \ac{doh} queries over Tor, the entry relay can observe the client's IP and
 encrypted traffic but not the \ac{dns} query itself. The middle relay only sees
