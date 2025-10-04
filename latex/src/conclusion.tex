@@ -1,16 +1,11 @@
-\section{Conclusion} \label{sec:conclusion}
-We argue that Tor's original threat model for anonymous communication can be
-relaxed in the context of anonymous \ac{dns} queries. By reducing circuit length and
-constraining relay locations, we achieve substantial latency improvements while
-maintaining resistance to collusion attacks. 
-
-Our measurements confirm that these modifications significantly reduce query
-latency, demonstrating that two-hop circuits with geographically localized
-relays offer a latency-optimized, collusion-resistant alternative for anonymous
-DNS resolution.
-
-Finally, we emphasize that evaluating anonymous \ac{dns} schemes requires more
-than performance metrics alone. We propose that threat model assumptions and
-deployability considerations be treated as equally important dimensions, and
-our results illustrate that Tor-based schemes could strike a favorable balance
-across all three for the right use case.
+\section{Conclusion} \label{sec:conclusion} We argue that Tor's original threat
+model for anonymous communication can be relaxed in the context of anonymous
+\ac{dns} queries. By reducing circuit length and constraining relay locations,
+we achieve substantial latency improvements while maintaining resistance to
+collusion attacks. Our measurements confirm that these modifications
+significantly reduce query latency compared to earlier DoHoT results,
+demonstrating that two-hop circuits with geographically localized relays offer a
+latency-optimized, collusion-resistant alternative for anonymous DNS resolution.
+We emphasize that evaluating anonymous \ac{dns} schemes requires more than
+blindly comparing performance metrics; threat model assumptions and
+deployability considerations provide different trade offs to carefully consider.

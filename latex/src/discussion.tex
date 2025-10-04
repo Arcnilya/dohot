@@ -69,13 +69,13 @@ default configuration for \ac{dohot}, going as low as 107 ms.
 \end{table}
 \fi
 When it comes to \emph{performance}, the oblivious single-proxy schemes
-(\ac{odns} and \ac{odoh}) achieve low latency but at the cost of a weaker
-threat model (prone to collusion). In contrast, Tor-based schemes incur latency
-overheads due to the additional anonymization layers. However, as this study
-has shown, it is possible to tune the circuits when using the Tor network to
-reduce latency by half without compromising the threat model. When it comes to
-$\mu$ODNS and \ac{pir} resolvers, they strike a balance between performance
-overhead and collusion resistance.
+(\ac{odns} and \ac{odoh}) achieve low latency but at the cost of a weaker threat
+model (prone to collusion). In contrast, Tor-based schemes incur latency
+overheads due to the additional anonymization layers. However, as this study has
+shown, it is possible to tune the circuits when using the Tor network to reduce
+latency by half under a stronger threat model. When it comes to $\mu$ODNS and
+\ac{pir} resolvers, they strike a balance between performance overhead and
+collusion resistance.
 
 Regarding the \emph{threat model}, the Tor-based schemes, $\mu$ODNS, and \ac{pir}
 resolvers are more resistant to collusion compared to the oblivious schemes.
@@ -83,10 +83,10 @@ Stronger privacy, therefore, comes at some performance penalty.
 
 Finally, looking at the \emph{deployability}, we can see that Tor-based
 solutions have the advantage of utilizing already deployed infrastructure by
-simply tunneling \ac{dns} queries through it. In contrast, the oblivious
-schemes and $\mu$ODNS require deployment of new specialized infrastructure in
-the \ac{dns} ecosystem. It could also be changes to protocols, as is the case
-with \ac{pir} resolvers. 
+simply tunneling \ac{dns} queries through the Tor network. In contrast, the
+oblivious schemes and $\mu$ODNS require deployment of new specialized
+infrastructure in the \ac{dns} ecosystem. It could also be changes to protocols,
+as is the case with \ac{pir} resolvers.
 
 Regardless of performance tradeoffs, practical deployment remains a bottleneck
 for many proposed anonymity schemes in \ac{dns}. The choice of scheme is
