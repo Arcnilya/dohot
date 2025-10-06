@@ -52,7 +52,7 @@ itself is encrypted using the server's public key. The query and encrypted key
 are sent to any resolver, which acts as a proxy and forwards it to the \ac{odns}
 server. The server decrypts the key, decrypts the domain, performs recursion,
 and returns an encrypted answer via the resolver. The proxy resolver only sees
-ciphertext, while the \ac{odns} server cannot identify the client. Two
+ciphertext, while the \ac{odns} server cannot identify the client. However, two
 limitations exist: (i) \ac{ecs}~\cite{RFC7871} in \ac{edns}~\cite{RFC6891} may
 de-anonymize clients, and (ii) collusion between the resolver and \ac{odns}
 server links identity and query.
@@ -68,7 +68,7 @@ DNS ($\mu$ODNS)~\cite{kurihara2023muodns} is an attempt to minimize the
 collusion between the relay and the target resolver and corruption of the
 client's privacy. For this purpose, multiple relays are selected randomly to be
 used towards the target resolver. However, to be the best of our knowledge,
-there is a significant lack of global $\mu$ODNS adoption.
+there is a significant lack of global $\mu$ODNS adoption and deployment.
 
 The effectiveness of oblivious schemes hinges on the availability of resolvers
 and proxies that support the protocols. If this number is limited, it can hinder

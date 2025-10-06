@@ -1,9 +1,9 @@
 \section{Discussion} \label{sec:disc}
 In this section we compare our measurement results with that of previous
 studies around anonymous \ac{dns} queries. We also compare the various schemes
-in terms of threat model and deployability in addition to performance.
+in terms of threat model and deployability in addition to query latency.
 
-\subsection{Performance Comparison with Related Work}
+\subsection{Comparison with Related Work}
 
 Schmitt~\emph{et al.}~\cite{ODNS} compared traditional \ac{dns} resolution with
 DNS resolution over the Tor network using the Alexa top 10,000 domains. Their
@@ -43,10 +43,11 @@ encryption. They highlighted different properties (on-path confidentiality,
 client anonymity, and collusion resistance) for various approaches to resolving
 \ac{dns} queries and compared them in performance. When comparing their
 proposed solution (PDNS) against \ac{dohot}, we assume that they do not
-configure any specific circuits (\texttt{any2any2any}). They reported a median
-query duration of around 450 ms for \ac{dohot} with HTTPS reuse while their own
-solution had a median of 208 ms. Our results show a much lower latency for the
-default configuration for \ac{dohot}, going as low as 107 ms.
+configure any specific circuits (comparable to our \texttt{any2any2any}). They
+reported a median query duration of around 450 ms for \ac{dohot} with HTTPS
+reuse while their own solution had a median of 208 ms. Our results show a much
+lower latency for the default configuration for \ac{dohot}, going as low as 107
+ms.
 
 \subsection{Evaluation Dimensions of Anonymous DNS Schemes}
 \iffalse
