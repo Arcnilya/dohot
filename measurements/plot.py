@@ -246,7 +246,9 @@ plot_five(tmp)
 
 group_stats_df = df.groupby('all', as_index=False).agg(
     mean_time=('time', 'mean'),
-    median_time=('time', 'median')
+    median_time=('time', 'median'),
+    std_time=('time', 'std')
 )
+group_stats_df['rel_std_pct'] = (group_stats_df['std_time'] / group_stats_df['mean_time']) * 100
 print(group_stats_df)
 

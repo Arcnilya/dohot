@@ -3,17 +3,18 @@
     resolvers are gaining adoption, direct use of popular protocols like
     DNS-over-HTTPS (DoH) allow resolver operators to link DNS queries to user
     identity (i.e., public IP address), posing a privacy threat. Several
-    privacy-preserving solutions to this problem have been proposed with varying
-    trade-offs in terms of query latency, privacy provided under different
-    threat models, and deployability. In this paper, we revisit
+    privacy-preserving solutions to this problem have been proposed with
+    varying trade-offs in terms of query latency, privacy provided under
+    different threat models, and deployability. In this paper, we revisit
     DNS-over-HTTPS-over-Tor (DoHoT), where DoH is used over circuits in the Tor
-    network to protect end-users. By changing circuit configuration we show that
-    the query latency in DoHoT can be cut in half compared to its default
-    configuration, while still providing protection in a stronger threat model
-    than related work and comparable ease of deployment (just use Tor). While
-    minimizing query latency is essential to user experience, our results
-    emphasize the importance of also considering different threat models and
-    deployability when comparing solutions.
+    network to protect end-users. By changing circuit configuration we show
+    that the average query latency in DoHoT can be cut in half compared to its
+    default configuration (from 134$\pm$110ms to 61$\pm$135ms), while still
+    providing protection in a stronger threat model than related work and
+    comparable ease of deployment (just use Tor). While minimizing query
+    latency is essential to user experience, our results emphasize the
+    importance of also considering different threat models and deployability
+    when comparing solutions.
 
     \keywords{Oblivious DNS \and Tor \and Network Measurements}
 \end{abstract}
