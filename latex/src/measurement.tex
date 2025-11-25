@@ -32,7 +32,7 @@ due to differences in relay selection. By default, \texttt{torrc}
 selects relays based on weighted bandwidth, favoring faster, more
 geographically optimal relays. In contrast, \texttt{carml+stem} selects relays
 uniformly at random within constraints such as location and relay type (e.g.,
-exit or non-exit). Another takaway from this measurement is that the latency
+exit or non-exit). Another takeaway from this measurement is that the latency
 is reduced for both circuit-building methods when we place the entry and
 exit relay closer to the client (i.e., \texttt{se2any2se}).
 
@@ -44,7 +44,7 @@ exit relay closer to the client (i.e., \texttt{se2any2se}).
     \vspace{-2em}
     \caption{Comparing \ac{dohot} circuits using carml+stem to specify location
     of middle relay in regards to latency. The labels on the left are the
-    cicuits built with the country code for each relay. We include
+    circuits built with the country code for each relay. We include
     \texttt{se2any2se} from Figure~\ref{fig:p1} for comparison.}
     \label{fig:p2}
 \end{figure}
@@ -94,7 +94,7 @@ main factors affecting the latency of \ac{dotor} being the latency of the
 circuit itself as well as the latency of the \ac{dns} query by the exit relay
 it stands to reason that a shorter circuit results in lower latency. A circuit
 with all nodes in the same country as the client should lower latency and
-removing the middle relay furhter so. This expected behaviour is consistent
+removing the middle relay further so. This expected behaviour is consistent
 with the results shown in Figure~\ref{fig:p4}.
 
 \begin{figure}[h]

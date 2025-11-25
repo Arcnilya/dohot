@@ -1,11 +1,11 @@
 # Todo
 
-- [ ] Spelling: "it, should be noted"
-- [ ] Spelling: "fully functionnal"
-- [ ] Spelling: "takaway"
-- [ ] Spelling: "Infromation" e.g., PIR
-- [ ] Spelling: "Furhter"
-- [ ] Spelling: "Cicuits"
+- [x] Spelling: "it, should be noted"
+- [x] Spelling: "fully functionnal"
+- [x] Spelling: "takaway"
+- [x] Spelling: "Infromation" e.g., PIR
+- [x] Spelling: "Furhter"
+- [x] Spelling: "Cicuits"
 - [ ] Do measurements without NXDOMAIN
     - otherwise:
         - issues
