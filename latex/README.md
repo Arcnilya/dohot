@@ -1,0 +1,35 @@
+# Todo
+
+- [ ] Spelling: "it, should be noted"
+- [ ] Spelling: "fully functionnal"
+- [ ] Spelling: "takaway"
+- [ ] Spelling: "Infromation" e.g., PIR
+- [ ] Spelling: "Furhter"
+- [ ] Spelling: "Cicuits"
+- [ ] Do measurements without NXDOMAIN
+    - otherwise:
+        - issues
+        - how generated?
+        - confirmed to be NXDOMAIN?
+- [ ] Clarify why two-hop is okay
+- [ ] Clarify that collusion between relays are irrelevant
+- [ ] Clarify that collusion between resolver and relays are important
+- [ ] Clarify why close relays are okay
+- [ ] Clarify what a nation state actor could see
+- [ ] Clarify unique domains 1,000 times
+- [ ] Real-world impact of proposed changes
+- [ ] "While negligible" is not proven
+- [ ] Write about Fig1 in detail
+- [ ] Explain any2any2any etc. in text
+- [ ] Fig3: how much is latency reduced?
+- [ ] Discussion: impact of caching
+- [ ] More locations apart from Sweden x2
+    - How about large countries?
+    - How about countries with few relays?
+- [ ] Narrow time period
+- [ ] Impact on real DNS traffic
+- [ ] Add formal threat analysis, it's too shallow
+- [ ] Add threat-model table
+    - on-path confidentiality
+    - client anonymity
+    - collusion resistance
