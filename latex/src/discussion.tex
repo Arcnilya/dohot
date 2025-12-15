@@ -105,6 +105,20 @@ network it could theoretically be possible to correlate the query and the
 client.
 \fi
 
+\subsection{Availability of Tor Relays}
+\begin{figure*}[h]
+    \centering
+    Tor Relay Distribution in the World
+    \includegraphics[width=\textwidth]{img/tor-relays-map.pdf}
+    \caption{By fetching relay information from Tor, and geolocating the IP
+    addresses, we plotted them on a world map. The result shows that relays are
+    primarily located in Europe and the U.S. Other parts of the world see few
+    and sparsely located relays.}
+    \label{fig:map}
+\end{figure*}
+
+\todo{write} Figure~\ref{fig:map}
+
 \subsection{Limitations}
 Our experiments primarily measured \ac{dns} query latency using NXDOMAIN
 lookups. This approach eliminates caching as a variable and does not accurately
