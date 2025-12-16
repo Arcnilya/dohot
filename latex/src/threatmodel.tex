@@ -4,34 +4,36 @@ The threat model for anonymous \ac{dns} queries considers a passive adversary
 with access to query information at the target recursive
 resolver~\cite{RFC9230,kurihara2023muodns,DoHoT,ODNS}. The objective is to
 anonymize the client's identity (IP address) so that it cannot be linked to the
-issued query processed by the resolver.
+issued query processed by the resolver. We are, however, not trying to hide the
+fact that the client is communicating with a \ac{dns} resolver.
 
 Oblivious approaches such as \ac{odoh} rely on a single-proxy model whose
 security hinges entirely on a \emph{non-collusion assumption}: the proxy that
 sees the client's IP must not cooperate with the resolver that sees the
-plaintext query. If these entities collude, the client's privacy is immediately
-compromised. This assumption is hard to verify let alone to enforce in practice,
-especially if both parties fall under the same operational or legal domain.
+decrypted query. If these entities collude, the client's privacy is immediately
+compromised. This non-collusion assumption is hard to verify let alone to
+enforce in practice, especially if both parties fall under the same operational
+or legal domain.
 
 In contrast, Tor considers a stronger threat model, where the adversary has a
 \emph{partial} view and/or control of the relays and communication
 links~\cite{dingledine2004} that make up the Tor network, consisting of over
-8,000
-relays\footnote{\url{https://metrics.torproject.org/networksize.html?start=2025-01-01}}.
+9,000
+relays\footnote{\url{https://metrics.torproject.org/networksize.html?start=2025-12-01}}.
 In general, reliably linking user activity in Tor requires control of all relays
 used for a circuit. 
 
-For \ac{doh} queries over Tor, the entry relay can observe the client's IP and
-encrypted traffic but not the \ac{dns} query itself. The middle relay only sees
-encrypted traffic without access to either the client IP, resolver IP, or the
-query. The exit relay only sees encrypted traffic and the target \ac{doh}
-resolver. The \ac{doh} resolver sees the decrypted \ac{dns} queries and the
-exit's IP, but never the client's IP. Even if the Tor circuit is shortened
-(e.g., by removing the middle relay), the design still ensures that no single
-entity can observe both the client's identity and the content of their queries
-simultaneously. Even if all relays are colluding in this setting, they still do
-not have access to the query since it is encrypted when sent to the \ac{doh}
-resolver. Thus, Tor's threat model remains stronger than that of single
-oblivious proxies, which fail completely under collusion between the two
+For \ac{doh} queries over Tor, the entry relay can observe the client source IP
+and encrypted traffic but not the \ac{dns} query itself. The middle relay only
+sees encrypted traffic without access to either the client source IP, resolver
+IP, or the query. The exit relay only sees encrypted traffic and the target
+\ac{doh} resolver. The \ac{doh} resolver sees the decrypted \ac{dns} queries
+and the exit source IP, but never the client source IP. Even if the Tor circuit
+is shortened (e.g., by removing the middle relay), the design still ensures
+that no single entity can observe both the client's identity and the content of
+their queries simultaneously. Even if all relays are colluding in this setting,
+they still do not have access to the query since it is encrypted when sent to
+the \ac{doh} resolver. Thus, Tor's threat model remains stronger than that of
+single oblivious proxies, which fail completely under collusion between the two
 involved parties. 
 

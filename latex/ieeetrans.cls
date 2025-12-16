@@ -4377,7 +4377,8 @@ between column types.}%
 \def\@citex[#1]#2{%
   \let\@citea\@empty
   \@cite{\@for\@citeb:=#2\do
-    {\@citea\def\@citea{], [}%
+  %{\@citea\def\@citea{], [}%
+    {\@citea\def\@citea{, }%
      \edef\@citeb{\expandafter\@firstofone\@citeb\@empty}%
      \if@filesw\immediate\write\@auxout{\string\citation{\@citeb}}\fi
      \@ifundefined{b@\@citeb}{\mbox{\reset@font\bfseries ?}%

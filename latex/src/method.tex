@@ -1,11 +1,10 @@
-\section{Method} \label{sec:method} Prior work on anonymous \ac{dns} queries has
-primarily focused on query latency when comparing against Tor-based
-approaches~\cite{RFC9230,kurihara2023muodns,ODNS,xiao2025}.
-% This metric alone is not particularly informative, since Tor's design inherently introduces higher delays. XXX: this entire section and the next is all about measuring query latency ... cannot say that it is not particularly informative
-Such comparisons typically assume the default Tor client configuration (e.g., in
-as in DoHoT~\cite{DoHoT}), where circuits consists of three randomly selected
-relays (see Section~\ref{sec:bg:tor}). The geographic placement of these relays
-can heavily influence latency results. To provide a more complete picture, our
+\section{Method} \label{sec:method} Prior work on anonymous \ac{dns} queries
+has primarily focused on query latency when comparing against Tor-based
+approaches~\cite{RFC9230,kurihara2023muodns,ODNS,xiao2025}. Such comparisons
+typically assume the default Tor client configuration (e.g., in as in
+DoHoT~\cite{DoHoT}), where circuits consists of three randomly selected relays
+(see Section~\ref{sec:bg:tor}). The geographic placement of these relays can
+heavily influence latency results. To provide a more complete picture, our
 overarching evaluation considers additional dimensions such as the threat model
 and deployability, in addition to exploring how we can reduce latency in
 Tor-based solutions.
@@ -22,23 +21,33 @@ specify country codes for the middle relay or omit it entirely, enabling us to
 explore Tor configurations that balance latency and anonymity systematically.
 Since the client for our measurements is located in Sweden (country-code:
 \texttt{se}), we estimated that under normal routing conditions, that the Tor
-relays in Sweden places them in close proximity to the client. 
+relays in Sweden places them in close proximity to the client. Regarding the
+availability of Tor relays around the world, see Section~\ref{sec:limit}.
 
 To eliminate the effects of caching and to maintain consistency across tests,
 we issue queries for uniquely generated \acp{sld} under a valid \ac{tld}, which
-are expected to return an non-existing-domain return code (NXDOMAIN). This
-approach ensures that the observed latency mainly reflects the path between the
-client and the resolver rather than the influence of cache hits or additional
-authoritative name servers. For each configuration we repeat the measurement
-1,000 times. In each iteration, we start our measurement container with the
-specified configuration and wait until a circuit is established and an
-arbitrary query receives a successful response. This ensure that the Tor
-circuit is fully established and that we have a fully functional \ac{dns}
-resolution over Tor. We then issue a query for an A record using a unique,
-non-existent domain and measure the time, in milliseconds, for the reply to
-return. Finally, we stop the container before the next iteration begins. The
-code for the containers and measurement script can be found on
-GitHub\footnote{Anonymized for submission}.
+are expected to return an non-existing-domain return code (NXDOMAIN). The
+query name consists of \texttt{prot-method-circuit-i-XXXXXXXX.net}. The first
+part is the protocol in use (i.e, dohot, dotor, odoh). The second part is the
+method for building circuits (i.e., torrc or carml). The third part represents
+the built circuit using the country codes for each relay. A three relay circuit
+is represented as: any2any2any, while a two relay circuit contstrained to
+Sweden is represented as: se2se. In addition to these parameters we also
+include an increasing number representing the measurement index (0-999) as well
+as a random alphanumeric string to ensure that the query is unique to avoid
+indluence of cache hits. This approach with unique NXDOMAIN queries ensures
+that the observed latency mainly reflects the path between the client and the
+resolver. 
+
+For each configuration we repeat the measurement with 1,000 unique queries. In
+each iteration, we start our measurement container with the specified
+configuration and wait until a circuit is established and an arbitrary query
+receives a successful response. This ensure that the Tor circuit is fully
+established and that we have a fully functional \ac{dns} resolution over Tor.
+We then issue a query for an A record using a unique, non-existent domain and
+measure the time, in milliseconds, for the reply to return. Finally, we stop
+the container before the next iteration begins. The code for the containers and
+measurement script can be found on GitHub\footnote{Anonymized for submission}.
 
 For comparison we set up docker containers running \ac{dohot} and
 \ac{odoh}. Both of these utilize DNSCrypt-proxy which is a flexible proxy for

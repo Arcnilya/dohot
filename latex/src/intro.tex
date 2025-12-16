@@ -20,24 +20,27 @@ exposed, but also resolver operators, who must safeguard the data they collect.
 Even in jurisdictions with strong privacy laws preventing the monetization of
 this type of data, there are data breaches and leakage risks.
 
-To break this link between client identity and \ac{dns} queries, new protocols
-have been proposed. \emph{Oblivious} protocols introduce a dedicated relay (or
-proxy) between the client and the resolver so that no single entity can observe
-both ends of the query~\cite{RFC9230,ODNS}. \emph{Tor-based} solutions use the
-Tor network~\cite{dingledine2004} to separate the client identity from the
-query~\cite{DoHoT}. Another recent proposal involves integrating \ac{pir} to
-\ac{dns} resolvers leveraging homomorphic encryption schemes~\cite{xiao2025}.
-Comparing these proposals solely in terms of query latency---which is a pain
-point for both encrypted and anonymous \ac{dns} transport---places the Tor-based
-solutions dead last~\cite{RFC9230,kurihara2023muodns,ODNS,xiao2025}.
+To break this link between client identity and \ac{dns} query content, new
+protocols have been proposed. \emph{Oblivious} protocols introduce a dedicated
+relay (or proxy) between the client and the resolver so that no single entity
+can observe both ends of the query~\cite{RFC9230,ODNS}. \emph{Tor-based}
+solutions use the Tor network~\cite{dingledine2004} to separate the client
+identity from the query~\cite{DoHoT}. Another recent proposal involves
+integrating \ac{pir} to \ac{dns} resolvers leveraging homomorphic encryption
+schemes~\cite{xiao2025}. Comparing these proposals solely in terms of query
+latency---which is a pain point for both encrypted and anonymous \ac{dns}
+transport---places the Tor-based solutions dead
+last~\cite{RFC9230,kurihara2023muodns,ODNS,xiao2025}.
 
 In this paper, we compare different anonymous query schemes in terms of query
 latency, threat model, and deployability concerns. We explore how Tor's latency
 overhead can be reduced while providing ample privacy protections (compared to
-related work) in the context of \ac{dns} resolution. Specifically, we
-investigate the viability of using two-hop Tor circuits and restricting relays
-to geographic regions in close proximity to the client. Our main contributions
-are as follows:
+related work) in the context of \ac{dns} resolution. We are not trying to hide
+that the client is communicating with a \ac{dns} resolver. The query content
+must be hidden from the relays while keeping the client source IP hidden from
+the \ac{dns} resolver. That is why we investigate the viability of using
+two-hop Tor circuits and restricting relays to geographic regions in close
+proximity to the client. Our main contributions are as follows:
 
 \begin{itemize}
     \item We show that it is possible to cut the average query latency of
@@ -45,8 +48,9 @@ are as follows:
         61$\pm$135ms) by using two-hop circuits and placing relays in relative
         close proximity to the client.
     \item An analysis that shows that despite weakening the protection from
-    default Tor by changing circuit creation, Tor-based solutions provide
-    stronger privacy-protections than oblivious protocols.
+        default Tor by changing circuit creation, Tor-based solutions provide
+        stronger privacy-protections than oblivious protocols in addition to
+        already being deployed.
     %\item We compare different anonymous query schemes in terms of query
         %latency, threat model, and deployability, emphasizing that more than
         %query latency should be taken into consideration when selecting a scheme

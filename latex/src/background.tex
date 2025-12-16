@@ -1,7 +1,7 @@
 \section{Background and Related Work} \label{sec:background} The \acf{dns} is a
 hierarchical and distributed database that maps domain names to resource records
 such as IP addresses~\cite{RFC1034,RFC1035}. It enables human-readable
-identifiers such as \texttt{example.com} to be translated into machine-usable
+names such as \texttt{www.example.com} to be translated into machine-usable
 network addresses for communication on the Internet. When a client needs to
 resolve a domain name, it issues a DNS query, typically to a \ac{dns} resolver
 operated by an \ac{isp} or a public \ac{dns} provider. The resolver acts on
@@ -17,14 +17,15 @@ resolver. \acf{dot}~\cite{RFC7858} encapsulates \ac{dns} queries within a
 \ac{tls} session, ensuring that on-path observers cannot inspect or tamper with
 \ac{dns} traffic. Similarly, \acf{doh}~\cite{RFC8484} transmits \ac{dns}
 messages over HTTPS, allowing \ac{dns} queries to blend in with regular
-encrypted web traffic. More recently, \acf{doq}~\cite{RFC9250} has been proposed
-to reduce latency and connection overhead by using the QUIC transport protocol,
-which integrates \ac{tls} over UDP and offers faster handshakes. While these
-protocols protect \ac{dns} queries from third-party passive eavesdroppers on the
-network path, they do not address a key structural vulnerability: the resolver
-remains fully capable of observing and logging all \ac{dns} queries and client
-source IP. This exposes users to potential privacy risks, including profiling,
-surveillance, or data misuse by the resolver operator.
+encrypted web traffic. More recently, \acf{doq}~\cite{RFC9250} has been
+proposed to reduce latency and connection overhead by using the QUIC transport
+protocol, which integrates \ac{tls} over UDP and offers faster handshakes.
+While these protocols protect \ac{dns} queries from third-party passive
+eavesdroppers on the network path, they do not address a key structural
+vulnerability: the resolver remains fully capable of observing and logging the
+client source IP and all their \ac{dns} queries. This exposes users to
+potential privacy risks, including profiling, surveillance, or data misuse by
+the resolver operator.
 
 \subsection{Tor} \label{sec:bg:tor} One way to anonymize clients is to use Tor,
 a low-latency anonymity network~\cite{dingledine2004}. Tor provides anonymity by
@@ -44,7 +45,7 @@ measured bandwidth.
 developed to introduce anonymity into \ac{dns} resolution by explicitly
 separating the client from the query.
 
-\subsubsection{Oblivious schemes:}
+\subsubsection{Oblivious schemes}
 \ac{odns} uses its own authoritative namespace where the authoritative name
 servers act as recursive resolvers~\cite{ODNS}. A client encrypts the domain
 name with a key and appends the special-use \ac{tld} \texttt{odns}. The key
@@ -61,7 +62,7 @@ server links identity and query.
 transport~\cite{RFC9230}. Clients send encrypted queries to a \ac{doh}
 forwarder (the proxy), which relays them to a \ac{doh} server (the target
 resolver). The proxy can observe the client's IP address but not the query,
-while the target resolver can observe the query but not the client's identity.
+while the target resolver can observe the query but not the client source IP.
 This design assumes that the proxy and resolver do not collude, an assumption
 that is difficult to verify in practice. The Mutualized Oblivious
 DNS ($\mu$ODNS)~\cite{kurihara2023muodns} is an attempt to minimize the
@@ -81,7 +82,7 @@ Mozilla's implementation of \ac{doh} where they suggested that Firefox also
 could help with discovering \ac{odoh} proxies which is important for a
 widespread adoption of the protocol~\cite{cfmozilla}. 
 
-\subsubsection{Tor-based schemes:}
+\subsubsection{Tor-based schemes}
 When a circuit is established in the Tor network to connect to a destination,
 the domain must be resolved at the exit relay. We call this approach \ac{dotor}.
 The specific resolver used for this lookup depends on the exit relay's
@@ -97,7 +98,7 @@ cost of latency. Muffett's extensive home testing during the pandemic lockdown
 demonstrated that, despite increased latency, the system maintained acceptable
 performance for everyday Internet activities.
 
-\subsubsection{Non-proxy schemes:}
+\subsubsection{Non-proxy schemes}
 \acf{pir} resolvers aim to circumvent the non-collusion assumptions when dealing
 with proxies by having resolvers operating ``in the blind''. This means
 resolving domains without knowing what they are using homomorphic encryption
