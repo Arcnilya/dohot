@@ -16,35 +16,36 @@ address of the client \emph{and} the contents of the query. This data is highly
 sensitive as it can reveal interests, routines, and affiliations of individuals,
 as well as operational details of organizations \cite{resolver-wiretap,RFC9076}.
 Importantly, these risks affect not only end users, whose activities may be
-exposed, but also resolver operators, who must safeguard the data they collect.
-Even in jurisdictions with strong privacy laws preventing the monetization of
-this type of data, there are data breaches and leakage risks.
+exposed, but also resolver operators, who must safeguard their privileged
+systems, and the data they process and collect. Even in jurisdictions with
+strong privacy laws preventing the monetization of this type of data, there are
+data breaches and leakage risks.
 
-To break this link between client identity and \ac{dns} query content, new
-protocols have been proposed. \emph{Oblivious} protocols introduce a dedicated
-relay (or proxy) between the client and the resolver so that no single entity
-can observe both ends of the query~\cite{RFC9230,ODNS}. \emph{Tor-based}
+To break this direct link between client identity and \ac{dns} query content,
+new protocols have been proposed. \emph{Oblivious} protocols introduce a
+dedicated relay (or proxy) between the client and the resolver so that no single
+entity can observe both ends of the query~\cite{RFC9230,ODNS}. \emph{Tor-based}
 solutions use the Tor network~\cite{dingledine2004} to separate the client
 identity from the query~\cite{DoHoT}. Another recent proposal involves
 integrating \ac{pir} to \ac{dns} resolvers leveraging homomorphic encryption
 schemes~\cite{xiao2025}. The client sends an encrypted query, the resolver
 computes over encrypted data using homomorphic encryption, and returns an
-encrypted response that the client decrypts locally, ensuring the resolver
-never learns the requested domain. Comparing these proposals solely in terms of
-query latency, which is a pain point for both encrypted and anonymous \ac{dns}
+encrypted response that the client decrypts locally, ensuring the resolver never
+learns the requested domain. Comparing these proposals solely in terms of query
+latency, which is a pain point for both encrypted and anonymous \ac{dns}
 transport, places the Tor-based solutions dead
 last~\cite{RFC9230,kurihara2023muodns,ODNS,xiao2025}.
 
 In this paper, we compare different anonymous query schemes in terms of query
-latency, threat model, and deployability concerns. We explore how Tor's latency
-overhead can be reduced while providing ample privacy protections in the
-context of \ac{dns} resolution compared to related work. We are not trying to
-hide that the client is communicating with a \ac{dns} resolver. The query
-content must be hidden from the relays while keeping the client source IP
-hidden from the \ac{dns} resolver. That is why this study investigates the
-viability of using two-hop Tor circuits and restricting relays to geographic
-regions in close proximity to the client. Our main contributions are as
-follows:
+latency, \emph{threat model}, and deployability concerns. We explore how Tor's
+latency overhead can be reduced \emph{while at the same time} still provide
+stronger privacy guarantees for \ac{dns} resolution compared to related work. We
+are not trying to hide that the client is communicating with a \ac{dns}
+resolver. The query content must be hidden from the relays while keeping the
+client source IP hidden from the \ac{dns} resolver. That is why this study
+investigates the viability of using two-hop Tor circuits and restricting relays
+to geographic regions in close proximity to the client. Our main contributions
+are as follows:
 
 \begin{itemize}
     \item An analysis of threat models, showing that two-hop circuits and
@@ -62,3 +63,10 @@ follows:
         %query latency should be taken into consideration when selecting a scheme
         %for anonymizing \ac{dns} queries.
 \end{itemize}
+
+Section~\ref{sec:background} presents background and related work. We define
+threat models for DNS queries in the context of Tor in
+Section~\ref{sec:threatmodel}. Section~\ref{sec:method} covers our network
+measurements methodology, followed by measurement results in
+Section~\ref{sec:measurement}. We discuss and ground our results in related work
+in Section~\ref{sec:disc}. Section~\ref{sec:conclusion} concludes the paper.
