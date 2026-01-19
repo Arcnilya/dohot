@@ -3,25 +3,38 @@
 The threat model for anonymous \ac{dns} queries considers a passive adversary
 with access to query information at the target recursive
 resolver~\cite{RFC9230,kurihara2023muodns,DoHoT,ODNS}. The objective is to
-anonymize the client's identity (IP address) so that it cannot be linked to the
-issued query processed by the resolver. We are, however, not trying to hide the
-fact that the client is communicating with a \ac{dns} resolver.
+anonymize the client's identity (source IP address) so that it cannot be linked
+to the issued query processed by the resolver. The goal is not to hide the fact
+that the client is communicating with a \ac{dns} resolver.
 
-Oblivious approaches such as \ac{odoh} rely on a single-proxy model whose
-security hinges entirely on a \emph{non-collusion assumption}: the proxy that
-sees the client's IP must not cooperate with the resolver that sees the
-decrypted query. If these entities collude, the client's privacy is immediately
-compromised. This non-collusion assumption is hard to verify let alone to
-enforce in practice, especially if both parties fall under the same operational
-or legal domain.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.8\columnwidth]{img/dns-tor-threatmodel.drawio.pdf}
+    \caption{The adversary in the threat model for anonymous DNS is the
+    resolver with knowledge about the query. One or more proxies may know the
+    client source IP or the resolver IP but not the query since the traffic is
+    encrypted. If the resolver and all proxies collude, then they can
+    compromise the user's privacy.}
+    \label{fig:threatmodel}
+\end{figure}
+
+Oblivious approaches such as \ac{odoh} rely on a single-proxy model and hinges
+entirely on a \emph{non-collusion assumption}: the proxy that sees the client
+source IP must not cooperate with the resolver that sees the decrypted query.
+If these entities collude, the privacy of the user is immediately compromised.
+This non-collusion assumption is hard to verify let alone to enforce in
+practice, especially if both parties fall under the same operational or legal
+domain.
 
 In contrast, Tor considers a stronger threat model, where the adversary has a
 \emph{partial} view and/or control of the relays and communication
 links~\cite{dingledine2004} that make up the Tor network, consisting of over
 9,000
 relays\footnote{\url{https://metrics.torproject.org/networksize.html?start=2025-12-01}}.
-In general, reliably linking user activity in Tor requires control of all relays
-used for a circuit. 
+In this threat model the adversary should be unable to link a client source IP
+to the destination IP. In general, reliably linking user activity in Tor
+requires control of all relays used for a circuit, traffic analysis on the
+encrypted links, or timing correlations by a global adversary. 
 
 For \ac{doh} queries over Tor, the entry relay can observe the client source IP
 and encrypted traffic but not the \ac{dns} query itself. The middle relay only
@@ -30,10 +43,10 @@ IP, or the query. The exit relay only sees encrypted traffic and the target
 \ac{doh} resolver. The \ac{doh} resolver sees the decrypted \ac{dns} queries
 and the exit source IP, but never the client source IP. Even if the Tor circuit
 is shortened (e.g., by removing the middle relay), the design still ensures
-that no single entity can observe both the client's identity and the content of
-their queries simultaneously. Even if all relays are colluding in this setting,
+that no single entity can observe both the client source IP and the content of
+the query simultaneously. Even if all Tor relays are colluding in this setting,
 they still do not have access to the query since it is encrypted when sent to
-the \ac{doh} resolver. Thus, Tor's threat model remains stronger than that of
-single oblivious proxies, which fail completely under collusion between the two
-involved parties. 
+the \ac{doh} resolver. Thus, threat model of \ac{dohot} remains stronger than
+that of single oblivious proxies, which fail completely under collusion between
+the two involved parties. 
 

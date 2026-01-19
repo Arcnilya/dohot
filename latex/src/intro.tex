@@ -27,30 +27,36 @@ can observe both ends of the query~\cite{RFC9230,ODNS}. \emph{Tor-based}
 solutions use the Tor network~\cite{dingledine2004} to separate the client
 identity from the query~\cite{DoHoT}. Another recent proposal involves
 integrating \ac{pir} to \ac{dns} resolvers leveraging homomorphic encryption
-schemes~\cite{xiao2025}. Comparing these proposals solely in terms of query
-latency---which is a pain point for both encrypted and anonymous \ac{dns}
-transport---places the Tor-based solutions dead
+schemes~\cite{xiao2025}. The client sends an encrypted query, the resolver
+computes over encrypted data using homomorphic encryption, and returns an
+encrypted response that the client decrypts locally, ensuring the resolver
+never learns the requested domain. Comparing these proposals solely in terms of
+query latency, which is a pain point for both encrypted and anonymous \ac{dns}
+transport, places the Tor-based solutions dead
 last~\cite{RFC9230,kurihara2023muodns,ODNS,xiao2025}.
 
 In this paper, we compare different anonymous query schemes in terms of query
 latency, threat model, and deployability concerns. We explore how Tor's latency
-overhead can be reduced while providing ample privacy protections (compared to
-related work) in the context of \ac{dns} resolution. We are not trying to hide
-that the client is communicating with a \ac{dns} resolver. The query content
-must be hidden from the relays while keeping the client source IP hidden from
-the \ac{dns} resolver. That is why we investigate the viability of using
-two-hop Tor circuits and restricting relays to geographic regions in close
-proximity to the client. Our main contributions are as follows:
+overhead can be reduced while providing ample privacy protections in the
+context of \ac{dns} resolution compared to related work. We are not trying to
+hide that the client is communicating with a \ac{dns} resolver. The query
+content must be hidden from the relays while keeping the client source IP
+hidden from the \ac{dns} resolver. That is why this study investigates the
+viability of using two-hop Tor circuits and restricting relays to geographic
+regions in close proximity to the client. Our main contributions are as
+follows:
 
 \begin{itemize}
-    \item We show that it is possible to cut the average query latency of
-        Tor-based solutions such as DoHoT in half (from 134$\pm$110ms to
-        61$\pm$135ms) by using two-hop circuits and placing relays in relative
-        close proximity to the client.
-    \item An analysis that shows that despite weakening the protection from
-        default Tor by changing circuit creation, Tor-based solutions provide
-        stronger privacy-protections than oblivious protocols in addition to
-        already being deployed.
+    \item An analysis of threat models, showing that two-hop circuits and
+        geographically close relays in Tor still provide stronger
+        privacy-protections than oblivious single-proxy schemes. Default Tor
+        defends against path adversaries, while anonymous DNS has the resolver
+        as the adversary. Privacy means hiding the client source IP from the
+        resolver, not the fact it contacted a resolver.
+    \item By using two-hop circuits and placing relays in relative close
+        proximity to the client, it is possible to cut the average query
+        latency of Tor-based solutions such as DoHoT in half (from
+        134$\pm$110ms to 61$\pm$135ms) 
     %\item We compare different anonymous query schemes in terms of query
         %latency, threat model, and deployability, emphasizing that more than
         %query latency should be taken into consideration when selecting a scheme

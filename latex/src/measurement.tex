@@ -48,14 +48,14 @@ client (i.e., \texttt{se2any2se}).
 One advantage of \texttt{carml+stem} is controlling the middle relay placement.
 By specifying the middle relay's location, we can reduce the geographical
 spread of circuits, and thus reduce the latency of the queries.
-Figure~\ref{fig:p2} shows a notable reduction in latency when the middle relay
-is constrained to be in the same country as the client (see se2any2se versus
-se2se2se). As expected, reducing the geographical distance between relays also
-improves performance. The main takeaway here is that by placing all three
-relays in close proximity to the client we can reduce the query latency from a
-median of 200ms (see \texttt{carml+stem}, \texttt{any2any2any} in
-Figure~\ref{fig:p1}) to 60ms (\texttt{se2se2se} in Figure~\ref{fig:p2}) with
-much less spread.
+Figure~\ref{fig:p2} shows a notable reduction in latency when the middle relay,
+in addition to the guard and exit relays, is constrained to be in the same
+country as the client (see se2any2se versus se2se2se). As expected, reducing
+the geographical distance between relays also improves performance. The main
+takeaway here is that by placing all three relays in close proximity to the
+client we can reduce the query latency from a median of 200ms (see
+\texttt{carml+stem}, \texttt{any2any2any} in Figure~\ref{fig:p1}) to 60ms
+(\texttt{se2se2se} in Figure~\ref{fig:p2}) with much less spread.
 
 \begin{figure}[h]
     \centering
@@ -104,6 +104,6 @@ configuration of \ac{dohot} (using torrc) introduced by Alex
 Muffet~\cite{DoHoT}, tuned circuits for \ac{dohot} and \ac{dotor}, as well as
 \ac{odoh} with a Swedish proxy. Even though the improved query latency of
 \ac{dohot} and \ac{dotor} is worse than \ac{odoh}, we managed to cut the
-latency in half compared with the default Tor configuration while still
-having a stronger threat model than with single collusion-prone oblivious
+latency in half compared with the default Tor configuration. At the same time,
+we maintain a stronger threat model than single collusion-prone oblivious
 proxies.

@@ -9,12 +9,14 @@
     DNS-over-HTTPS-over-Tor (DoHoT), where DoH is used over circuits in the Tor
     network to protect end-users. By changing circuit configuration we show
     that the average query latency in DoHoT can be cut in half compared to its
-    default configuration (from 134$\pm$110ms to 61$\pm$135ms), while still
-    providing protection in a stronger threat model than other work around
-    anonymous DNS and comparable ease of deployment (just use Tor). While
+    default configuration (from 134$\pm$110ms to 61$\pm$135ms). While
     minimizing query latency is essential to user experience, our results
     emphasize the importance of also considering different threat models and
-    deployability when comparing solutions for anonymous DNS queries.
+    deployability when comparing solutions for anonymous DNS queries. Comparing
+    Tor-based anonymization schemes against the others, we emphasise that they
+    provide a stronger threat model than single-proxy oblivious schemes and
+    comparable ease of deployment by using the already existing Tor relays.
+
 
     %\keywords{Oblivious DNS \and Tor \and Network Measurements}
 \end{abstract}
