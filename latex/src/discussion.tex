@@ -2,7 +2,8 @@
 In this section we compare our measurement results with that of previous
 studies around anonymous \ac{dns} queries. We also compare the various schemes
 in terms of threat model and deployability in addition to query latency.
-\todo{update above}
+Finally, the limitations of the study are listed, including the use of NXDOMAIN
+lookups, caching effects, and Tor relay distribution in the world.
 
 \subsection{Comparison with Related Work}
 
@@ -107,13 +108,14 @@ the characteristics of the intended use case.
 Table~\ref{tab:eval} shows an overview of the three dimensions for comparing
 anonymous \ac{dns} schemes. The oblivious single-proxy schemes have low latency
 but suffers from a relatively weak threat model and low deployability due to
-specialized server infrastructure. The Tor-based schemes typically have high
+specialized server infrastructure. The Tor-based schemes \emph{typically} have high
 latency, although with a much stronger threat model as well as a readily
-deployed infrastructure. The $\mu$ODNS and \ac{pir}-based schemes have found a
-nice balance between latency and threat model, but either require specialized
+deployed infrastructure. The work in this study has been addressing the high
+latency in Tor-based schemes since the threat model and deployability already
+are relatively high. The $\mu$ODNS and \ac{pir}-based schemes have found a nice
+balance between latency and threat model, but either require specialized
 infrastructure or changes to \ac{dns} protocols and by extension the role of a
-recursive resolver. The work in this study has been addressing the high latency
-in Tor-based schemes since the threat model and deployability already are relatively high.
+recursive resolver. 
 
 Regardless of performance trade-offs, practical deployment remains the
 bottleneck for many anonymity schemes in \ac{dns}. The appropriate choice
