@@ -15,7 +15,7 @@ default Tor configuration method (\texttt{torrc}) allows users to constrain the
 geographic location of entry and exit relays via country codes, but offers no
 control over the middle relay. It also does not support building circuits with
 fewer than three relays. To overcome these limitations, the Python libraries
-\texttt{carml}~\cite{carml} and \texttt{stem}~\cite{stem} are used, which expose
+\texttt{carml}~\cite{carml} and \texttt{Stem}~\cite{stem} are used, which expose
 fine-grained control over circuit construction. With these tools, it is possible
 specify country codes for the middle relay or omit it entirely (see
 Figure~\ref{fig:carml-tor}), enabling the exploration of circuit configurations
@@ -24,7 +24,7 @@ that balance latency and anonymity systematically.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\columnwidth]{img/dns-tor-carml.drawio.pdf}
-    \caption{A Tor circuit created with carml and stem, using only an entry
+    \caption{A Tor circuit created with carml and Stem, using only an entry
     guard and an exit relay.}
     \label{fig:carml-tor}
 \end{figure}
@@ -40,7 +40,7 @@ the measurements issue queries for uniquely generated \acp{sld} under a valid
 \ac{tld}, which are expected to return an non-existing-domain return code
 (NXDOMAIN). The query name consists of
 \texttt{prot-method-circuit-i-XXXXXXXX.net}. The first part is the protocol in
-use (i.e, dohot, dotor, odoh). The second part is the method for building
+use (i.e, DoHoT, DoTor, ODoH). The second part is the method for building
 circuits (i.e., torrc or carml). The third part represents the built circuit
 using the country codes for each relay. A circuit consisting of three
 unspecified relays is represented as \texttt{any2any2any}, while a two relay
@@ -51,7 +51,7 @@ query is unique to avoid influence of cache hits. This approach with unique
 NXDOMAIN queries ensures that the observed latency mainly reflects the path
 between the client and the resolver.
 
-Each configuration is measured 1,000 times with unqiue queries. In each
+Each configuration is measured 1,000 times with unique queries. In each
 iteration, we start our measurement container with the specified configuration
 and wait until a circuit is established and an arbitrary query receives a
 successful response. This prelude ensures that the Tor circuit is fully

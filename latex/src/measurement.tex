@@ -1,18 +1,24 @@
 \section{Measurement Results} \label{sec:measurement} We performed our
-measurements in four groups. The goal of the first set of measurements is to
+measurements in four sets. The goal of the first set of measurements is to
 compare the circuit configuration methods against each other. We want to
 investigate performance differences between using \texttt{torrc} or
-\texttt{carml+stem}. The second set of measurements explore the impact on
-latency when specifying the location of the middle relay, something that only
-\texttt{carml+stem} can do out of the two methods. In the third set of
-measurements we look at circuits without middle relays, also a capability we
-get from \texttt{carml+stem}. Finally we also compare the best performing
-configuration of Tor-based approaches (\ac{dohot} and \ac{dotor}) against the
-default \ac{dohot} setup and \ac{odoh} with a proxy in Sweden.
+\texttt{carml+Stem} (Section~\ref{sec:measurement:p1}). The second set of
+measurements explore the impact on latency when specifying the location of the
+middle relay, something that only \texttt{carml+Stem} can do out of the two
+methods (Section~\ref{sec:measurement:p2}). In the third set of measurements we
+look at circuits without middle relays, also a capability we get from
+\texttt{carml+Stem}
+(Sections~\ref{sec:measurement:p3}--\ref{sec:measurement:p4}). Finally, we
+compare the best performing configuration of the Tor-based approaches
+(\ac{dohot} and \ac{dotor}) against the default \ac{dohot} setup and \ac{odoh}
+with a proxy in Sweden, the same country as our client
+(Section~\ref{sec:measurement:p5}).
+
+\subsection{Query Time by Method (torrc vs. carml+Stem)}
+\label{sec:measurement:p1}
 
 \begin{figure}[ht]
     \centering
-    Query Time by Method (torrc vs carml+stem)\par\medskip
     \includegraphics[width=\columnwidth]{img/p1.pdf}
     \caption{Comparing approaches for building circuits in Tor for \ac{dohot}
     in regards to query latency. On the left are the methods used for building
@@ -23,29 +29,31 @@ default \ac{dohot} setup and \ac{odoh} with a proxy in Sweden.
 \end{figure}
 
 We began by comparing the latency of circuits constructed using the standard
-\texttt{torrc} configuration with those built using \texttt{carml+stem}. As
-shown in Figure~\ref{fig:p1}, circuits created via \texttt{torrc} outperformed
-those built with \texttt{carml+stem}. This performance gap is due to
-differences in relay selection. By default, \texttt{torrc} selects relays based
-on weighted bandwidth, favoring faster, more geographically optimal relays. In
-contrast, \texttt{carml+stem} selects relays uniformly at random within
-constraints such as location and relay type (e.g., exit or non-exit). Another
-takeaway from this measurement is that the latency is reduced for both
-circuit-building methods when we place the entry and exit relay closer to the
-client (i.e., \texttt{se2any2se}).
+\texttt{torrc} configuration with those built using \texttt{carml+Stem}. As
+shown in the box plot in Figure~\ref{fig:p1}, circuits created via
+\texttt{torrc} outperformed those built with \texttt{carml+Stem}. This
+performance gap is due to differences in relay selection. By default,
+\texttt{torrc} selects relays based on weighted bandwidth, favoring faster, more
+geographically optimal relays. In contrast, \texttt{carml+Stem} selects relays
+uniformly at random within constraints such as location and relay type (e.g.,
+exit or non-exit). Another takeaway from this measurement is that the latency is
+reduced for both circuit-building methods when we place the entry and exit relay
+closer to the client (i.e., \texttt{se2any2se}).
+
+\subsection{Query Time by Circuit (Specific Middle)}
+\label{sec:measurement:p2}
 
 \begin{figure}[ht]
     \centering
-    Query Time by Circuit (specific middle)\par\medskip
     \includegraphics[width=\columnwidth]{img/p2.pdf}
-    \caption{Comparing \ac{dohot} circuits using carml+stem to specify location
+    \caption{Comparing \ac{dohot} circuits using carml+Stem to specify location
     of middle relay in regards to latency. The labels on the left are the
     circuits built with the country code for each relay. We include
     \texttt{se2any2se} from Figure~\ref{fig:p1} for comparison.}
     \label{fig:p2}
 \end{figure}
 
-One advantage of \texttt{carml+stem} is controlling the middle relay placement.
+One advantage of \texttt{carml+Stem} is controlling the middle relay placement.
 By specifying the middle relay's location, we can reduce the geographical
 spread of circuits, and thus reduce the latency of the queries.
 Figure~\ref{fig:p2} shows a notable reduction in latency when the middle relay,
@@ -54,29 +62,33 @@ country as the client (see se2any2se versus se2se2se). As expected, reducing
 the geographical distance between relays also improves performance. The main
 takeaway here is that by placing all three relays in close proximity to the
 client we can reduce the query latency from a median of 200ms (see
-\texttt{carml+stem}, \texttt{any2any2any} in Figure~\ref{fig:p1}) to 60ms
+\texttt{carml+Stem}, \texttt{any2any2any} in Figure~\ref{fig:p1}) to 60ms
 (\texttt{se2se2se} in Figure~\ref{fig:p2}) with much less spread.
+
+\subsection{Query Time by Circuit (Without Middle)}
+\label{sec:measurement:p3}
 
 \begin{figure}[ht]
     \centering
-    Query Time by Circuit (without middle)\par\medskip
     \includegraphics[width=\columnwidth]{img/p3.pdf}
     \caption{Comparing \ac{dohot} circuits without middle relays using
-    carml+stem in regards to latency.}
+    carml+Stem in regards to latency.}
     \label{fig:p3}
 \end{figure}
 
-We used \texttt{carml+stem} to construct two-hop circuits, consisting
+We used \texttt{carml+Stem} to construct two-hop circuits, consisting
 only of an entry and an exit relay, a configuration not supported by
 \texttt{torrc}. As illustrated in Figure~\ref{fig:p3}, this further reduces
 latency. The best performance was observed when both relays were in close
 proximity to the client with a median query time of 40ms. 
 
+\subsection{Query Time by Circuit (DoTor carml+Stem)}
+\label{sec:measurement:p4}
+
 \begin{figure}[ht]
     \centering
-    Query Time by Circuit (DoTor carml+stem)\par\medskip
     \includegraphics[width=\columnwidth]{img/p4.pdf}
-    \caption{Comparing \ac{dotor} circuit configurations using carml+stem,
+    \caption{Comparing \ac{dotor} circuit configurations using carml+Stem,
     showing that the query time is reduced by shortening the circuit and
     selecting relays in close proximation to the client.}
     \label{fig:p4}
@@ -90,9 +102,11 @@ with all nodes in the same country as the client should lower latency and
 removing the middle relay further so. This expected behaviour is consistent
 with the results shown in Figure~\ref{fig:p4}.
 
+\subsection{Query Time by Approach}
+\label{sec:measurement:p5}
+
 \begin{figure}[ht]
     \centering
-    Query Time by Approach\par\medskip
     \includegraphics[width=\columnwidth]{img/p5.pdf}
     \caption{Comparing the default configuration of DoHoT (any2any2any) with
     DoHoT (se2se), DoTor (se2se), as well as ODoH with a proxy in Sweden.}
