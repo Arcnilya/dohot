@@ -28,16 +28,18 @@ same country as the client, the average resolution time was further reduced to
 Kurihara~\emph{et al.}~\cite{kurihara2023muodns} compared their
 collusion-resistant approach to anonymous \ac{dns} queries: $\mu$ODNS, against
 variations of ADNSCrypt, as well as DNSCrypt over Tor in terms of performance.
-For the Tor-based setting they had two circuit configurations alongside a
-client in Japan (jp): (i) an entry in Japan with middle and exit relays
-selected globally (i.e., \texttt{jp2any2any}), and (ii) an entry in Japan with
-middle and exit relays located in East Asia and East South
-Asia\footnote{limited to the following country-codes: cn, hk, jp, kr, tw, kh,
-tp, id, my, ph, sg, th and vn}. The median query time of the first setting was
-1228.8 ms and the second setting was 461.8 ms. While we used \ac{doh} over Tor
-instead of DNSCrypt, the results of our equivalent setting were nowhere close
-to the high latency observed in their experiment (circuit \texttt{se2any2any}
-using torrc was 88 ms, and carml+stem was 130 ms).
+For the Tor-based setting they had two circuit configurations alongside a client
+in Japan (jp): (i) an entry in Japan with middle and exit relays selected
+globally (i.e., \texttt{jp2any2any}), and (ii) an entry in Japan with middle and
+exit relays located in East Asia and East South Asia\footnote{limited to the
+following country-codes: cn, hk, jp, kr, tw, kh, tp, id, my, ph, sg, th and vn}.
+The median query time of the first setting was 1228.8 ms and the second setting
+was 461.8 ms. While we used \ac{doh} over Tor instead of DNSCrypt, the results
+of our equivalent setting were nowhere close to the high latency observed in
+their experiment (circuit \texttt{se2any2any} using torrc was 88 ms, and
+carml+stem was 130 ms). This is likely due to the geographic distribution of Tor
+relays (further discussed in Section~\ref{sec:limit}), where our experiments
+with a client in Sweden greatly benefits compared to a client in Japan.
 
 Xiao~\emph{et al.}~\cite{xiao2025} introduced a way to avoid proxies by having
 the resolver resolve domains without knowing what they are using homomorphic
@@ -59,15 +61,16 @@ performance and privacy depend on the specific deployment parameters (e.g.,
 vantage points, network conditions, and implementation choices).
 
 
-\subsubsection{Latency} Oblivious single-proxy schemes (\ac{odns} and
-\ac{odoh}) generally achieve \emph{low} latency because they introduce only one
-additional hop and modest cryptographic overhead. This comes at the cost of a
-weaker threat model due to potential collusion between the proxy and the
-resolver. Tor-based schemes incur \emph{higher} latency, mainly due to
-multi-hop paths in the overlay network. Nevertheless, as shown in our
-experiments, circuit selection and tuning can reduce latency by roughly half.
-When it comes to $\mu$ODNS and \ac{pir} resolvers, they strike a balance
-between performance overhead and collusion resistance.
+\subsubsection{Latency} Oblivious single-proxy schemes (\ac{odns} and \ac{odoh})
+generally achieve \emph{low} latency because they introduce only one additional
+hop and modest cryptographic overhead. This comes at the cost of a weaker threat
+model due to potential collusion between the proxy and the resolver. Tor-based
+schemes incur \emph{higher} latency, mainly due to multi-hop paths in the
+overlay network. Nevertheless, as shown in our experiments, circuit selection
+and tuning can reduce latency by roughly half. \todo{The following sentence is
+not latency, and DoHoT also addresses collusion resistance by enabling using
+several DoH servers. Rework.} When it comes to $\mu$ODNS and \ac{pir} resolvers,
+they strike a balance between performance overhead and collusion resistance.
 
 \subsubsection{Threat Model} Tor-based schemes, $\mu$ODNS, and \ac{pir}
 resolvers provide \emph{stronger} resistance to collusion compared to
@@ -98,12 +101,15 @@ the characteristics of the intended use case.
         & Latency & Threat Model & Deployability \\
         \hline
         \hline
-        Oblivious   & Low & Low & Low \\\hline
-        Tor-based   & High & High & High \\\hline
-        $\mu$ODNS   & Medium & High & Low \\\hline
-        PIR-based   & Medium & High & Low  \\\hline
+        Oblivious           & Low & Low & Low \\\hline
+        Tor-based (default) & High & High & High \\\hline
+        Tor-based (2-hop)   & Medium & Medium & High \\\hline
+        $\mu$ODNS           & Medium & High & Low \\\hline
+        PIR-based           & Medium & High & Low  \\\hline
     \end{tabular}
 \end{table}
+
+\todo{I would refine this table and make it two-column (uses more space as a bonus!). For latency, quantify if possible (avg±std ms). I don't get why oblivious has to have lower latency than mu or PIR. For threat model, make it freetext. Oblivious: non-collusion. DoTor distributed trust, DoHoT: distributed trust + collusion resistance, mu: collusion resistance, PIR: depends. For Deployability, quantify: Tor is easy, try to get numbers for oblivious somewhere, etc. Then in the text, work in a sentence on clarifying that while 2-hop weakens from default Tor, it's still better than related stuff for DNS (for confused reviewers).}
 
 Table~\ref{tab:eval} shows an overview of the three dimensions for comparing
 anonymous \ac{dns} schemes. The oblivious single-proxy schemes have low latency
@@ -124,19 +130,23 @@ adversarial model, operational feasibility, and the availability of cooperating
 infrastructure.
 
 
-\subsection{Limitations} \label{sec:limit}
-Our experiments primarily measured \ac{dns} query latency using NXDOMAIN
-lookups. This approach eliminates caching as a variable and does not accurately
-reflect real-world usage, where cache hits are common. Depending on the
-measurement targets and caching effects of the related works, the NXDOMAIN
-queries could also explain some of our lower latency results for comparison.
-Moreover, the improvement of routing and software stack performance may have
-also contributed to the observed decrease in latency compared to previous work
-in this area.
+\subsection{Limitations} \label{sec:limit} Our experiments primarily measured
+\ac{dns} query latency using NXDOMAIN lookups. This approach eliminates caching
+as a variable and does not accurately reflect real-world usage, where cache hits
+are common. Depending on the measurement targets and caching effects of the
+related works, the NXDOMAIN queries could also explain some of our lower latency
+results for comparison \todo{I dont get why: if we remove any caching, and
+others might not have, how does that explain our lower latencies?}. Moreover,
+the improvement of routing and software stack performance may have also
+contributed to the observed decrease in latency compared to previous work in
+this area. \todo{client location (already added to related work), also, can work
+in overall improvements to the performance of Tor,
+https://blog.torproject.org/congestion-contrl-047/ and
+https://metrics.torproject.org/onionperf-latencies.html}
 
 \begin{figure*}[ht]
     \centering
-    Tor Relay Distribution in the World
+    %Tor Relay Distribution in the World
     \includegraphics[width=\textwidth]{img/tor-relays-map.pdf}
     \caption{By fetching relay information from Tor, and geolocating the IP
     addresses, we plotted the locations on a world map. The result shows that
