@@ -15,13 +15,13 @@ default Tor configuration method (\texttt{torrc}) allows users to constrain the
 geographic location of entry and exit relays via country codes, but offers no
 control over the middle relay. It also does not support building circuits with
 fewer than three relays. To overcome these limitations, the Python libraries
-\texttt{carml}~\cite{carml} and \texttt{stem}~\cite{stem} are used, which
-expose fine-grained control over circuit construction. With these tools, it is
-possible specify country codes for the middle relay or omit it entirely (see
+\texttt{carml}~\cite{carml} and \texttt{stem}~\cite{stem} are used, which expose
+fine-grained control over circuit construction. With these tools, it is possible
+specify country codes for the middle relay or omit it entirely (see
 Figure~\ref{fig:carml-tor}), enabling the exploration of circuit configurations
 that balance latency and anonymity systematically. 
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\columnwidth]{img/dns-tor-carml.drawio.pdf}
     \caption{A Tor circuit created with carml and stem, using only an entry
@@ -43,8 +43,8 @@ the measurements issue queries for uniquely generated \acp{sld} under a valid
 use (i.e, dohot, dotor, odoh). The second part is the method for building
 circuits (i.e., torrc or carml). The third part represents the built circuit
 using the country codes for each relay. A circuit consisting of three
-unspecified relays is represented as: \texttt{any2any2any}, while a two relay
-circuit contstrained to Sweden is represented as: \texttt{se2se}. In addition
+unspecified relays is represented as \texttt{any2any2any}, while a two relay
+circuit constrained to Sweden is represented as \texttt{se2se}. In addition
 to these parameters an increasing number representing the measurement index
 (0-999) as well as a random alphanumeric string are included to ensure that the
 query is unique to avoid influence of cache hits. This approach with unique
@@ -74,16 +74,17 @@ using anycast which means that the closest from the perspective of our exit or
 proxy will be used\footnote{\url{https://developers.cloudflare.com/1.1.1.1/}}.
 
 In addition we also implemented and measured the latency of \ac{dotor}. This is
-similar to the Tor-based approach used for comparison with
-\ac{odns}~\cite{ODNS} where \ac{doh} is not used. Instead the query is resolved
-by the exit relay. Our \ac{dotor} approach relies on directly interfacing with
-the Tor client using its extensions to the SOCKS5 protocol, specifically the
-RESOLVE command value (0xF0)\cite{tor-socks5}. This allows for sending a domain
-to be resolved instead of a destination for the exit relay to connect to. It
-should be noted that this approach does not utilize full \ac{dns}-queries at
-this level. To interface with the Tor client a python script is instead
-utilized to receive and provide dig-compliant DNS queries and their answers.
-While negligible in this context, it should be noted that some overhead is
-incurred in the process.
+similar to the Tor-based approach used for comparison with \ac{odns}~\cite{ODNS}
+where \ac{doh} is not used. Instead the query is resolved by the exit relay. Our
+\ac{dotor} approach relies on directly interfacing with the Tor client using its
+extensions to the SOCKS5 protocol, specifically the RESOLVE command value
+(0xF0)\cite{tor-socks5}. This allows for sending a domain to be resolved instead
+of a destination for the exit relay to connect to (i.e., Tor uses
+\texttt{RELAY\_RESOLVE} cells~\cite{TorSpecResolve}, see
+Section~\ref{sec:bak:tor}). It should be noted that this approach does not
+utilize full \ac{dns}-queries at this level. To interface with the Tor client a
+python script is instead used to receive and provide dig-compliant DNS queries
+and their answers. While negligible in this context, it should be noted that
+some overhead is incurred in the process.
 
 

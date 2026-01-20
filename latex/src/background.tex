@@ -28,15 +28,17 @@ potential privacy risks, including profiling, surveillance, or data misuse by
 the resolver operator.
 
 \subsection{Tor} \label{sec:bg:tor} One way to anonymize clients is to use Tor,
-a low-latency anonymity network~\cite{dingledine2004}. Tor provides anonymity
-by routing traffic through a series of volunteer-operated relays as part of the
-Tor network such that no single relay knows both the communication's origin and
-destination. Traffic is routed through short-lived circuits. A typical circuit
-consists of three relays: an entry guard relay, a middle relay, and an exit
-relay (see Figure~\ref{fig:default-tor}). The entry relay is the only node that
-can observe the client source IP address. The middle relay forwards encrypted
-traffic between the entry and exit, while the exit relay communicates with the
-final destination. The circuit creation is referred to as path
+a low-latency anonymity network~\cite{dingledine2004} with an estimated 5
+million daily users and about 10,000 volunteer-operated relays as part of the
+Tor network~\cite{TorMetricsServers,TorMetricsUsers}. Tor provides anonymity by
+routing traffic through a series of relays as part of the Tor network such that
+no single relay knows both the communication's origin and destination. Traffic
+is routed through short-lived circuits. A typical circuit consists of three
+relays: an entry guard relay, a middle relay, and an exit relay (see
+Figure~\ref{fig:default-tor}). The entry relay is the only node that can observe
+the client source IP address. The middle relay forwards encrypted traffic
+between the entry and exit, while the exit relay communicates with the final
+destination. The circuit creation is referred to as path
 selection~\cite{tor-path-selection}. The entry guard is long-lived (i.e., fixed
 from a small guard set that persists across invocations of Tor), while middle
 and exit relays are sampled weighted by their measured bandwidth. One thing to
@@ -44,14 +46,14 @@ keep in mind when using Tor is that the exit relay will be able to see all
 traffic to the destination unless encrypted end-to-end by the client (e.g.,
 HTTPS or \ac{doh}).
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\columnwidth]{img/dns-tor-default.drawio.pdf}
-    \caption{A default Tor circuit with an entry guard, a middle, and an exit relay.}
+    \caption{A general Tor circuit with an entry guard, a middle, and an exit relay.}
     \label{fig:default-tor}
 \end{figure}
 
-\subsection{Anonymous Queries} \label{sec:bg:anon} Several schemes have been
+\subsection{Anonymous DNS Queries} \label{sec:bg:anon} Several schemes have been
 developed to introduce anonymity into \ac{dns} resolution by explicitly
 separating the client from the query.
 
@@ -69,63 +71,70 @@ de-anonymize clients, and (ii) collusion between the resolver and \ac{odns}
 server links identity and query.
 
 \ac{odoh} builds on the idea from \ac{odns} but is instead using the \ac{doh}
-transport~\cite{RFC9230}. Clients send encrypted queries to a \ac{doh}
-forwarder (the proxy), which relays them to a \ac{doh} server (the target
-resolver). The proxy can observe the client's IP address but not the query,
-while the target resolver can observe the query but not the client source IP.
-The effectiveness of oblivious schemes hinges on the availability of resolvers
-and proxies that support the protocols. If this number is limited, it can hinder
-the scalability and accessibility of the protocols for end-users. \ac{odns}
-needs custom authoritative name servers which also act as recursive resolvers,
-and \ac{odoh} needs custom proxies between clients and the recursive \ac{doh}
-resolvers. The \ac{odoh} has seen deployment from Cloudflare with several proxy
+transport~\cite{RFC9230}, see Figure~\ref{fig:oblivious}. Clients send encrypted
+queries to a \ac{doh} forwarder (the proxy), which relays them to a \ac{doh}
+server (the target resolver). The proxy can observe the client's IP address but
+not the query, while the target resolver can observe the query but not the
+client source IP. The effectiveness of oblivious schemes hinges on the
+availability of resolvers and proxies that support the protocols. If this number
+is limited, it can hinder the scalability, accessibility, and privacy provided
+of the protocols for end-users. \ac{odns} needs custom authoritative name
+servers which also act as recursive resolvers, and \ac{odoh} needs custom
+proxies between clients and the recursive \ac{doh} resolvers. \ac{odoh} has seen
+deployment from Cloudflare with several proxy
 partners~\cite{cfblog,singanamalla2020}. Cloudflare has also commented on
 Mozilla's implementation of \ac{doh} where they suggested that Firefox also
 could help with discovering \ac{odoh} proxies which is important for a
 widespread adoption of the protocol~\cite{cfmozilla}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\columnwidth]{img/dns-tor-oblivious.drawio.pdf}
-    \caption{Two oblivious schemes utilizing single-proxies: \ac{odns} in the
-    top and \ac{odoh} at the bottom.}
+    \caption{Two oblivious schemes utilizing single-proxies:
+    \ac{odns}~\cite{ODNS} in the top and \ac{odoh}~\cite{RFC9230} at the
+    bottom.}
     \label{fig:oblivious}
 \end{figure}
 
-This design assumes that the proxy and resolver do not collude, an assumption
-that is difficult to verify in practice. The Mutualized Oblivious DNS
-($\mu$ODNS)~\cite{kurihara2023muodns} is an attempt to minimize the collusion
-between the relay and the target resolver and corruption of the client's
-privacy. For this purpose, multiple relays are selected randomly to be used
-towards the target resolver, similarly to the Tor network. However, to be the
-best of our knowledge, there is a significant lack of global $\mu$ODNS adoption
-and deployment.
-
+The threat model of existing oblivious schemes assumes non-collusion between the
+proxy and resolver, an assumption that is difficult to verify in practice. The
+Mutualized Oblivious DNS ($\mu$ODNS)~\cite{kurihara2023muodns} is an attempt to
+improve on the situation by reducing the probability of collusion between the
+relay and the target resolver. For this purpose, multiple relays are selected
+randomly to be used towards the target resolver, distributing trust, similarly
+to the Tor network. However, to be the best of our knowledge, there is a
+significant lack of global $\mu$ODNS adoption and deployment.
 
 \subsubsection{Tor-based schemes}
+\label{sec:bak:tor}
 When using the Tor network to connect to a destination, the \ac{dns} query for
-that service must be sent through the circuit first, because it would
+the destination must be sent through a circuit first, because it would
 completely negate any privacy benefits if the client would resolve the query
-before using Tor. The domain is therefore resolved by the exit relay. The
-specific resolver used for this lookup depends on the configuration on the exit
-relay. The operator of the exit relay could either host a local resolver used
-by the exit, or forward the query to a public resolver or the resolver provided
-by the \ac{isp}. We refer to this approach as \ac{dotor}.
+locally before using Tor. The domain is therefore resolved by the exit relay.
+Tor only supports A and AAAA DNS records, either implicitly by establishing
+connections with \texttt{RELAY\_BEGIN} cells, or explicitly through
+\texttt{RELAY\_RESOLVE} cells~\cite{TorSpecResolve}. The specific resolver used
+for this lookup depends on the configuration on the exit relay. The operator of
+the exit relay could either host a local resolver used by the exit, or forward
+the query to a public resolver or the resolver provided by the
+\ac{isp}~\cite{greschbach2016effect}. We refer to using Tor's DNS resolution
+mechanism as a DNS resolver as \ac{dotor}.
 
 \ac{dohot} is an alternative method for anonymizing queries introduced by
 Muffet~\cite{DoHoT}. By routing \ac{doh} traffic through the Tor network, this
 approach enables clients to conceal their identity using Tor's existing relay
 infrastructure without requiring additional cryptographic protocols or
-specialized infrastructure. The \ac{dns} queries remain encrypted end-to-end
-via \ac{doh} and Tor ensures anonymity between the client and the resolver at
-the cost of latency. Muffett's extensive home testing during the pandemic
-lockdown demonstrated that, despite increased latency, the system maintained
-acceptable performance for everyday Internet activities. The main difference
-between \ac{dotor} and \ac{dohot} is that the exit relay is able to see the
-query in the former, while it is encrypted by the public key of the \ac{doh}
-resolver in the latter.
+specialized infrastructure. The \ac{dns} queries remain encrypted end-to-end via
+\ac{doh} and Tor ensures anonymity between the client and the resolver at the
+cost of latency. Muffett's extensive home testing during the pandemic lockdown
+demonstrated that, despite increased latency, the system maintained acceptable
+performance for everyday Internet activities. The main difference between
+\ac{dotor} and \ac{dohot} is that the exit relay is able to see the query in the
+former, while it is encrypted by the public key of the \ac{doh} resolver in the
+latter. \todo{Expand on DoHoT using multiple DoH servers, can relate to muODNS.
+Another dimension to also work in.}
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\columnwidth]{img/dns-tor-dohot.drawio.pdf}
     \caption{Two Tor-based schemes: \ac{dotor} in the top and \ac{dohot} at the

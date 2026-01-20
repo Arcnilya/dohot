@@ -10,7 +10,7 @@ get from \texttt{carml+stem}. Finally we also compare the best performing
 configuration of Tor-based approaches (\ac{dohot} and \ac{dotor}) against the
 default \ac{dohot} setup and \ac{odoh} with a proxy in Sweden.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     Query Time by Method (torrc vs carml+stem)\par\medskip
     \includegraphics[width=\columnwidth]{img/p1.pdf}
@@ -34,7 +34,7 @@ takeaway from this measurement is that the latency is reduced for both
 circuit-building methods when we place the entry and exit relay closer to the
 client (i.e., \texttt{se2any2se}).
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     Query Time by Circuit (specific middle)\par\medskip
     \includegraphics[width=\columnwidth]{img/p2.pdf}
@@ -57,7 +57,7 @@ client we can reduce the query latency from a median of 200ms (see
 \texttt{carml+stem}, \texttt{any2any2any} in Figure~\ref{fig:p1}) to 60ms
 (\texttt{se2se2se} in Figure~\ref{fig:p2}) with much less spread.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     Query Time by Circuit (without middle)\par\medskip
     \includegraphics[width=\columnwidth]{img/p3.pdf}
@@ -72,7 +72,7 @@ only of an entry and an exit relay, a configuration not supported by
 latency. The best performance was observed when both relays were in close
 proximity to the client with a median query time of 40ms. 
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     Query Time by Circuit (DoTor carml+stem)\par\medskip
     \includegraphics[width=\columnwidth]{img/p4.pdf}
@@ -90,7 +90,7 @@ with all nodes in the same country as the client should lower latency and
 removing the middle relay further so. This expected behaviour is consistent
 with the results shown in Figure~\ref{fig:p4}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     Query Time by Approach\par\medskip
     \includegraphics[width=\columnwidth]{img/p5.pdf}
