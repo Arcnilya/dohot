@@ -12,7 +12,7 @@ scale = 0.8
 
 TO_LATEX = False
 
-def plot_one(dframe):
+def plot_one(dframe, xmax=None):
     # torrc vs carml+stem
     settings_order = ['any2any2any', 'se2any2any', 'se2any2se']
     methods_order = ['torrc', 'carml+stem']
@@ -35,7 +35,8 @@ def plot_one(dframe):
         y='pair', x='time', data=df,
         showfliers=False, order=pair_order
     )
-
+    if xmax:
+        ax.set_xlim(0, xmax)
     ax.set_yticklabels(ticklabels)
 
     middle_index = 2  
@@ -63,7 +64,7 @@ def plot_one(dframe):
     plt.savefig('p1.png')
     # plt.show()
 
-def plot_one_old(dframe):
+def plot_one_old(dframe, xmax=None):
     settings_order = ['any2any2any', 'se2any2any', 'se2any2se']
     methods_order = ['torrc', 'carml+stem']
     group_order = [
@@ -78,6 +79,8 @@ def plot_one_old(dframe):
         showfliers=False, order=group_order
     )
 
+    if xmax:
+        ax.set_xlim(0, xmax)
     middle_index = 2  
     rect = patches.Rectangle(
         (ax.get_xlim()[0], middle_index - 0.5),  
@@ -99,10 +102,11 @@ def plot_one_old(dframe):
     #plt.show()
 
 
-def plot_two(dframe):
+def plot_two(dframe, xmax=None):
     # Sweden Middle
     plt.figure(figsize=(width, (height-1)*scale))
-    sns.boxplot(y='setting', x='time', data=dframe, showfliers=False)
+    ax = sns.boxplot(y='setting', x='time', data=dframe, showfliers=False)
+    if xmax: ax.set_xlim(0, xmax)
     plt.xticks(rotation=45)
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Circuit')
@@ -112,10 +116,11 @@ def plot_two(dframe):
     #plt.show()
 
 
-def plot_three(dframe):
+def plot_three(dframe, xmax=None):
     # Two-Hop
     plt.figure(figsize=(width, (height-2)*scale))
-    sns.boxplot(y='setting', x='time', data=dframe, showfliers=False)
+    ax = sns.boxplot(y='setting', x='time', data=dframe, showfliers=False)
+    if xmax: ax.set_xlim(0, xmax)
     plt.xticks(rotation=45)
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Circuit')
@@ -124,10 +129,11 @@ def plot_three(dframe):
     plt.savefig('p3.png')
     #plt.show()
 
-def plot_four(dframe):
+def plot_four(dframe, xmax=None):
     # DoTor
     plt.figure(figsize=(width, (height-2)*scale))
-    sns.boxplot(y='setting', x='time', data=dframe, showfliers=False)
+    ax = sns.boxplot(y='setting', x='time', data=dframe, showfliers=False)
+    if xmax: ax.set_xlim(0, xmax)
     plt.xticks(rotation=45)
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Circuit')
@@ -136,11 +142,13 @@ def plot_four(dframe):
     plt.savefig('p4.png')
     #plt.show()
 
-def plot_five(dframe):
+def plot_five(dframe, xmax=None):
     # DoHoT vs Optimised vs ODoH 
-    dframe['ylabel'] = df['prot'] + '\n' + df['setting']
+    # dframe['ylabel'] = df['prot'] + '\n' + df['setting']
+    dframe['ylabel'] = dframe['prot'] + '\n' + dframe['setting']
     plt.figure(figsize=(width, (height-1.5)*scale))
     ax = sns.boxplot(y='ylabel', x='time', data=dframe, showfliers=False)
+    if xmax: ax.set_xlim(0, xmax)
     ax.set_yticklabels(["DoHoT\ndefault", "DoHoT\nse2se", "DoTor\nse2se", "ODoH\nse"])
     plt.xticks(rotation=45)
     plt.xlabel('Query Time (ms)')
@@ -151,13 +159,14 @@ def plot_five(dframe):
     #plt.show()
 
 
-
 df = pd.read_csv("log.csv")
 df[['prot','method','setting','iteration','nonce']] = df['query'].str.split('-',expand=True)
 df['method'] = df['method'].str.replace('carml','carml+stem')
 df['group'] = df['method'] + '\n' + df['setting']
 df['all'] = df['prot'] +'-'+ df['method'] +'-'+ df['setting']
 df['time'] = pd.to_numeric(df['time'], errors='coerce')
+#xmax = df['time'].max()
+xmax = df['time'].quantile(0.98)
 print(df)
 
 
@@ -173,7 +182,7 @@ tmp = pd.concat([tmp, df[
         (df['prot'] == "dohot") & 
         (df['setting'] == "se2any2se")]], sort=False)
 print(tmp)
-plot_one(tmp)
+plot_one(tmp, xmax)
 
 # Second plot: middle relay
 tmp = df[
@@ -193,7 +202,7 @@ tmp = pd.concat([tmp, df[
         (df['prot'] == "dohot") & 
         (df['setting'] == "se2se2se")]], sort=False)
 print(tmp)
-plot_two(tmp)
+plot_two(tmp, xmax)
 
 # Third plot: two-hops
 tmp = df[
@@ -209,7 +218,7 @@ tmp = pd.concat([tmp, df[
         (df['prot'] == "dohot") & 
         (df['setting'] == "se2se")]], sort=False)
 print(tmp)
-plot_three(tmp)
+plot_three(tmp, xmax)
 
 # Fourth plot: DoTor
 tmp = df[
@@ -225,7 +234,7 @@ tmp = pd.concat([tmp, df[
         (df['method'] == "carml+stem") & 
         (df['setting'] == "se2se")]], sort=False)
 print(tmp)
-plot_four(tmp)
+plot_four(tmp, xmax)
 
 # Fifth plot: old dohot, new dohot, odoh
 tmp = df[
@@ -242,7 +251,7 @@ tmp = pd.concat([tmp, df[
         (df['setting'] == "se2se")]], sort=False) # new dotor
 tmp = pd.concat([tmp, df[df['prot'] == "odoh"]], sort=False) # odoh
 print(tmp)
-plot_five(tmp)
+plot_five(tmp, xmax)
 
 group_stats_df = df.groupby('all', as_index=False).agg(
     mean_time=('time', 'mean'),
