@@ -38,18 +38,18 @@ around the world.
 To eliminate the effects of caching and to maintain consistency across tests,
 the measurements issue queries for uniquely generated \acp{sld} under a valid
 \ac{tld}, which are expected to return an non-existing-domain return code
-(NXDOMAIN). The query name consists of
+(\texttt{NXDOMAIN}). The query name consists of
 \texttt{prot-method-circuit-i-XXXXXXXX.net}. The first part is the protocol in
-use (i.e, DoHoT, DoTor, ODoH). The second part is the method for building
-circuits (i.e., torrc or carml). The third part represents the built circuit
-using the country codes for each relay. A circuit consisting of three
+use (i.e, \ac{dohot}, \ac{dotor}, \ac{odoh}). The second part is the method for
+building circuits (i.e., torrc or carml). The third part represents the built
+circuit using the country codes for each relay. A circuit consisting of three
 unspecified relays is represented as \texttt{any2any2any}, while a two relay
-circuit constrained to Sweden is represented as \texttt{se2se}. In addition
-to these parameters an increasing number representing the measurement index
+circuit constrained to Sweden is represented as \texttt{se2se}. In addition to
+these parameters an increasing number representing the measurement index
 (0-999) as well as a random alphanumeric string are included to ensure that the
 query is unique to avoid influence of cache hits. This approach with unique
-NXDOMAIN queries ensures that the observed latency mainly reflects the path
-between the client and the resolver.
+\texttt{NXDOMAIN} queries ensures that the observed latency mainly reflects the
+path between the client and the resolver.
 
 Each configuration is measured 1,000 times with unique queries. In each
 iteration, we start our measurement container with the specified configuration

@@ -111,14 +111,14 @@ When using the Tor network to connect to a destination, the \ac{dns} query for
 the destination must be sent through a circuit first, because it would
 completely negate any privacy benefits if the client would resolve the query
 locally before using Tor. The domain is therefore resolved by the exit relay.
-Tor only supports A and AAAA DNS records, either implicitly by establishing
+Tor only supports A and AAAA \ac{dns} records, either implicitly by establishing
 connections with \texttt{RELAY\_BEGIN} cells, or explicitly through
 \texttt{RELAY\_RESOLVE} cells~\cite{TorSpecResolve}. The specific resolver used
 for this lookup depends on the configuration on the exit relay. The operator of
 the exit relay could either host a local resolver used by the exit, or forward
 the query to a public resolver or the resolver provided by the
-\ac{isp}~\cite{greschbach2016effect}. We refer to using Tor's DNS resolution
-mechanism as a DNS resolver as \ac{dotor}.
+\ac{isp}~\cite{greschbach2016effect}. We refer to using Tor's \ac{dns} resolution
+mechanism as a \ac{dns} resolver as \ac{dotor}.
 
 \ac{dohot} is an alternative method for anonymizing queries introduced by
 Muffet~\cite{DoHoT}. By routing \ac{doh} traffic through the Tor network, this
@@ -131,8 +131,20 @@ demonstrated that, despite increased latency, the system maintained acceptable
 performance for everyday Internet activities. The main difference between
 \ac{dotor} and \ac{dohot} is that the exit relay is able to see the query in the
 former, while it is encrypted by the public key of the \ac{doh} resolver in the
-latter. \todo{Expand on DoHoT using multiple DoH servers, can relate to muODNS.
-Another dimension to also work in.}
+latter. 
+
+Because \ac{doh} endpoints are application‑selected, a \ac{dohot} client can
+rotate across multiple independent \ac{doh} resolvers, distributing trust
+similarly in spirit to the multi‑relay design of $\mu$ODNS. Unlike $\mu$ODNS,
+which requires protocol‑level changes and specialized infrastructure,
+\ac{dohot} achieves resolver‑side diversity without new protocols: the Tor
+circuit hides the client IP, and end‑to‑end \ac{doh} encryption prevents
+exit‑side inspection. In Section~\ref{sec:eval}, we discuss how resolver
+rotation can mitigate resolver‑side profiling and reduce single‑provider
+dependence, and how this compares to the collusion-resistance goals of
+$\mu$ODNS.
+
+%\todo{Expand on DoHoT using multiple DoH servers, can relate to muODNS. Another dimension to also work in.}
 
 \begin{figure}[ht]
     \centering

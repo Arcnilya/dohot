@@ -47,23 +47,26 @@ investigates the viability of using two-hop Tor circuits and restricting relays
 to geographic regions in close proximity to the client. Our main contributions
 are as follows:
 
-\todo{We need 3 crisp contributions here, now the first contrib bullet defines privacy? Iterate on the expanded text then revisit the intro. The contrib bullets should be crisp, concrete, and falsifiable, as the second bullet is better at than the first.}
+%\todo{We need 3 crisp contributions here, now the first contrib bullet defines privacy? Iterate on the expanded text then revisit the intro. The contrib bullets should be crisp, concrete, and falsifiable, as the second bullet is better at than the first.}
 
 \begin{itemize}
-    \item An analysis of threat models, showing that two-hop circuits and
-        geographically close relays in Tor still provide stronger
-        privacy-protections than oblivious single-proxy schemes. Default Tor
-        defends against path adversaries, while anonymous DNS has the resolver
-        as the adversary. Privacy means hiding the client source IP from the
-        resolver, not the fact it contacted a resolver.
-    \item By using two-hop circuits and placing relays in relative close
-        proximity to the client, it is possible to cut the average query
-        latency of Tor-based solutions such as DoHoT in half (from
-        134$\pm$110ms to 61$\pm$135ms) 
-    %\item We compare different anonymous query schemes in terms of query
-        %latency, threat model, and deployability, emphasizing that more than
-        %query latency should be taken into consideration when selecting a scheme
-        %for anonymizing \ac{dns} queries.
+    \item Threat‑model grounding for anonymous \ac{dohot}: We formalize the
+        adversary for anonymous \ac{dns} (resolver-side observer) and show that
+        shortened two‑hop circuits (guard and exit) in Tor still prevent any single
+        entity from linking client IP and query contents, providing strictly
+        stronger protections than single‑proxy oblivious schemes under
+        proxy-resolver collusion (Section~\ref{sec:threatmodel}).
+    \item Measurement‑driven latency tuning of \ac{dohot}: Using programmable
+        circuit construction (carml+Stem), we demonstrate that constraining
+        both relays to a nearby region reduces average resolution time from
+        134$\pm$110\,ms (default 3‑hop) to 61$\pm$135\,ms (two‑hop, co‑located
+        relays) across 1,000 queries per configuration
+        (Sections~\ref{sec:method} and \ref{sec:measurement}).
+    \item Deployability and trade‑off analysis: We compare anonymous \ac{dns}
+        schemes across latency, threat model, and deployability, positioning
+        two‑hop localized \ac{dohot} as a practical middle ground: near
+        \ac{odoh} latency while maintaining collusion resistance without new
+        infrastructure (Section~\ref{sec:disc}).
 \end{itemize}
 
 Section~\ref{sec:background} presents background and related work. We define
