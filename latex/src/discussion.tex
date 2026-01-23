@@ -12,18 +12,19 @@ DNS resolution over the Tor network using the Alexa top 10,000 domains. Their
 results showed a median resolution time of 31.31\,ms for traditional \ac{dns},
 compared to 276.76\,ms over Tor. It is important to note that their evaluation
 used a setup similar to \ac{dotor}, where DNS queries are resolved in plaintext
-at the exit relay. In our measurements around \ac{dotor} we saw a median resolution
-time of 250\,ms, but managed to reduce it to 50\,ms by tuning the circuits for latency.
+at the exit relay. In our measurements around \ac{dotor} with default torrc we
+saw a median resolution time of 119\,ms, but managed to reduce it to 54\,ms by
+tuning the circuits for latency.
 
 Singanamalla~\emph{et al.}~\cite{singanamalla2020} evaluated the performance of
 \ac{odoh} in a deployment setting, comparing it with several other protocols
 including standard \ac{doh}, proxied \ac{doh}, various \ac{odoh}
 configurations, DNSCrypt, and \ac{dohot}. They reported an average resolution
-time of approximately 300\,ms for \ac{odoh}, while \ac{dohot} averaged 696.40
-ms. In contrast, our experiments showed a substantially lower average for
-\ac{dohot} at 134.48\,ms. With a two-hop circuit using relays located in the
-same country as the client, the average resolution time was further reduced to
-61.69\,ms.
+time of approximately 300\,ms for \ac{odoh}, while \ac{dohot} averaged
+696.40\,ms. In contrast, our experiments showed a substantially lower average
+for \ac{dohot} at 134.48\,ms. With a two-hop circuit using relays located in
+the same country as the client, the average resolution time was further reduced
+to 61.69\,ms.
 
 Kurihara~\emph{et al.}~\cite{kurihara2023muodns} compared their
 collusion-resistant approach to anonymous \ac{dns} queries: $\mu$ODNS, against
@@ -129,11 +130,10 @@ the work is framed as a proof‑of‑concept with a research prototype demo.
         Tor-based (default) & 134$\pm$110\,ms (mean) & distributed trust + collusion resistant & 10,000 relays~\cite{TorMetricsServers} \\\hline
         Tor-based (2-hop)   & 61$\pm$135\,ms (mean) & distributed trust + collusion resistant & 10,000 relays~\cite{TorMetricsServers} \\\hline
         $\mu$ODNS           & 137$\pm$110\,ms (mean) & collusion resistant & 3 relays~\cite{modns-git} \\\hline
-        PIR-based           & 200\,ms (median) & collusion resistant & 0 relays \\\hline
+        PIR-based           & 208\,ms (median) & collusion resistant & 0 relays \\\hline
     \end{tabular}
 \end{table*}
 
-%\todo{I would refine this table and make it two-column (uses more space as a bonus!). For latency, quantify if possible (avg±std ms). I don't get why oblivious has to have lower latency than mu or PIR. For threat model, make it freetext. Oblivious: non-collusion. DoTor distributed trust, DoHoT: distributed trust + collusion resistance, mu: collusion resistance, PIR: depends. For Deployability, quantify: Tor is easy, try to get numbers for oblivious somewhere, etc. Then in the text, work in a sentence on clarifying that while 2-hop weakens from default Tor, it's still better than related stuff for DNS (for confused reviewers).}
 
 Table~\ref{tab:eval} shows an overview of the three dimensions for comparing
 anonymous \ac{dns} schemes. The oblivious single-proxy schemes have low latency
@@ -156,22 +156,11 @@ infrastructure.
 
 
 \subsection{Limitations} \label{sec:limit} 
-Our experiments primarily measured \ac{dns} query latency using \texttt{NXDOMAIN}
-lookups. This approach eliminates caching as a variable and does not accurately
-reflect real-world usage, where cache hits are common. Depending on the
-measurement targets of the related works, the \texttt{NXDOMAIN} queries could also
-explain some of our lower latency results for comparison. The full resolution
-of an existing domain requires additional queries between the resolver and name
-servers, increasing the round-trip time from client query to resolver response.
-Moreover, the improvement of routing and software stack performance may have
-also contributed to the observed decrease in latency compared to previous work
-in this area. Particularly relevant are the improvements to the performance of
-the Tor network itself~\cite{TorCongestion, TorPerformance}.
 
 \begin{figure*}[ht]
     \centering
     %Tor Relay Distribution in the World
-    \includegraphics[width=\textwidth]{img/tor-relays-map.pdf}
+    \includegraphics[trim={0 2.1cm 0 0},clip,width=\textwidth]{img/tor-relays-map.pdf}
     \caption{By fetching relay information from Tor, and geolocating the IP
     addresses, we plotted the locations on a world map. The result shows that
     relays are primarily located in Europe and the U.S. Other parts of the
@@ -179,12 +168,25 @@ the Tor network itself~\cite{TorCongestion, TorPerformance}.
     \label{fig:map}
 \end{figure*}
 
-The geographical location of the client is also relevant to performance as
+Our experiments primarily measured \ac{dns} query latency using
+\texttt{NXDOMAIN} lookups. This approach eliminates caching as a variable and
+does not accurately reflect real-world usage, where cache hits are common. The
+full resolution of an existing domain requires additional queries between the
+resolver and name servers, increasing the round-trip time from client query to
+resolver response. Depending on the measurement targets of the related works,
+the \texttt{NXDOMAIN} queries could also explain some of our lower latency
+results for comparison. Moreover, the improvement of routing and software stack
+performance may have also contributed to the observed decrease in latency
+compared to previous work in this area. Improvements to the performance of the
+Tor network itself are particularly relevant~\cite{TorCongestion,
+TorPerformance}.
+
+The geographical location of the client is also tied to performance as
 mentioned in Section~\ref{sec:compare}. Putting constraints on the location of
 Tor relays may only be feasible in locations with enough availability. In
 Figure~\ref{fig:map} we plot the geographical locations of available relays in
 December 2025. The two most dense areas in the world are Europe and the U.S.,
 this means that it might not be possible to select two relays within the same
-country, optimizing for latency, in countries outside these two areas. This is
+country, optimizing for latency, outside these two areas. This is
 a limitation of using Tor relays for this purpose.
 

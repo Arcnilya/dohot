@@ -23,40 +23,36 @@ data breaches and leakage risks.
 
 To break this direct link between client identity and \ac{dns} query content,
 new protocols have been proposed. \emph{Oblivious} protocols introduce a
-dedicated relay (or proxy) between the client and the resolver so that no single
-entity can observe both ends of the query~\cite{RFC9230,ODNS}. \emph{Tor-based}
-solutions use the Tor network~\cite{dingledine2004} to separate the client
-identity from the query~\cite{DoHoT}. Another recent proposal involves
-integrating \ac{pir} to \ac{dns} resolvers leveraging homomorphic encryption
-schemes~\cite{xiao2025}. The client sends an encrypted query, the resolver
-computes over encrypted data using homomorphic encryption, and returns an
-encrypted response that the client decrypts locally, ensuring the resolver never
-learns the requested domain. Comparing these proposals solely in terms of query
-latency, which is a pain point for both encrypted and anonymous \ac{dns}
-transport, places the Tor-based solutions dead
-last~\cite{RFC9230,kurihara2023muodns,ODNS,xiao2025}.
+dedicated relay (or proxy) between the client and the resolver so that no
+single entity can observe both ends of the query~\cite{RFC9230,ODNS}.
+\emph{Tor-based} solutions use the Tor network~\cite{dingledine2004} to
+separate the client identity from the query~\cite{DoHoT}. Another recent
+proposal integrates \ac{pir} into \ac{dns} resolution by using homomorphic
+encryption to process encrypted queries and return encrypted responses,
+ensuring the resolver never learns the requested domain~\cite{xiao2025}.
+Comparing these proposals solely in terms of query latency, which is a pain
+point for both encrypted and anonymous \ac{dns} transport, places the Tor-based
+solutions dead last~\cite{RFC9230,kurihara2023muodns,ODNS,xiao2025}.
 
 In this paper, we compare different anonymous query schemes in terms of query
-latency, \emph{threat model}, and deployability concerns. We explore how Tor's
+latency, threat model, and deployability concerns. We explore how Tor's
 latency overhead can be reduced \emph{while at the same time} still provide
-stronger privacy guarantees for \ac{dns} resolution compared to related work. We
-are not trying to hide that the client is communicating with a \ac{dns}
+stronger privacy guarantees for \ac{dns} resolution compared to related work. 
+The goal is \emph{not} to hide that the client is communicating with a \ac{dns}
 resolver. The query content must be hidden from the relays while keeping the
 client source IP hidden from the \ac{dns} resolver. That is why this study
 investigates the viability of using two-hop Tor circuits and restricting relays
 to geographic regions in close proximity to the client. Our main contributions
 are as follows:
 
-%\todo{We need 3 crisp contributions here, now the first contrib bullet defines privacy? Iterate on the expanded text then revisit the intro. The contrib bullets should be crisp, concrete, and falsifiable, as the second bullet is better at than the first.}
-
 \begin{itemize}
-    \item Threat‑model grounding for anonymous \ac{dohot}: We formalize the
+    \item Threat‑model grounding for anonymous \acs{dohot}: We formalize the
         adversary for anonymous \ac{dns} (resolver-side observer) and show that
         shortened two‑hop circuits (guard and exit) in Tor still prevent any single
         entity from linking client IP and query contents, providing strictly
         stronger protections than single‑proxy oblivious schemes under
         proxy-resolver collusion (Section~\ref{sec:threatmodel}).
-    \item Measurement‑driven latency tuning of \ac{dohot}: Using programmable
+    \item Measurement‑driven latency tuning of \acs{dohot}: Using programmable
         circuit construction (carml+Stem), we demonstrate that constraining
         both relays to a nearby region reduces average resolution time from
         134$\pm$110\,ms (default 3‑hop) to 61$\pm$135\,ms (two‑hop, co‑located
@@ -64,7 +60,7 @@ are as follows:
         (Sections~\ref{sec:method} and \ref{sec:measurement}).
     \item Deployability and trade‑off analysis: We compare anonymous \ac{dns}
         schemes across latency, threat model, and deployability, positioning
-        two‑hop localized \ac{dohot} as a practical middle ground: near
+        two‑hop localized \acs{dohot} as a practical middle ground: near
         \ac{odoh} latency while maintaining collusion resistance without new
         infrastructure (Section~\ref{sec:disc}).
 \end{itemize}

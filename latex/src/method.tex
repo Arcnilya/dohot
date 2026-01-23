@@ -5,9 +5,9 @@ typically assume the default Tor client configuration (e.g., in as in
 DoHoT~\cite{DoHoT}), where circuits consists of three randomly selected relays
 (see Section~\ref{sec:bg:tor}). The geographic placement of these relays can
 heavily influence latency results. To provide a more complete picture, our
-overarching evaluation considers additional dimensions such as the threat model
-and deployability, in addition to exploring how we can reduce latency in
-Tor-based solutions.
+overarching evaluation in Section~\ref{sec:disc} considers additional
+dimensions such as the threat model and deployability, while exploring
+how we can reduce latency in Tor-based solutions.
 
 This study is focusing on two approaches for reducing latency in Tor circuits:
 controlling the \emph{number} of relays and the \emph{location} of relays. The
@@ -37,7 +37,7 @@ around the world.
 
 To eliminate the effects of caching and to maintain consistency across tests,
 the measurements issue queries for uniquely generated \acp{sld} under a valid
-\ac{tld}, which are expected to return an non-existing-domain return code
+\ac{tld}, which are expected to return a non-existing-domain return code
 (\texttt{NXDOMAIN}). The query name consists of
 \texttt{prot-method-circuit-i-XXXXXXXX.net}. The first part is the protocol in
 use (i.e, \ac{dohot}, \ac{dotor}, \ac{odoh}). The second part is the method for
@@ -52,17 +52,17 @@ query is unique to avoid influence of cache hits. This approach with unique
 path between the client and the resolver.
 
 Each configuration is measured 1,000 times with unique queries. In each
-iteration, we start our measurement container with the specified configuration
-and wait until a circuit is established and an arbitrary query receives a
-successful response. This prelude ensures that the Tor circuit is fully
-established and that we have a functional \ac{dns} resolution over Tor. A query
-is then issued for an A record using a unique non-existent domain described
-earlier, and the time for the reply to return is measured in milliseconds.
-Finally, the container is stopped before the next iteration begins to ensure a
-new circuit. The code for the containers and measurement script can be found on
-GitHub\footnote{Anonymized for submission}.
+iteration, we start our measurement docker container with the specified
+configuration and wait until a circuit is established and an arbitrary query
+receives a successful response. This prelude ensures that the Tor circuit is
+fully established and that we have a functional \ac{dns} resolution over Tor. A
+query is then issued for an A record using a unique non-existent domain
+described earlier, and the time for the reply to return is measured in
+milliseconds. Finally, the container is stopped before the next iteration
+begins to ensure a new circuit. The code for the containers and measurement
+script can be found on GitHub\footnote{Anonymized for submission}.
 
-For comparison we set up docker containers running \ac{dohot} and
+For comparison we set up containers running \ac{dohot} and
 \ac{odoh}. Both of these utilize DNSCrypt-proxy which is a flexible proxy for
 \ac{dns} and supports many encryption protocols~\cite{dnscrypt-proxy}.
 DNSCrypt-proxy is responsible for listening on a port for client queries and
@@ -74,17 +74,17 @@ using anycast which means that the closest from the perspective of our exit or
 proxy will be used\footnote{\url{https://developers.cloudflare.com/1.1.1.1/}}.
 
 In addition we also implemented and measured the latency of \ac{dotor}. This is
-similar to the Tor-based approach used for comparison with \ac{odns}~\cite{ODNS}
-where \ac{doh} is not used. Instead the query is resolved by the exit relay. Our
-\ac{dotor} approach relies on directly interfacing with the Tor client using its
-extensions to the SOCKS5 protocol, specifically the RESOLVE command value
-(0xF0)\cite{tor-socks5}. This allows for sending a domain to be resolved instead
-of a destination for the exit relay to connect to (i.e., Tor uses
-\texttt{RELAY\_RESOLVE} cells~\cite{TorSpecResolve}, see
+similar to the Tor-based approach used for comparison with
+\ac{odns}~\cite{ODNS} where \ac{doh} is not used. Instead the query is resolved
+by the exit relay. Our \ac{dotor} approach relies on directly interfacing with
+the Tor client using its extensions to the SOCKS5 protocol, specifically the
+RESOLVE command value (0xF0)\cite{tor-socks5}. This allows for sending a domain
+to be resolved instead of a destination for the exit relay to connect to (i.e.,
+Tor uses \texttt{RELAY\_RESOLVE} cells~\cite{TorSpecResolve}, see
 Section~\ref{sec:bak:tor}). It should be noted that this approach does not
 utilize full \ac{dns}-queries at this level. To interface with the Tor client a
-python script is instead used to receive and provide dig-compliant DNS queries
-and their answers. While negligible in this context, it should be noted that
-some overhead is incurred in the process.
+python script is used instead of DNSCrypt-proxy to receive and provide
+dig-compliant DNS queries and their answers. While negligible in this context,
+it should be noted that some overhead is incurred in the process.
 
 

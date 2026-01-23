@@ -146,10 +146,10 @@ def plot_five(dframe, xmax=None):
     # DoHoT vs Optimised vs ODoH 
     # dframe['ylabel'] = df['prot'] + '\n' + df['setting']
     dframe['ylabel'] = dframe['prot'] + '\n' + dframe['setting']
-    plt.figure(figsize=(width, (height-1.5)*scale))
+    plt.figure(figsize=(width, (height-0.5)*scale))
     ax = sns.boxplot(y='ylabel', x='time', data=dframe, showfliers=False)
     if xmax: ax.set_xlim(0, xmax)
-    ax.set_yticklabels(["DoHoT\ndefault", "DoHoT\nse2se", "DoTor\nse2se", "ODoH\nse"])
+    ax.set_yticklabels(["DoHoT\ndefault", "DoHoT\nse2se", "DoTor\ndefault", "DoTor\nse2se", "ODoH\nse"])
     plt.xticks(rotation=45)
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Approach')
@@ -245,6 +245,10 @@ tmp = pd.concat([tmp, df[
         (df['prot'] == "dohot") & 
         (df['method'] == "carml+stem") & 
         (df['setting'] == "se2se")]], sort=False) # new dohot
+tmp = pd.concat([tmp, df[
+        (df['prot'] == "dotor") & 
+        (df['method'] == "torrc") & 
+        (df['setting'] == "any2any2any")]], sort=False) # old dotor
 tmp = pd.concat([tmp, df[
         (df['prot'] == "dotor") & 
         (df['method'] == "carml+stem") & 

@@ -5,8 +5,8 @@ with access to query information at the target recursive
 resolver~\cite{RFC9230,kurihara2023muodns,DoHoT,ODNS}, as depicted in
 Figure~\ref{fig:threatmodel}. The objective is to anonymize the client's
 identity (source IP address) so that it cannot be linked to the issued query
-processed by the resolver. The goal is not to hide the fact that the client is
-communicating with a \ac{dns} resolver.
+processed by the resolver. The goal is \emph{not} to hide the fact that the
+client is communicating with a \ac{dns} resolver.
 
 \begin{figure}[h]
     \centering
@@ -14,7 +14,7 @@ communicating with a \ac{dns} resolver.
     \caption{The adversary in the threat model for anonymous DNS is the
     resolver with knowledge about the query. One or more proxies may know the
     client source IP or the resolver IP but not the query since the traffic is
-    encrypted. If the resolver and all proxies collude, then they can
+    encrypted. If the resolver and \emph{all} proxies collude, then they can
     compromise the user's privacy.}
     \label{fig:threatmodel}
 \end{figure}

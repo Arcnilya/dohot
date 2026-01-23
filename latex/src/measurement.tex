@@ -37,7 +37,7 @@ performance gap is due to differences in relay selection. By default,
 geographically optimal relays. In contrast, \texttt{carml+Stem} selects relays
 uniformly at random within constraints such as location and relay type (e.g.,
 exit or non-exit). Another takeaway from this measurement is that the latency is
-reduced for both circuit-building methods when we place the entry and exit relay
+reduced for both circuit-building methods when we place the entry and exit relays
 closer to the client (i.e., \texttt{se2any2se}).
 
 \subsection{Query Time by Circuit (Specific Middle)}
@@ -108,7 +108,7 @@ with the results shown in Figure~\ref{fig:p4}.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\columnwidth]{img/p5.pdf}
-    \caption{Comparing the default configuration of DoHoT (any2any2any) with
+    \caption{Comparing the default torrc configuration (any2any2any) of DoHoT and DoTor with
     DoHoT (se2se), DoTor (se2se), as well as ODoH with a proxy in Sweden.}
     \label{fig:p5}
 \end{figure}
