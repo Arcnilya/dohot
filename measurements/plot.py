@@ -12,6 +12,11 @@ scale = 0.8
 
 TO_LATEX = False
 
+ANONYMIZE = True
+def _anon(s: str) -> str:
+    return s.replace('se', 'xx') if ANONYMIZE else s
+
+
 def plot_one(dframe, xmax=None):
     # torrc vs carml+stem
     settings_order = ['any2any2any', 'se2any2any', 'se2any2se']
@@ -51,7 +56,7 @@ def plot_one(dframe, xmax=None):
     for i, setting in enumerate(settings_order):
         y_center = i * len(methods_order) + (len(methods_order) - 1) / 2.0
         ax.text(
-            1.01, y_center, setting,
+            1.01, y_center, _anon(setting), # added _anon()
             va='center', ha='left', transform=ax.get_yaxis_transform()
         )
 
@@ -107,6 +112,7 @@ def plot_two(dframe, xmax=None):
     plt.figure(figsize=(width, (height-1)*scale))
     ax = sns.boxplot(y='setting', x='time', data=dframe, showfliers=False)
     if xmax: ax.set_xlim(0, xmax)
+    ax.set_yticklabels([_anon(t.get_text()) for t in ax.get_yticklabels()]) # new
     plt.xticks(rotation=45)
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Circuit')
@@ -121,6 +127,7 @@ def plot_three(dframe, xmax=None):
     plt.figure(figsize=(width, (height-2)*scale))
     ax = sns.boxplot(y='setting', x='time', data=dframe, showfliers=False)
     if xmax: ax.set_xlim(0, xmax)
+    ax.set_yticklabels([_anon(t.get_text()) for t in ax.get_yticklabels()]) # new
     plt.xticks(rotation=45)
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Circuit')
@@ -134,6 +141,7 @@ def plot_four(dframe, xmax=None):
     plt.figure(figsize=(width, (height-2)*scale))
     ax = sns.boxplot(y='setting', x='time', data=dframe, showfliers=False)
     if xmax: ax.set_xlim(0, xmax)
+    ax.set_yticklabels([_anon(t.get_text()) for t in ax.get_yticklabels()]) # new
     plt.xticks(rotation=45)
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Circuit')
@@ -149,7 +157,11 @@ def plot_five(dframe, xmax=None):
     plt.figure(figsize=(width, (height-0.5)*scale))
     ax = sns.boxplot(y='ylabel', x='time', data=dframe, showfliers=False)
     if xmax: ax.set_xlim(0, xmax)
-    ax.set_yticklabels(["DoHoT\ndefault", "DoHoT\nse2se", "DoTor\ndefault", "DoTor\nse2se", "ODoH\nse"])
+    # new replacement
+    ax.set_yticklabels([_anon(s) for s in [
+        "DoHoT\ndefault", "DoHoT\nse2se", "DoTor\ndefault", "DoTor\nse2se", "ODoH\nse"
+    ]])
+    #ax.set_yticklabels(["DoHoT\ndefault", "DoHoT\nse2se", "DoTor\ndefault", "DoTor\nse2se", "ODoH\nse"])
     plt.xticks(rotation=45)
     plt.xlabel('Query Time (ms)')
     plt.ylabel('Approach')
