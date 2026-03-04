@@ -28,19 +28,20 @@ to 61.69\,ms.
 
 Kurihara~\emph{et al.}~\cite{kurihara2023muodns} compared their
 collusion-resistant approach to anonymous \ac{dns} queries: $\mu$ODNS, against
-variations of ADNSCrypt, as well as DNSCrypt over Tor in terms of performance.
-For the Tor-based setting they had two circuit configurations alongside a client
-in Japan (jp): (i) an entry in Japan with middle and exit relays selected
-globally (i.e., \texttt{jp2any2any}), and (ii) an entry in Japan with middle and
-exit relays located in East Asia and East South Asia\footnote{limited to the
-following country-codes: cn, hk, jp, kr, tw, kh, tp, id, my, ph, sg, th and vn}.
-The median query time of the first setting was 1228.8\,ms and the second setting
-was 461.8\,ms. While we used \ac{doh} over Tor instead of DNSCrypt, the results
-of our equivalent setting were nowhere close to the high latency observed in
-their experiment (circuit \texttt{se2any2any} using torrc was 88\,ms, and
-carml+stem was 130\,ms). This is likely due to the geographic distribution of Tor
-relays (further discussed in Section~\ref{sec:limit}), where our experiments
-with a client in Sweden greatly benefits compared to a client in Japan.
+variations of \emph{Anonymous DNSCrypt}~\cite{adnscrypt}, as well as DNSCrypt over Tor
+in terms of performance. For the Tor-based setting they had two circuit
+configurations alongside a client in Japan (jp): (i) an entry in Japan with
+middle and exit relays selected globally (i.e., \texttt{jp2any2any}), and (ii)
+an entry in Japan with middle and exit relays located in East Asia and East
+South Asia\footnote{limited to the following country-codes: cn, hk, jp, kr, tw,
+kh, tp, id, my, ph, sg, th and vn}. The median query time of the first setting
+was 1228.8\,ms and the second setting was 461.8\,ms. While we used \ac{doh}
+over Tor instead of DNSCrypt, the results of our equivalent setting were
+nowhere close to the high latency observed in their experiment (circuit
+\texttt{xx2any2any} using torrc was 88\,ms, and carml+stem was 130\,ms). This
+is likely due to the geographic distribution of Tor relays (further discussed
+in Section~\ref{sec:limit}), where our experiments with a client in country x
+greatly benefits compared to a client in Japan.
 
 Xiao~\emph{et al.}~\cite{xiao2025} introduced a way to avoid proxies by having
 the resolver resolve domains without knowing what they are using homomorphic
@@ -52,7 +53,7 @@ configure any specific circuits (comparable to our \texttt{any2any2any}). They
 reported a median query duration of around 450\,ms for \ac{dohot} with HTTPS
 reuse while their own solution had a median of 208\,ms. Our results show a much
 lower latency for the default configuration for \ac{dohot}, going as low as 
-107\,ms (torrc any2any2any).
+107\,ms (torrc \texttt{any2any2any}).
 
 \subsection{Evaluation Dimensions of Anonymous DNS Schemes} \label{sec:eval}
 We evaluate anonymous \ac{dns} schemes along three primary dimensions:
@@ -161,6 +162,7 @@ infrastructure.
     \centering
     %Tor Relay Distribution in the World
     \includegraphics[trim={0 2.1cm 0 0},clip,width=\textwidth]{img/tor-relays-map.pdf}
+    \vspace{-1em}
     \caption{By fetching relay information from Tor, and geolocating the IP
     addresses, we plotted the locations on a world map. The result shows that
     relays are primarily located in Europe and the U.S. Other parts of the
@@ -187,6 +189,7 @@ Tor relays may only be feasible in locations with enough availability. In
 Figure~\ref{fig:map} we plot the geographical locations of available relays in
 December 2025. The two most dense areas in the world are Europe and the U.S.,
 this means that it might not be possible to select two relays within the same
-country, optimizing for latency, outside these two areas. This is
-a limitation of using Tor relays for this purpose.
+country, optimizing for latency, outside these two areas. This is a limitation
+of using Tor relays for this purpose, but the deployability of other collusion
+resistant schemes are much worse, as shown in Table~\ref{tab:eval}.
 

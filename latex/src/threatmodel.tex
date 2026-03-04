@@ -1,12 +1,14 @@
-\section{Threat Models for DNS Queries and Tor} \label{sec:threatmodel}
+\section{Threat Models for Anonymous DNS and Tor} \label{sec:threatmodel}
 
-The threat model for anonymous \ac{dns} queries considers a passive adversary
-with access to query information at the target recursive
+The threat model for anonymous \ac{dns} considers a passive adversary with
+access to query information at the target recursive
 resolver~\cite{RFC9230,kurihara2023muodns,DoHoT,ODNS}, as depicted in
 Figure~\ref{fig:threatmodel}. The objective is to anonymize the client's
 identity (source IP address) so that it cannot be linked to the issued query
-processed by the resolver. The goal is \emph{not} to hide the fact that the
-client is communicating with a \ac{dns} resolver.
+processed by the resolver. This also means that the content of the query must
+be hidden for any intermediate proxy with knowledge about the client. But
+contraty to Tor, the goal is \emph{not} to hide the fact that the client is
+communicating with a \ac{dns} resolver.
 
 \begin{figure}[h]
     \centering

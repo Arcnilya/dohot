@@ -46,18 +46,18 @@ to geographic regions in close proximity to the client. Our main contributions
 are as follows:
 
 \begin{itemize}
-    \item Threat‑model grounding for anonymous \acs{dohot}: We formalize the
-        adversary for anonymous \ac{dns} (resolver-side observer) and show that
-        shortened two‑hop circuits (guard and exit) in Tor still prevent any single
-        entity from linking client IP and query contents, providing strictly
-        stronger protections than single‑proxy oblivious schemes under
-        proxy-resolver collusion (Section~\ref{sec:threatmodel}).
+    \item Threat‑model grounding for anonymous \ac{dns}: We formalize the
+        adversary (a resolver-side observer) and show that shortened two‑hop
+        circuits (guard and exit) in Tor still prevent any single entity from
+        linking client IP and query contents, providing strictly stronger
+        protections than single‑proxy oblivious schemes under proxy-resolver
+        collusion (Section~\ref{sec:threatmodel}).
     \item Measurement‑driven latency tuning of \acs{dohot}: Using programmable
         circuit construction (carml+Stem), we demonstrate that constraining
-        both relays to a nearby region reduces average resolution time from
-        134$\pm$110\,ms (default 3‑hop) to 61$\pm$135\,ms (two‑hop, co‑located
+        two relays to a nearby region reduces average resolution time from
+        134$\pm$110\,ms (default) to 61$\pm$135\,ms (two‑hop, co‑located
         relays) across 1,000 queries per configuration
-        (Sections~\ref{sec:method} and \ref{sec:measurement}).
+        (Section~\ref{sec:measurement}).
     \item Deployability and trade‑off analysis: We compare anonymous \ac{dns}
         schemes across latency, threat model, and deployability, positioning
         two‑hop localized \acs{dohot} as a practical middle ground: near

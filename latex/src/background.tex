@@ -66,10 +66,10 @@ are sent to any resolver, which acts as a proxy and forwards it to the
 \ac{odns} server (see Figure~\ref{fig:oblivious}). The server decrypts the key,
 decrypts the domain, performs recursion, and returns an encrypted answer via
 the resolver. The proxy resolver only sees ciphertext, while the \ac{odns}
-server cannot identify the client. However, two limitations exist: (i)
-\ac{ecs}~\cite{RFC7871} in \ac{edns}~\cite{RFC6891} may de-anonymize clients,
-and (ii) collusion between the resolver and \ac{odns} server links identity and
-query.
+server cannot identify the client. However, three limitations exist: (i)
+\ac{ecs}~\cite{RFC7871} in \ac{edns}~\cite{RFC6891} may de-anonymize clients, 
+(ii) collusion between the resolver and \ac{odns} server links identity and query,
+and (iii) a single \ac{tld} (\texttt{odns}) is easily blocked.
 
 \acf{odoh} builds on the idea from \ac{odns} but is instead using the \ac{doh}
 transport~\cite{RFC9230}, see Figure~\ref{fig:oblivious}. Clients send

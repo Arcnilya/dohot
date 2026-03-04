@@ -29,9 +29,9 @@ that balance latency and anonymity systematically.
     \label{fig:carml-tor}
 \end{figure}
 
-Since the client for the measurements is located in Sweden (country-code:
-\texttt{se}), it is estimated that under normal routing conditions the Tor
-relays in Sweden places them in close proximity to the client. In
+Since the client for the measurements is located in European country x (country-code:
+\texttt{xx})\footnote{Anonymized for submission}, it is estimated that under normal routing conditions the Tor
+relays in country x places them in close proximity to the client. In
 Section~\ref{sec:limit} we address the limitations of Tor relay availability
 around the world.
 
@@ -44,7 +44,7 @@ use (i.e, \ac{dohot}, \ac{dotor}, \ac{odoh}). The second part is the method for
 building circuits (i.e., torrc or carml). The third part represents the built
 circuit using the country codes for each relay. A circuit consisting of three
 unspecified relays is represented as \texttt{any2any2any}, while a two relay
-circuit constrained to Sweden is represented as \texttt{se2se}. In addition to
+circuit constrained to country x is represented as \texttt{xx2xx}. In addition to
 these parameters an increasing number representing the measurement index
 (0-999) as well as a random alphanumeric string are included to ensure that the
 query is unique to avoid influence of cache hits. This approach with unique
@@ -62,16 +62,18 @@ milliseconds. Finally, the container is stopped before the next iteration
 begins to ensure a new circuit. The code for the containers and measurement
 script can be found on GitHub\footnote{Anonymized for submission}.
 
-For comparison we set up containers running \ac{dohot} and
-\ac{odoh}. Both of these utilize DNSCrypt-proxy which is a flexible proxy for
-\ac{dns} and supports many encryption protocols~\cite{dnscrypt-proxy}.
-DNSCrypt-proxy is responsible for listening on a port for client queries and
-sending them to the configured anonymization approach. For \ac{odoh} we choose
-a proxy in Sweden to mimic the tuned circuit in \ac{dohot}. We decided to pick
-a single \ac{doh} provider for our measurements to limit the number of
-variables. Our choice of \ac{doh} resolver, Cloudflare's \texttt{1.1.1.1}, is
-using anycast which means that the closest from the perspective of our exit or
-proxy will be used\footnote{\url{https://developers.cloudflare.com/1.1.1.1/}}.
+For comparison we set up containers running \ac{dohot} and \ac{odoh}. Both of
+these utilize DNSCrypt-proxy which is a flexible proxy for \ac{dns} and
+supports many encryption protocols~\cite{dnscrypt-proxy}. DNSCrypt-proxy is
+responsible for listening on a port for client queries and sending them to the
+configured anonymization approach. For \ac{odoh} we choose a proxy in country x to
+mimic the tuned circuit in \ac{dohot}. We decided to pick a single \ac{doh}
+provider for our measurements to limit the number of variables. Our chosen
+\ac{doh} resolver, Cloudflare's \texttt{1.1.1.1}, uses
+anycast\footnote{\url{https://developers.cloudflare.com/1.1.1.1/}}, meaning
+that the resolver instance closest to our exit or proxy will typically be
+selected (an approach that is best‑effort and subject to the usual limitations
+of anycast).
 
 In addition we also implemented and measured the latency of \ac{dotor}. This is
 similar to the Tor-based approach used for comparison with
