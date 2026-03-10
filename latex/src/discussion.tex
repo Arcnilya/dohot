@@ -28,16 +28,16 @@ to 61.69\,ms.
 
 Kurihara~\emph{et al.}~\cite{kurihara2023muodns} compared their
 collusion-resistant approach to anonymous \ac{dns} queries: $\mu$ODNS, against
-variations of \emph{Anonymous DNSCrypt}~\cite{adnscrypt}, as well as DNSCrypt over Tor
-in terms of performance. For the Tor-based setting they had two circuit
-configurations alongside a client in Japan (jp): (i) an entry in Japan with
-middle and exit relays selected globally (i.e., \texttt{jp2any2any}), and (ii)
-an entry in Japan with middle and exit relays located in East Asia and East
-South Asia\footnote{limited to the following country-codes: cn, hk, jp, kr, tw,
-kh, tp, id, my, ph, sg, th and vn}. The median query time of the first setting
-was 1228.8\,ms and the second setting was 461.8\,ms. While we used \ac{doh}
-over Tor instead of DNSCrypt, the results of our equivalent setting were
-nowhere close to the high latency observed in their experiment (circuit
+variations of \emph{Anonymous DNSCrypt}~\cite{adnscrypt}, as well as DNSCrypt
+over Tor in terms of performance. For the Tor-based setting they had two
+circuit configurations alongside a client in Japan (jp): (i) an entry in Japan
+with middle and exit relays selected globally (i.e., \texttt{jp2any2any}), and
+(ii) an entry in Japan with middle and exit relays located in East Asia and
+East South Asia\footnote{limited to the following country-codes: cn, hk, jp,
+kr, tw, kh, tp, id, my, ph, sg, th and vn}. The median query time of the first
+setting was 1228.8\,ms and the second setting was 461.8\,ms. While we used
+\ac{doh} over Tor instead of DNSCrypt, the results of our equivalent setting
+were nowhere close to the high latency observed in their experiment (circuit
 \texttt{xx2any2any} using torrc was 88\,ms, and carml+stem was 130\,ms). This
 is likely due to the geographic distribution of Tor relays (further discussed
 in Section~\ref{sec:limit}), where our experiments with a client in country x
@@ -97,7 +97,7 @@ necessitate protocol changes and specialized server infrastructure. Regardless
 of performance tradeoffs, practical deployment remains a bottleneck for many
 proposed anonymity schemes in \ac{dns}. \ac{odoh} relies on the availability of
 dedicated proxies and resolvers. In practice, deployment remains limited. 
-
+%
 The DNSCrypt project maintains curated, publicly accessible lists of \ac{odoh}
 relays (proxies) and resolvers, which dnscrypt‑proxy uses to discover and
 configure \ac{odoh} infrastructure~\cite{dnscrypt-git}. At the time of writing,
@@ -106,17 +106,29 @@ these lists contain only a single publicly listed \ac{odoh} proxy and seven
 footprint~\cite{dnscrypt-commit}. This limited ecosystem constrains both
 scalability and trust distribution, as clients have little choice in proxy
 selection and must place substantial trust in a small number of operators.
-
+%
 Lists of publicly available relays and resolvers for $\mu$ODNS are available;
-however, the current deployment remains primarily experimental~\cite{modns-git}.
-There are three relays and three resolvers, all located in Tokyo. While this
-setup is sufficient to demonstrate feasibility and performance characteristics,
-the lack of geographic and organizational diversity limits the practicality of
-anonymity guarantees and underscores that $\mu$ODNS, in its current form, is
-not yet deployed at a global scale.
+however, the current deployment remains primarily
+experimental~\cite{modns-git}. There are three relays and three resolvers, all
+located in Tokyo. While this setup is sufficient to demonstrate feasibility and
+performance characteristics, the lack of geographic and organizational
+diversity limits the practicality of anonymity guarantees and underscores that
+$\mu$ODNS, in its current form, is not yet deployed at a global scale. We did
+not find any publicly available \ac{pir} resolvers online, and it seems the
+work is framed as a proof‑of‑concept with a research prototype demo.
 
-We did not find any publicly available \ac{pir} resolvers online, and it seems
-the work is framed as a proof‑of‑concept with a research prototype demo.
+\begin{figure*}[ht]
+    \centering
+    %Tor Relay Distribution in the World
+    \includegraphics[trim={0 2.1cm 0 0},clip,width=\textwidth]{img/tor-relays-map.pdf}
+    \vspace{-1em}
+    \caption{By fetching relay information from Tor, and geolocating the IP
+    addresses, we plotted the locations on a world map. The result shows that
+    relays are primarily located in Europe and the U.S. Other parts of the
+    world see few and sparsely located relays.}
+    \label{fig:map}
+\end{figure*}
+
 
 \begin{table*}[]
     \centering
@@ -157,18 +169,6 @@ infrastructure.
 
 
 \subsection{Limitations} \label{sec:limit} 
-
-\begin{figure*}[ht]
-    \centering
-    %Tor Relay Distribution in the World
-    \includegraphics[trim={0 2.1cm 0 0},clip,width=\textwidth]{img/tor-relays-map.pdf}
-    \vspace{-1em}
-    \caption{By fetching relay information from Tor, and geolocating the IP
-    addresses, we plotted the locations on a world map. The result shows that
-    relays are primarily located in Europe and the U.S. Other parts of the
-    world see few and sparsely located relays.}
-    \label{fig:map}
-\end{figure*}
 
 Our experiments primarily measured \ac{dns} query latency using
 \texttt{NXDOMAIN} lookups. This approach eliminates caching as a variable and

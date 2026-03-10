@@ -85,8 +85,9 @@ to be resolved instead of a destination for the exit relay to connect to (i.e.,
 Tor uses \texttt{RELAY\_RESOLVE} cells~\cite{TorSpecResolve}, see
 Section~\ref{sec:bak:tor}). It should be noted that this approach does not
 utilize full \ac{dns}-queries at this level. To interface with the Tor client a
-python script is used instead of DNSCrypt-proxy to receive and provide
-pseudo dig-compliant DNS queries and their answers.  While negligible in this context,
-it should be noted that some overhead is incurred in the process from modifying fields in a dummy query response to include the correct ip et cetera.
+python script is used instead of DNSCrypt-proxy to receive and provide pseudo
+dig-compliant DNS queries and their answers. While negligible in this context,
+it should be noted that some overhead is incurred in the process from modifying
+fields in a dummy query response to include the correct IP et cetera.
 
 
