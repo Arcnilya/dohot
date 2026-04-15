@@ -12,7 +12,7 @@ scale = 0.8
 
 TO_LATEX = False
 
-ANONYMIZE = True
+ANONYMIZE = False
 def _anon(s: str) -> str:
     return s.replace('se', 'xx') if ANONYMIZE else s
 
@@ -67,6 +67,7 @@ def plot_one(dframe, xmax=None):
     plt.tight_layout()
     if TO_LATEX: plt.savefig('../latex/img/p1.pdf')
     plt.savefig('p1.png')
+    plt.savefig('pdfs/p1.pdf')
     # plt.show()
 
 def plot_one_old(dframe, xmax=None):
@@ -104,6 +105,7 @@ def plot_one_old(dframe, xmax=None):
     plt.tight_layout()
     if TO_LATEX: plt.savefig('../latex/img/p1.pdf')
     plt.savefig('p1.png')
+    plt.savefig('pdfs/p1.pdf')
     #plt.show()
 
 
@@ -119,6 +121,7 @@ def plot_two(dframe, xmax=None):
     plt.tight_layout()
     if TO_LATEX: plt.savefig('../latex/img/p2.pdf')
     plt.savefig('p2.png')
+    plt.savefig('pdfs/p2.pdf')
     #plt.show()
 
 
@@ -134,6 +137,7 @@ def plot_three(dframe, xmax=None):
     plt.tight_layout()
     if TO_LATEX: plt.savefig('../latex/img/p3.pdf')
     plt.savefig('p3.png')
+    plt.savefig('pdfs/p3.pdf')
     #plt.show()
 
 def plot_four(dframe, xmax=None):
@@ -148,6 +152,7 @@ def plot_four(dframe, xmax=None):
     plt.tight_layout()
     if TO_LATEX: plt.savefig('../latex/img/p4.pdf')
     plt.savefig('p4.png')
+    plt.savefig('pdfs/p4.pdf')
     #plt.show()
 
 def plot_five(dframe, xmax=None):
@@ -168,6 +173,7 @@ def plot_five(dframe, xmax=None):
     plt.tight_layout()
     if TO_LATEX: plt.savefig('../latex/img/p5.pdf')
     plt.savefig('p5.png')
+    plt.savefig('pdfs/p5.pdf')
     #plt.show()
 
 
