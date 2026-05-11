@@ -54,13 +54,15 @@ path between the client and the resolver.
 Each configuration is measured 1,000 times with unique queries. In each
 iteration, we start our measurement docker container with the specified
 configuration and wait until a circuit is established and an arbitrary query
-receives a successful response. This prelude ensures that the Tor circuit is
-fully established and that we have a functional \ac{dns} resolution over Tor. A
-query is then issued for an A record using a unique non-existent domain
-described earlier, and the time for the reply to return is measured in
-milliseconds. Finally, the container is stopped before the next iteration
-begins to ensure a new circuit. The code for the containers and measurement
-script can be found on GitHub\footnote{Anonymized for submission}.
+receives a response. The success or failure of the resolution (e.g.,
+\texttt{NOERROR} or \texttt{NXDOMAIN}) and any caching effects at the target
+resolver are irrelevant for this arbitrary query, which serves only to confirm
+the existence of a Tor circuit to a functioning resolver. A query is then
+issued for an A record using a unique non-existent domain described earlier,
+and the time for the reply to return is measured in milliseconds. Finally, the
+container is stopped before the next iteration begins to ensure a new circuit.
+The code for the containers and measurement script can be found on
+GitHub\footnote{Anonymized for submission}.
 
 For comparison we set up containers running \ac{dohot} and \ac{odoh}. Both of
 these utilize DNSCrypt-proxy which is a flexible proxy for \ac{dns} and
