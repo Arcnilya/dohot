@@ -69,14 +69,15 @@ additional hop and modest cryptographic overhead. This comes at the cost of a
 weaker threat model due to potential collusion between the proxy and the
 resolver. Tor-based schemes incur \emph{higher} latency, mainly due to
 multi-hop paths in the overlay network. Nevertheless, as shown in our
-experiments, circuit selection and tuning can reduce latency by roughly half.
-Similarly to the Tor-based schemes, $\mu$ODNS use multiple proxies to
-distribute trust during \ac{dns} resolution, so this also incurrs additional
-latency. Most of the added delay for the \ac{pir}-based scheme comes from the
-server‑side \ac{pir} computation, which performs homomorphic evaluation over
-the resolver's encrypted cache. On cache misses, the client performs iterative
-lookups directly to authoritative servers over \ac{doh}, which then forwards a
-cache update, optionally with a random delay to defeat timing correlation.
+experiments, circuit selection and tuning can reduce the median latency by
+roughly two thirds. Similarly to the Tor-based schemes, $\mu$ODNS use multiple
+proxies to distribute trust during \ac{dns} resolution, so this also incurrs
+additional latency. Most of the added delay for the \ac{pir}-based scheme comes
+from the server‑side \ac{pir} computation, which performs homomorphic
+evaluation over the resolver's encrypted cache. On cache misses, the client
+performs iterative lookups directly to authoritative servers over \ac{doh},
+which then forwards a cache update, optionally with a random delay to defeat
+timing correlation.
 
 \subsubsection{Threat Model} Tor-based schemes, $\mu$ODNS, and \ac{pir}
 resolvers provide \emph{stronger} resistance to collusion compared to
@@ -131,6 +132,7 @@ work is framed as a proof‑of‑concept with a research prototype demo.
 
 
 \begin{table*}[]
+    \begin{minipage}{\textwidth}
     \centering
     \caption{Anonymous DNS Scheme Dimensions}
     \label{tab:eval}
@@ -139,12 +141,16 @@ work is framed as a proof‑of‑concept with a research prototype demo.
         & Latency & Threat Model & Deployability \\
         \hline
         \hline
-        Oblivious           & 28$\pm$26\,ms (mean) & non-collusion & 1 relay~\cite{dnscrypt-commit} \\\hline
-        Tor-based (default) & 134$\pm$110\,ms (mean) & distributed trust + collusion resistant & 10,000 relays~\cite{TorMetricsServers} \\\hline
-        Tor-based (2-hop)   & 61$\pm$135\,ms (mean) & distributed trust + collusion resistant & 10,000 relays~\cite{TorMetricsServers} \\\hline
-        $\mu$ODNS           & 137$\pm$110\,ms (mean) & collusion resistant & 3 relays~\cite{modns-git} \\\hline
+        Oblivious           & 15/25/51\,ms$^{*}$ & NC & 1 relay~\cite{dnscrypt-commit} \\\hline
+        \ac{dohot} (default) & 63/107/289\,ms$^{*}$ & DT + CR & 10,000 relays~\cite{TorMetricsServers} \\\hline
+        \ac{dohot} (2-hop)   & 20/37/144\,ms$^{*}$ & DT + CR & 10,000 relays~\cite{TorMetricsServers} \\\hline
+        $\mu$ODNS (one relay) & 11.7/111.8/502.7\,ms$^{\dagger}$ & CR & 3 relays~\cite{modns-git} \\\hline
         PIR-based           & 208\,ms (median) & collusion resistant & 0 relays \\\hline
     \end{tabular}
+    \vspace{.5em}
+    \\NC = Non-Collusion, DT = Distributed Trust, CR = Collusion Resistant
+    \\$^{*}$Percentiles (p5/p50/p95) $^{\dagger}$Percentiles (p1/p50/p99)
+    \end{minipage}
 \end{table*}
 
 

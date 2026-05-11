@@ -63,7 +63,7 @@ country as the client (see \texttt{xx2any2xx} versus \texttt{xx2xx2xx}). As expe
 the geographical distance between relays also improves performance. The main
 takeaway here is that by placing all three relays in close proximity to the
 client we can reduce the query latency from a median of 200ms (see
-\texttt{carml+Stem}, \texttt{any2any2any} in Figure~\ref{fig:p1}) to 60ms
+\texttt{carml+Stem}, \texttt{any2any2any} in Figure~\ref{fig:p1}) to 60\,ms
 (\texttt{xx2xx2xx} in Figure~\ref{fig:p2}) with much less spread.
 
 \subsection{Query Time by Circuit (Without Middle)}
@@ -82,7 +82,7 @@ We used \texttt{carml+Stem} to construct two-hop circuits, consisting
 only of an entry and an exit relay, a configuration not supported by
 \texttt{torrc}. As illustrated in Figure~\ref{fig:p3}, this further reduces
 latency. The best performance was observed when both relays were in close
-proximity to the client with a median query time of 40ms. 
+proximity to the client with a median query time of 37\,ms. 
 
 \subsection{Query Time by Circuit (DoTor carml+Stem)}
 \label{sec:measurement:p4}
@@ -118,8 +118,8 @@ with the results shown in Figure~\ref{fig:p4}.
 Figure~\ref{fig:p5} presents a side-by-side comparison between the default
 configuration of \ac{dohot} (using torrc) introduced by Alex
 Muffet~\cite{DoHoT}, tuned circuits for \ac{dohot} and \ac{dotor}, as well as
-\ac{odoh} with a Swedish proxy. Even though the improved query latency of
-\ac{dohot} and \ac{dotor} is worse than \ac{odoh}, we managed to cut the
-latency in half compared with the default Tor configuration. At the same time,
-we maintain a stronger threat model than single collusion-prone oblivious
-proxies.
+\ac{odoh} with a Swedish proxy. While the improved query latency of \ac{dohot}
+and \ac{dotor} is still worse than that of \ac{odoh}, our optimizations reduce
+the median latency by roughly two thirds for \ac{dohot} and by about half for
+\ac{dotor} relative to the default Tor configuration. At the same time, we
+maintain a stronger threat model than single collusion-prone oblivious proxies.

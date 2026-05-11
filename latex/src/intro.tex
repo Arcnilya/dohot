@@ -53,11 +53,11 @@ are as follows:
         protections than single‑proxy oblivious schemes under proxy-resolver
         collusion (Section~\ref{sec:threatmodel}).
     \item Measurement‑driven latency tuning of \acs{dohot}: Using programmable
-        circuit construction (carml+Stem), we demonstrate that constraining
-        two relays to a nearby region reduces average resolution time from
-        134$\pm$110\,ms (default) to 61$\pm$135\,ms (two‑hop, co‑located
-        relays) across 1,000 queries per configuration
-        (Section~\ref{sec:measurement}).
+        circuit construction (carml+Stem), we demonstrate that constraining two
+        relays to a nearby region reduces median resolution time, from 107\,ms
+        (p5--p95: 63--289\,ms) in the default configuration to 37\,ms (p5--p95:
+        20--144\,ms) when using two‑hop circuits with co‑located relays, across
+        1,000 queries per configuration (Section~\ref{sec:measurement}).
     \item Deployability and trade‑off analysis: We compare anonymous \ac{dns}
         schemes across latency, threat model, and deployability, positioning
         two‑hop localized \acs{dohot} as a practical middle ground: near

@@ -176,6 +176,67 @@ def plot_five(dframe, xmax=None):
     plt.savefig('pdfs/p5.pdf')
     #plt.show()
 
+def print_percentiles(dframe):
+    def pct(series):
+        return series.quantile([0.05, 0.50, 0.95])
+
+    # Default DoHoT
+    default_dohot = dframe[
+        (dframe['prot'] == 'dohot') &
+        (dframe['method'] == 'torrc') &
+        (dframe['setting'] == 'any2any2any')
+    ]['time']
+
+    # Optimized DoHoT
+    optimized_dohot = dframe[
+        (dframe['prot'] == 'dohot') &
+        (dframe['method'] == 'carml+stem') &
+        (dframe['setting'] == 'se2se')
+    ]['time']
+
+    # Default DoTor
+    default_dotor = dframe[
+        (dframe['prot'] == 'dotor') &
+        (dframe['method'] == 'torrc') &
+        (dframe['setting'] == 'any2any2any')
+    ]['time']
+
+    # Optimized DoTor
+    optimized_dotor = dframe[
+        (dframe['prot'] == 'dotor') &
+        (dframe['method'] == 'carml+stem') &
+        (dframe['setting'] == 'se2se')
+    ]['time']
+
+    # ODoH
+    odoh = dframe[(dframe['prot'] == 'odoh')]['time']
+
+    print("\nLatency Percentiles (ms)")
+    print("--------------------------------")
+
+    for label, series in [
+        ("Default DoHoT (torrc, any2any2any)", default_dohot),
+        ("Optimized DoHoT (carml+stem, se2se)", optimized_dohot),
+        ("Default DoTor (torrc, any2any2any)", default_dotor),
+        ("Optimized DoTor (carml+stem, se2se)", optimized_dotor),
+        ("ODoH (se)", odoh)
+    ]:
+        if series.empty:
+            print(f"{label}: no data")
+            continue
+
+        p = pct(series)
+        print(
+            f"{label:30s} "
+            f"5/50/95 = "
+            f"{p.loc[0.05]:.1f} / "
+            f"{p.loc[0.50]:.1f} / "
+            f"{p.loc[0.95]:.1f} ms"
+        )
+
+
+# Main ==============================================
+
 
 df = pd.read_csv("log.csv")
 df[['prot','method','setting','iteration','nonce']] = df['query'].str.split('-',expand=True)
@@ -283,3 +344,5 @@ group_stats_df = df.groupby('all', as_index=False).agg(
 group_stats_df['rel_std_pct'] = (group_stats_df['std_time'] / group_stats_df['mean_time']) * 100
 print(group_stats_df)
 
+
+print_percentiles(df)
