@@ -1,5 +1,5 @@
 # --- builder stage ---
-FROM golang:1.24 AS builder
+FROM golang:1.25 AS builder
 WORKDIR /work
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates \
   && rm -rf /var/lib/apt/lists/*

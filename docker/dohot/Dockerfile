@@ -1,5 +1,5 @@
 # --- builder stage ---
-FROM golang:1.24 AS builder
+FROM golang:1.25 AS builder
 WORKDIR /work
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates \
   && rm -rf /var/lib/apt/lists/*
@@ -21,20 +21,22 @@ RUN apt-get update && apt-get upgrade -y && \
     && rm -rf /var/lib/apt/lists/*
 
 # Python 3.11 (deadsnakes)
-RUN add-apt-repository ppa:deadsnakes/ppa -y && apt-get update && \
-    apt-get install -y --no-install-recommends python3.11 python3.11-venv python3.11-dev python3-pip && \
-    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 && \
-    apt-get remove -y python3-cryptography || true && \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    software-properties-common ca-certificates && \
+    add-apt-repository ppa:deadsnakes/ppa -y && \
+    apt-get update && apt-get install -y --no-install-recommends \
+    python3.11 python3.11-venv python3.11-dev python3-pip && \
     rm -rf /var/lib/apt/lists/*
 
-# Create and use a dedicated venv
+# Create and activate virtual environment
 RUN python3.11 -m venv /opt/venv
 ENV VIRTUAL_ENV=/opt/venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENV PATH="/opt/venv/bin:$PATH"
 
-RUN apt-get update && apt-get install -y python3.11-distutils
-RUN python -m pip install --upgrade pip setuptools wheel
+# Upgrade pip inside venv
+RUN pip install --upgrade pip setuptools wheel
 
+# Install Python dependencies (isolated, no conflicts)
 RUN pip install --no-cache-dir stem carml
 
 # Copy compiled dnscrypt-proxy from builder
